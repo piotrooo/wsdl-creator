@@ -3,10 +3,12 @@
  * WSDLCreator
  *
  * @author Piotr Olaszewski
+ * @see http://www.xfront.com/GlobalVersusLocal.html
  */
 namespace WSDL;
 
 require_once 'ClassDocParser.php';
+require_once 'XMLWrapperGenerator.php';
 
 class WSDLCreator
 {
@@ -25,8 +27,17 @@ class WSDLCreator
         $classParser = new ClassDocParser($this->_class);
     }
 
+    public function generateXML()
+    {
+
+    }
+
     public function renderWSDL()
     {
-//        header("Content-Type: text/xml");
+        header("Content-Type: text/xml");
+        $xml = new XMLWrapperGenerator("http://example.com/stockquote.wsdl");
+        $xml
+            ->setDefinitions();
+        $xml->render();
     }
 }

@@ -2,7 +2,7 @@
 /**
  * ClassParser
  *
- * @author Piotrooo
+ * @author Piotr Olaszewski
  */
 namespace WSDL;
 
@@ -48,8 +48,6 @@ class ClassDocParser
             $return = $this->_parseReturn($rawTrimCommentWithoutStars);
             $this->_parsedMethods[$single]['return'] = $return;
         }
-
-        print_r($this->_parsedMethods);
     }
 
     public function _parseDesc($docCommentString)
