@@ -13,6 +13,7 @@ require_once 'XMLWrapperGenerator.php';
 class WSDLCreator
 {
     private $_class;
+    private $_classParser;
     private $_soapVersion = SOAP_1_1;
 
     public function __construct($class)
@@ -24,7 +25,7 @@ class WSDLCreator
 
     public function parseClassDocComments()
     {
-        $classParser = new ClassDocParser($this->_class);
+        $this->_classParser = new ClassDocParser($this->_class);
     }
 
     public function generateXML()
@@ -35,9 +36,14 @@ class WSDLCreator
     public function renderWSDL()
     {
         header("Content-Type: text/xml");
-        $xml = new XMLWrapperGenerator("http://example.com/stockquote.wsdl");
+
+        $methods = $this->_classParser->getAllMethods();
+
+        $xml = new XMLWrapperGenerator('ExampleSoapServer', "http://example.com/stockquote.wsdl");
         $xml
-            ->setDefinitions();
+            ->setDefinitions()
+            ->setBinding($methods)
+        ;
         $xml->render();
     }
 }

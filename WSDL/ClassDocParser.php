@@ -80,4 +80,9 @@ class ClassDocParser
 
         return $trimGroupMatches[1];
     }
+
+    public function getAllMethods()
+    {
+        return array_keys($this->_methodDocComments);
+    }
 }
