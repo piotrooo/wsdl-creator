@@ -14,13 +14,13 @@ class ExampleSoapServer
     }
 
     /**
-     * showUserName
      * @desc Method do show user name from array
      *
      * @param string $idUser
+     * @param int $age
      * @return string
      */
-    public function showUserName($idUser)
+    public function showUserName($idUser, $age)
     {
         $usersName = array('John', 'Peter');
 
