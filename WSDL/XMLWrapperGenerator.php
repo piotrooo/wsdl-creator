@@ -157,7 +157,7 @@ class XMLWrapperGenerator
     {
         $serviceElement = $this->_createElement('service');
 
-        $name = $this->_name . 'kService';
+        $name = $this->_name . 'Service';
         $nameAttribute = $this->_createAttributeWithValue('name', $name);
         $serviceElement->appendChild($nameAttribute);
 
