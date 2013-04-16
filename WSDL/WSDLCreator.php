@@ -39,10 +39,12 @@ class WSDLCreator
 
         $methods = $this->_classParser->getAllMethods();
 
-        $xml = new XMLWrapperGenerator('ExampleSoapServer', "http://example.com/stockquote.wsdl");
+        $xml = new XMLWrapperGenerator('ExampleSoapServer', "http://example.com/");
         $xml
             ->setDefinitions()
+            ->setPortType($methods)
             ->setBinding($methods)
+            ->setService()
         ;
         $xml->render();
     }

@@ -9,15 +9,21 @@ namespace WSDL;
 class XMLWrapperGenerator
 {
     private $_name;
+    private $_namespace;
     private $_targetNamespace;
+    private $_xsd1;
     private $_DOMDocument;
     private $_definitionsRootNode;
     private $_generatedXML;
 
-    public function __construct($name, $targetNamespace)
+    public function __construct($name, $namespace)
     {
         $this->_name = $name;
-        $this->_targetNamespace = $targetNamespace;
+        $this->_namespace = $namespace;
+
+        $this->_targetNamespace = $this->_namespace . strtolower($this->_name) . '.wsdl';
+        $this->_xsd1 = $this->_namespace . strtolower($this->_name) . '.xsd';
+
         $this->_DOMDocument = new \DOMDocument("1.0", "UTF-8");
 
         $this->_saveXML();
@@ -41,7 +47,7 @@ class XMLWrapperGenerator
         $xmlnsTnsAttribute = $this->_createAttributeWithValue('xmlns:tns', $this->_targetNamespace);
         $definitionsElement->appendChild($xmlnsTnsAttribute);
 
-        $xmlnsXSDAttribute = $this->_createAttributeWithValue('xmlns:xsd1', $this->_targetNamespace);
+        $xmlnsXSDAttribute = $this->_createAttributeWithValue('xmlns:xsd1', $this->_xsd1);
         $definitionsElement->appendChild($xmlnsXSDAttribute);
 
         $xmlnsSoapAttribute = $this->_createAttributeWithValue('xmlns:soap', 'http://schemas.xmlsoap.org/wsdl/soap/');
@@ -55,6 +61,39 @@ class XMLWrapperGenerator
         $this->_definitionsRootNode = $definitionsElement;
 
         $this->_saveXML();
+
+        return $this;
+    }
+
+    public function setPortType($methods)
+    {
+        $portTypeElement = $this->_createElement('portType');
+
+        $name = $this->_name . 'PortType';
+        $nameAttribute = $this->_createAttributeWithValue('name', $name);
+        $portTypeElement->appendChild($nameAttribute);
+
+        foreach ($methods as $method) {
+            $operationElement = $this->_createElement('operation');
+            $name = $this->_createAttributeWithValue('name', $method);
+            $operationElement->appendChild($name);
+
+            $inputElement = $this->_createElement('input');
+            $methodInputMessage = $method . 'Input';
+            $messageInputAttribute = $this->_createAttributeWithValue('message', 'tns:' . $methodInputMessage);
+            $inputElement->appendChild($messageInputAttribute);
+            $operationElement->appendChild($inputElement);
+
+            $outputElement = $this->_createElement('output');
+            $methodOutputMessage = $method . 'Output';
+            $messageOutputAttribute = $this->_createAttributeWithValue('message', 'tns:' . $methodOutputMessage);
+            $outputElement->appendChild($messageOutputAttribute);
+            $operationElement->appendChild($outputElement);
+
+            $portTypeElement->appendChild($operationElement);
+        }
+
+        $this->_definitionsRootNode->appendChild($portTypeElement);
 
         return $this;
     }
@@ -78,27 +117,59 @@ class XMLWrapperGenerator
         $soapBindingElement->appendChild($transportAttribute);
         $bindingElement->appendChild($soapBindingElement);
 
-        $soapBodyElement = $this->_createElement('soap:body');
+        $soapBodyElementInput = $this->_createElement('soap:body');
         $use = $this->_createAttributeWithValue('use', 'literal');
-        $soapBodyElement->appendChild($use);
+        $soapBodyElementInput->appendChild($use);
+
+        $soapBodyElementOutput = $this->_createElement('soap:body');
+        $use = $this->_createAttributeWithValue('use', 'literal');
+        $soapBodyElementOutput->appendChild($use);
 
         foreach ($methods as $method) {
             $operationElement = $this->_createElement('operation');
             $name = $this->_createAttributeWithValue('name', $method);
             $operationElement->appendChild($name);
 
+            $soapOperationElement = $this->_createElement('soap:operation');
+            $soapActionAttribute = $this->_createAttributeWithValue('soapAction', $this->_namespace . $method);
+            $soapOperationElement->appendChild($soapActionAttribute);
+            $operationElement->appendChild($soapOperationElement);
+
             $inputElement = $this->_createElement('input');
-            $inputElement->appendChild($soapBodyElement);
+            $inputElement->appendChild($soapBodyElementInput);
             $operationElement->appendChild($inputElement);
 
             $outputElement = $this->_createElement('output');
-            $outputElement->appendChild($soapBodyElement);
+            $outputElement->appendChild($soapBodyElementOutput);
             $operationElement->appendChild($outputElement);
 
             $bindingElement->appendChild($operationElement);
         }
 
         $this->_definitionsRootNode->appendChild($bindingElement);
+
+        $this->_saveXML();
+
+        return $this;
+    }
+
+    public function setService()
+    {
+        $serviceElement = $this->_createElement('service');
+
+        $name = $this->_name . 'kService';
+        $nameAttribute = $this->_createAttributeWithValue('name', $name);
+        $serviceElement->appendChild($nameAttribute);
+
+        $portElement = $this->_createElement('port');
+        $namePortAttribute = $this->_createAttributeWithValue('name', $this->_name . 'Port');
+        $portElement->appendChild($namePortAttribute);
+        $bindingAttribute = $this->_createAttributeWithValue('binding', 'tns:' . $this->_name . 'Binding');
+        $portElement->appendChild($bindingAttribute);
+
+        $serviceElement->appendChild($portElement);
+
+        $this->_definitionsRootNode->appendChild($serviceElement);
 
         $this->_saveXML();
     }
