@@ -36,17 +36,17 @@ class ClassDocParser
 
     public function _parseDocComment()
     {
-        foreach ($this->_methodDocComments as $single => $comment) {
-            $rawTrimCommentWithoutStars = trim(str_replace(array('*', '/'), '', $comment));
+        foreach ($this->_methodDocComments as $methodName => $methodComment) {
+            $rawTrimCommentWithoutStars = trim(str_replace(array('*', '/'), '', $methodComment));
 
             $desc = $this->_parseDesc($rawTrimCommentWithoutStars);
-            $this->_parsedMethods[$single]['desc'] = $desc;
+            $this->_parsedMethods[$methodName]['desc'] = $desc;
 
             $parameters = $this->_parseParameters($rawTrimCommentWithoutStars);
-            $this->_parsedMethods[$single]['params'] = $parameters;
+            $this->_parsedMethods[$methodName]['params'] = $parameters;
 
             $return = $this->_parseReturn($rawTrimCommentWithoutStars);
-            $this->_parsedMethods[$single]['return'] = $return;
+            $this->_parsedMethods[$methodName]['return'] = $return;
         }
     }
 
@@ -83,6 +83,11 @@ class ClassDocParser
 
     public function getAllMethods()
     {
-        return array_keys($this->_methodDocComments);
+        return array_keys($this->_parsedMethods);
+    }
+
+    public function getParsedComments()
+    {
+        return $this->_parsedMethods;
     }
 }

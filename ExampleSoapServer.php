@@ -30,4 +30,14 @@ class ExampleSoapServer
             return '';
         }
     }
+
+    /**
+     * @param integer $a
+     * @param integer $b
+     * @return integer
+     */
+    public function sum($a, $b)
+    {
+        return $a + $b;
+    }
 }

@@ -65,6 +65,27 @@ class XMLWrapperGenerator
         return $this;
     }
 
+    public function setMessage($methods, $parsedComments)
+    {
+        foreach ($methods as $method) {
+            $messageInputElement = $this->_createElement('message');
+            $nameInput = $method . 'Request';
+            $nameMessageInputAttribute = $this->_createAttributeWithValue('name', $nameInput);
+            $messageInputElement->appendChild($nameMessageInputAttribute);
+
+            $this->_definitionsRootNode->appendChild($messageInputElement);
+
+            $messageOutputElement = $this->_createElement('message');
+            $nameOutput = $method . 'Response';
+            $nameMessageOutputAttribute = $this->_createAttributeWithValue('name', $nameOutput);
+            $messageOutputElement->appendChild($nameMessageOutputAttribute);
+
+            $this->_definitionsRootNode->appendChild($messageOutputElement);
+        }
+
+        return $this;
+    }
+
     public function setPortType($methods)
     {
         $portTypeElement = $this->_createElement('portType');
@@ -79,13 +100,13 @@ class XMLWrapperGenerator
             $operationElement->appendChild($name);
 
             $inputElement = $this->_createElement('input');
-            $methodInputMessage = $method . 'Input';
+            $methodInputMessage = $method . 'Request';
             $messageInputAttribute = $this->_createAttributeWithValue('message', 'tns:' . $methodInputMessage);
             $inputElement->appendChild($messageInputAttribute);
             $operationElement->appendChild($inputElement);
 
             $outputElement = $this->_createElement('output');
-            $methodOutputMessage = $method . 'Output';
+            $methodOutputMessage = $method . 'Response';
             $messageOutputAttribute = $this->_createAttributeWithValue('message', 'tns:' . $methodOutputMessage);
             $outputElement->appendChild($messageOutputAttribute);
             $operationElement->appendChild($outputElement);

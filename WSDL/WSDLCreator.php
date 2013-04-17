@@ -38,10 +38,12 @@ class WSDLCreator
         header("Content-Type: text/xml");
 
         $methods = $this->_classParser->getAllMethods();
+        $parsedComments = $this->_classParser->getParsedComments();
 
         $xml = new XMLWrapperGenerator('ExampleSoapServer', "http://example.com/");
         $xml
             ->setDefinitions()
+            ->setMessage($methods, $parsedComments)
             ->setPortType($methods)
             ->setBinding($methods)
             ->setService()
