@@ -5,6 +5,7 @@
  * @author Piotr Olaszewski
  */
 namespace WSDL;
+require_once 'ParserComplexType.php';
 
 class ClassDocParser
 {
@@ -34,7 +35,7 @@ class ClassDocParser
         }
     }
 
-    public function _parseDocComment()
+    private function _parseDocComment()
     {
         foreach ($this->_methodDocComments as $methodName => $methodComment) {
             $rawTrimCommentWithoutStars = trim(str_replace(array('*', '/'), '', $methodComment));
@@ -50,7 +51,7 @@ class ClassDocParser
         }
     }
 
-    public function _parseDesc($docCommentString)
+    private function _parseDesc($docCommentString)
     {
         preg_match('#@desc(.+)#', $docCommentString, $groupMatches);
         $trimGroupMatches = array_map('trim', $groupMatches);
@@ -58,12 +59,12 @@ class ClassDocParser
         return $trimGroupMatches[1];
     }
 
-    public function _parseParameters($docCommentString)
+    private function _parseParameters($docCommentString)
     {
         preg_match_all('#@param(.+)#', $docCommentString, $groupMatches);
         $trimGroupMatches = array_map('trim', $groupMatches[1]);
-        $return = array();
 
+        $return = array();
         foreach ($trimGroupMatches as $one) {
             $pairTypeAndName = explode(' ', $one);
 
@@ -89,5 +90,10 @@ class ClassDocParser
     public function getParsedComments()
     {
         return $this->_parsedMethods;
+    }
+
+    public function parserComplexTypes()
+    {
+        return new ParserComplexType($this->_parsedMethods);
     }
 }

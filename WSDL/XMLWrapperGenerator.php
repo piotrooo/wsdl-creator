@@ -8,6 +8,7 @@ namespace WSDL;
 
 class XMLWrapperGenerator
 {
+    private $_methods;
     private $_name;
     private $_namespace;
     private $_targetNamespace;
@@ -15,6 +16,15 @@ class XMLWrapperGenerator
     private $_DOMDocument;
     private $_definitionsRootNode;
     private $_generatedXML;
+
+    /**
+     * @see http://infohost.nmt.edu/tcc/help/pubs/rnc/xsd.html
+     */
+    private $_parametersTypes = array(
+        'string' => 'xsd:string',
+        'integer' => 'xsd:int',
+        'int' => 'xsd:int'
+    );
 
     public function __construct($name, $namespace)
     {
@@ -32,6 +42,13 @@ class XMLWrapperGenerator
     private function _saveXML()
     {
         $this->_generatedXML = $this->_DOMDocument->saveXML();
+    }
+
+    public function setMethods($methods)
+    {
+        $this->_methods = $methods;
+
+        return $this;
     }
 
     public function setDefinitions()
@@ -65,13 +82,18 @@ class XMLWrapperGenerator
         return $this;
     }
 
-    public function setMessage($methods, $parsedComments)
+    public function setMessage($parsedComments)
     {
-        foreach ($methods as $method) {
+        foreach ($this->_methods as $method) {
             $messageInputElement = $this->_createElement('message');
             $nameInput = $method . 'Request';
             $nameMessageInputAttribute = $this->_createAttributeWithValue('name', $nameInput);
             $messageInputElement->appendChild($nameMessageInputAttribute);
+
+            $generatedParts = $this->_createXMLMessageParams($parsedComments[$method]['params']);
+            foreach ($generatedParts as $part) {
+                $messageInputElement->appendChild($part);
+            }
 
             $this->_definitionsRootNode->appendChild($messageInputElement);
 
@@ -80,13 +102,48 @@ class XMLWrapperGenerator
             $nameMessageOutputAttribute = $this->_createAttributeWithValue('name', $nameOutput);
             $messageOutputElement->appendChild($nameMessageOutputAttribute);
 
+            $generatedReturn = $this->_createXMLMessageReturn($nameOutput, $parsedComments[$method]['return']);
+            $messageOutputElement->appendChild($generatedReturn);
+
             $this->_definitionsRootNode->appendChild($messageOutputElement);
         }
 
         return $this;
     }
 
-    public function setPortType($methods)
+    private function _createXMLMessageParams($params)
+    {
+        $XMLparam = array();
+        foreach ($params as $i => $param) {
+            $paramType = array_keys($param);
+            $paramName = str_replace('$', '', array_values($param));
+
+            $XMLparam[$i] = $this->_createElement('part');
+
+            $paramNameAttribute = $this->_createAttributeWithValue('name', $paramName[0]);
+            $XMLparam[$i]->appendChild($paramNameAttribute);
+
+            $paramTypeAttribute = $this->_createAttributeWithValue('type', $this->_parametersTypes[$paramType[0]]);
+            $XMLparam[$i]->appendChild($paramTypeAttribute);
+        }
+
+        return $XMLparam;
+    }
+
+    private function _createXMLMessageReturn($method, $return)
+    {
+        $returnElement = $this->_createElement('part');
+
+        $paramNameAttribute = $this->_createAttributeWithValue('name', $method);
+        $returnElement->appendChild($paramNameAttribute);
+
+        $paramTypeAttribute = $this->_createAttributeWithValue('type', $this->_parametersTypes[$return]);
+        $returnElement->appendChild($paramTypeAttribute);
+
+        return $returnElement;
+    }
+
+    public function setPortType()
     {
         $portTypeElement = $this->_createElement('portType');
 
@@ -94,7 +151,7 @@ class XMLWrapperGenerator
         $nameAttribute = $this->_createAttributeWithValue('name', $name);
         $portTypeElement->appendChild($nameAttribute);
 
-        foreach ($methods as $method) {
+        foreach ($this->_methods as $method) {
             $operationElement = $this->_createElement('operation');
             $name = $this->_createAttributeWithValue('name', $method);
             $operationElement->appendChild($name);
@@ -119,7 +176,7 @@ class XMLWrapperGenerator
         return $this;
     }
 
-    public function setBinding($methods)
+    public function setBinding()
     {
         $bindingElement = $this->_createElement('binding');
 
@@ -146,7 +203,7 @@ class XMLWrapperGenerator
         $use = $this->_createAttributeWithValue('use', 'literal');
         $soapBodyElementOutput->appendChild($use);
 
-        foreach ($methods as $method) {
+        foreach ($this->_methods as $method) {
             $operationElement = $this->_createElement('operation');
             $name = $this->_createAttributeWithValue('name', $method);
             $operationElement->appendChild($name);

@@ -26,6 +26,7 @@ class WSDLCreator
     public function parseClassDocComments()
     {
         $this->_classParser = new ClassDocParser($this->_class);
+        $s = $this->_classParser->parserComplexTypes();
     }
 
     public function generateXML()
@@ -42,10 +43,11 @@ class WSDLCreator
 
         $xml = new XMLWrapperGenerator('ExampleSoapServer', "http://example.com/");
         $xml
+            ->setMethods($methods)
             ->setDefinitions()
-            ->setMessage($methods, $parsedComments)
-            ->setPortType($methods)
-            ->setBinding($methods)
+            ->setMessage($parsedComments)
+            ->setPortType()
+            ->setBinding()
             ->setService()
         ;
         $xml->render();

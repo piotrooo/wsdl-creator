@@ -14,30 +14,12 @@ class ExampleSoapServer
     }
 
     /**
-     * @desc Method do show user name from array
-     *
-     * @param string $idUser
-     * @param int $age
-     * @return string
+     * @param array $arr1
+     * @param string $name
+     * @return array
      */
-    public function showUserName($idUser, $age)
+    public function arrayTest(array $arr1, $name)
     {
-        $usersName = array('John', 'Peter');
-
-        if (!empty($usersName[$idUser])) {
-            return $usersName[$idUser];
-        } else {
-            return '';
-        }
-    }
-
-    /**
-     * @param integer $a
-     * @param integer $b
-     * @return integer
-     */
-    public function sum($a, $b)
-    {
-        return $a + $b;
+        return array('name' => $name);
     }
 }
