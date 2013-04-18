@@ -56,7 +56,7 @@ class ClassDocParser
         preg_match('#@desc(.+)#', $docCommentString, $groupMatches);
         $trimGroupMatches = array_map('trim', $groupMatches);
 
-        return $trimGroupMatches[1];
+        return !empty($trimGroupMatches[1]) ? $trimGroupMatches[1] : '';
     }
 
     private function _parseParameters($docCommentString)
@@ -65,13 +65,37 @@ class ClassDocParser
         $trimGroupMatches = array_map('trim', $groupMatches[1]);
 
         $return = array();
-        foreach ($trimGroupMatches as $one) {
-            $pairTypeAndName = explode(' ', $one);
+        foreach ($trimGroupMatches as $i => $one) {
+            $pairTypeNameAndComplex = explode(' ', $one);
 
-            $return[][trim($pairTypeAndName[0])] = $pairTypeAndName[1];
+            $type = trim($pairTypeNameAndComplex[0]);
+            $name = str_replace('$', '', $pairTypeNameAndComplex[1]);
+
+            if ($type == 'array') {
+                $parsedArrayProperies = $this->_parseArray(array_splice($pairTypeNameAndComplex, 2));
+
+                $return[$name][$type] = $parsedArrayProperies;
+            } else {
+                $return[][$type] = $name;
+            }
         }
 
         return $return;
+    }
+
+    private function _parseArray($type)
+    {
+        $arrayData = array();
+
+        foreach ($type as $properties) {
+            preg_match('#@(.+)=(.+)#', $properties, $matches);
+            $param = $matches[1];
+            $value = $matches[2];
+
+            $arrayData[$param] = $value;
+        }
+
+        return $arrayData;
     }
 
     private function _parseReturn($docCommentString)

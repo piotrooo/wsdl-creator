@@ -8,7 +8,6 @@ namespace WSDL;
 
 class XMLWrapperGenerator
 {
-    private $_methods;
     private $_name;
     private $_namespace;
     private $_targetNamespace;
@@ -16,6 +15,8 @@ class XMLWrapperGenerator
     private $_DOMDocument;
     private $_definitionsRootNode;
     private $_generatedXML;
+    private $_methods;
+    private $_parsedClass;
 
     /**
      * @see http://infohost.nmt.edu/tcc/help/pubs/rnc/xsd.html
@@ -51,6 +52,13 @@ class XMLWrapperGenerator
         return $this;
     }
 
+    public function setParsedClass($parsedClass)
+    {
+        $this->_parsedClass = $parsedClass;
+
+        return $this;
+    }
+
     public function setDefinitions()
     {
         $definitionsElement = $this->_createElement('definitions');
@@ -82,8 +90,15 @@ class XMLWrapperGenerator
         return $this;
     }
 
-    public function setMessage($parsedComments)
+    public function setTypes()
     {
+        return $this;
+    }
+
+    public function setMessage()
+    {
+        $parsedComments = $this->_parsedClass;
+
         foreach ($this->_methods as $method) {
             $messageInputElement = $this->_createElement('message');
             $nameInput = $method . 'Request';
@@ -116,7 +131,7 @@ class XMLWrapperGenerator
         $XMLparam = array();
         foreach ($params as $i => $param) {
             $paramType = array_keys($param);
-            $paramName = str_replace('$', '', array_values($param));
+            $paramName = array_values($param);
 
             $XMLparam[$i] = $this->_createElement('part');
 

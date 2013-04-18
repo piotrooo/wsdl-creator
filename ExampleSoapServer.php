@@ -14,11 +14,12 @@ class ExampleSoapServer
     }
 
     /**
-     * @param array $arr1
+     * @param array $arr1 @type=string
+     * @param array $arr2 @type=double
      * @param string $name
      * @return array
      */
-    public function arrayTest(array $arr1, $name)
+    public function arrayTest(array $arr1, array $arr2, $name)
     {
         return array('name' => $name);
     }
