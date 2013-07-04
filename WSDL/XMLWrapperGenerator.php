@@ -75,10 +75,10 @@ class XMLWrapperGenerator
         $xmlnsXSDAttribute = $this->_createAttributeWithValue('xmlns:xsd1', $this->_xsd1);
         $definitionsElement->appendChild($xmlnsXSDAttribute);
 
-        $xmlnsSoapAttribute = $this->_createAttributeWithValue('xmlns:soap', 'http://schemas.xmlsoap.org/wsdl/soap/');
+        $xmlnsSoapAttribute = $this->_createAttributeWithValue('xmlns:soap', 'http://schemas.xmlsoap.org/WSDL/soap/');
         $definitionsElement->appendChild($xmlnsSoapAttribute);
 
-        $xmlnsAttribute = $this->_createAttributeWithValue('xmlns', 'http://schemas.xmlsoap.org/wsdl/');
+        $xmlnsAttribute = $this->_createAttributeWithValue('xmlns', 'http://schemas.xmlsoap.org/WSDL/');
         $definitionsElement->appendChild($xmlnsAttribute);
 
         $this->_DOMDocument->appendChild($definitionsElement);

@@ -4,10 +4,12 @@
  *
  * @author Piotr Olaszewski
  */
-namespace WSDL;
-require_once 'ParserComplexType.php';
 
-class ClassDocParser
+namespace WSDL\DocParser;
+
+use ReflectionClass;
+
+class ClassParser
 {
     private $_reflectedClass;
     private $_methodDocComments = array();
@@ -15,24 +17,25 @@ class ClassDocParser
 
     public function __construct($className)
     {
-        $this->_reflectedClass = new \ReflectionClass($className);
+        $this->_reflectedClass = new ReflectionClass($className);
+    }
 
-        $this->_getAllPublicMethodDocComment();
-        $this->_parseDocComment();
+    public function parse()
+    {
+        $this->_getAllPublicMethodDocComment()->_parseDocComment();
     }
 
     private function _getAllPublicMethodDocComment()
     {
         $reflectionClassMethods = $this->_reflectedClass->getMethods();
-
-        foreach ($reflectionClassMethods as $singleMethod) {
-            if ($singleMethod->isPublic()) {
-                $methodName = $singleMethod->getName();
-                $methodDocComment = $singleMethod->getDocComment();
-
+        foreach ($reflectionClassMethods as $method) {
+            if ($method->isPublic()) {
+                $methodName = $method->getName();
+                $methodDocComment = $method->getDocComment();
                 $this->_methodDocComments[$methodName] = $methodDocComment;
             }
         }
+        return $this;
     }
 
     private function _parseDocComment()
@@ -55,7 +58,6 @@ class ClassDocParser
     {
         preg_match('#@desc(.+)#', $docCommentString, $groupMatches);
         $trimGroupMatches = array_map('trim', $groupMatches);
-
         return !empty($trimGroupMatches[1]) ? $trimGroupMatches[1] : '';
     }
 
@@ -65,36 +67,29 @@ class ClassDocParser
         $trimGroupMatches = array_map('trim', $groupMatches[1]);
 
         $return = array();
-        foreach ($trimGroupMatches as $i => $one) {
+        foreach ($trimGroupMatches as $one) {
             $pairTypeNameAndComplex = explode(' ', $one);
-
             $type = trim($pairTypeNameAndComplex[0]);
             $name = str_replace('$', '', $pairTypeNameAndComplex[1]);
-
             if ($type == 'array') {
                 $parsedArrayProperies = $this->_parseArray(array_splice($pairTypeNameAndComplex, 2));
-
                 $return[$name][$type] = $parsedArrayProperies;
             } else {
                 $return[][$type] = $name;
             }
         }
-
         return $return;
     }
 
-    private function _parseArray($type)
+    private function _parseArray($toParse)
     {
         $arrayData = array();
-
-        foreach ($type as $properties) {
+        foreach ($toParse as $properties) {
             preg_match('#@(.+)=(.+)#', $properties, $matches);
-            $param = $matches[1];
+            $type = $matches[1];
             $value = $matches[2];
-
-            $arrayData[$param] = $value;
+            $arrayData[$type] = $value;
         }
-
         return $arrayData;
     }
 
@@ -102,7 +97,6 @@ class ClassDocParser
     {
         preg_match('#@return(.+)#', $docCommentString, $groupMatches);
         $trimGroupMatches = array_map('trim', $groupMatches);
-
         return $trimGroupMatches[1];
     }
 

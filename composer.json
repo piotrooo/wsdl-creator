@@ -1,0 +1,14 @@
+{
+    "name": "piotrooo/WSDL-creator",
+    "description": "description_text",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Piotr Olaszewski",
+            "email": "piotroo89@gmai.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "3.7.19"
+    }
+}
