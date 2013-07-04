@@ -5,11 +5,12 @@
  * @author Piotr Olaszewski
  * @see http://www.xfront.com/GlobalVersusLocal.html
  */
+
 namespace WSDL;
 
-use WSDL\DocParser\ClassParser;
+use WSDL\Parser\ClassParser;
 
-require_once 'DocParser/ClassParser.php';
+require_once 'Parser/ClassParser.php';
 require_once 'XMLWrapperGenerator.php';
 
 class WSDLCreator
@@ -35,8 +36,8 @@ class WSDLCreator
 
     public function renderWSDL()
     {
-//        header("Content-Type: text/xml");
-//
+        header("Content-Type: text/xml");
+
 //        $methods = $this->_classParser->getAllMethods();
 //
 //        print_r($methods);

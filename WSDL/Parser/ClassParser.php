@@ -5,7 +5,7 @@
  * @author Piotr Olaszewski
  */
 
-namespace WSDL\DocParser;
+namespace WSDL\Parser;
 
 use ReflectionClass;
 
