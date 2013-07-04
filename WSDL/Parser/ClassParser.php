@@ -72,7 +72,8 @@ class ClassParser
             $type = trim($pairTypeNameAndComplex[0]);
             $name = str_replace('$', '', $pairTypeNameAndComplex[1]);
             if ($type == 'array') {
-                $parsedArrayProperies = $this->_parseArray(array_splice($pairTypeNameAndComplex, 2));
+                $arrayElements = array_splice($pairTypeNameAndComplex, 2);
+                $parsedArrayProperies = $this->_parseArray($arrayElements);
                 $return[$name][$type] = $parsedArrayProperies;
             } else {
                 $return[][$type] = $name;

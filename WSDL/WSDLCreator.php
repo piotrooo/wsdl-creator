@@ -11,7 +11,7 @@ namespace WSDL;
 use WSDL\Parser\ClassParser;
 
 require_once 'Parser/ClassParser.php';
-require_once 'XMLWrapperGenerator.php';
+require_once 'XML/XMLWrapperGenerator.php';
 
 class WSDLCreator
 {
@@ -37,26 +37,18 @@ class WSDLCreator
     public function renderWSDL()
     {
         header("Content-Type: text/xml");
+        $methods = $this->_classParser->getAllMethods();
+        $parsedComments = $this->_classParser->getParsedComments();
 
-//        $methods = $this->_classParser->getAllMethods();
-//
-//        print_r($methods);
-//
-//        $parsedComments = $this->_classParser->getParsedComments();
-//
-//        $parserComplex = $this->_classParser->parserComplexTypes();
-//        $complexTypes = $parserComplex->getComplexTypes();
-//
-//        $xml = new XMLWrapperGenerator('ExampleSoapServer', "http://example.com/");
-//        $xml
-//            ->setMethods($methods)
-//            ->setParsedClass($parsedComments)
-//            ->setDefinitions()
-//            ->setTypes()
-//            ->setMessage()
-//            ->setPortType()
-//            ->setBinding()
-//            ->setService();
-//        $xml->render();
+        $xml = new XMLWrapperGenerator($this->_class, "http://example.com/");
+        $xml
+            ->setMethods($methods)
+            ->setParsedClass($parsedComments)
+            ->setDefinitions()
+            ->setMessage()
+            ->setPortType()
+            ->setBinding()
+            ->setService();
+        $xml->render();
     }
 }

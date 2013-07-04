@@ -4,7 +4,10 @@
  *
  * @author Piotr Olaszewski
  */
+
 namespace WSDL;
+
+use DOMDocument;
 
 class XMLWrapperGenerator
 {
@@ -35,8 +38,7 @@ class XMLWrapperGenerator
         $this->_targetNamespace = $this->_namespace . strtolower($this->_name) . '.wsdl';
         $this->_xsd1 = $this->_namespace . strtolower($this->_name) . '.xsd';
 
-        $this->_DOMDocument = new \DOMDocument("1.0", "UTF-8");
-
+        $this->_DOMDocument = new DOMDocument("1.0", "UTF-8");
         $this->_saveXML();
     }
 
@@ -48,14 +50,12 @@ class XMLWrapperGenerator
     public function setMethods($methods)
     {
         $this->_methods = $methods;
-
         return $this;
     }
 
     public function setParsedClass($parsedClass)
     {
         $this->_parsedClass = $parsedClass;
-
         return $this;
     }
 
@@ -132,16 +132,16 @@ class XMLWrapperGenerator
         foreach ($params as $i => $param) {
             $paramType = array_keys($param);
             $paramName = array_values($param);
+            $name = is_array(current($param)) ? $i : $paramName[0];
 
             $XMLparam[$i] = $this->_createElement('part');
 
-            $paramNameAttribute = $this->_createAttributeWithValue('name', $paramName[0]);
+            $paramNameAttribute = $this->_createAttributeWithValue('name', $name);
             $XMLparam[$i]->appendChild($paramNameAttribute);
 
             $paramTypeAttribute = $this->_createAttributeWithValue('type', $this->_parametersTypes[$paramType[0]]);
             $XMLparam[$i]->appendChild($paramTypeAttribute);
         }
-
         return $XMLparam;
     }
 
@@ -199,7 +199,7 @@ class XMLWrapperGenerator
         $nameAttribute = $this->_createAttributeWithValue('name', $name);
         $bindingElement->appendChild($nameAttribute);
 
-        $type = $this->_name . 'PortType';
+        $type = 'tns:' . $this->_name . 'PortType';
         $typeAttribute = $this->_createAttributeWithValue('type', $type);
         $bindingElement->appendChild($typeAttribute);
 
@@ -210,15 +210,15 @@ class XMLWrapperGenerator
         $soapBindingElement->appendChild($transportAttribute);
         $bindingElement->appendChild($soapBindingElement);
 
-        $soapBodyElementInput = $this->_createElement('soap:body');
-        $use = $this->_createAttributeWithValue('use', 'literal');
-        $soapBodyElementInput->appendChild($use);
-
-        $soapBodyElementOutput = $this->_createElement('soap:body');
-        $use = $this->_createAttributeWithValue('use', 'literal');
-        $soapBodyElementOutput->appendChild($use);
-
         foreach ($this->_methods as $method) {
+            $soapBodyElementInput = $this->_createElement('soap:body');
+            $use = $this->_createAttributeWithValue('use', 'literal');
+            $soapBodyElementInput->appendChild($use);
+
+            $soapBodyElementOutput = $this->_createElement('soap:body');
+            $use = $this->_createAttributeWithValue('use', 'literal');
+            $soapBodyElementOutput->appendChild($use);
+
             $operationElement = $this->_createElement('operation');
             $name = $this->_createAttributeWithValue('name', $method);
             $operationElement->appendChild($name);
@@ -240,9 +240,7 @@ class XMLWrapperGenerator
         }
 
         $this->_definitionsRootNode->appendChild($bindingElement);
-
         $this->_saveXML();
-
         return $this;
     }
 
@@ -276,7 +274,6 @@ class XMLWrapperGenerator
     {
         $attribute = $this->_DOMDocument->createAttribute($attributeName);
         $attribute->value = $value;
-
         return $attribute;
     }
 
