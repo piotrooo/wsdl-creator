@@ -3,11 +3,12 @@
  * XMLWrapperGenerator
  *
  * @author Piotr Olaszewski
+ * @see http://www.xfront.com/GlobalVersusLocal.html
  */
-
 namespace WSDL;
 
 use DOMDocument;
+use WSDL\Parser\Method;
 
 class XMLWrapperGenerator
 {
@@ -18,6 +19,9 @@ class XMLWrapperGenerator
     private $_DOMDocument;
     private $_definitionsRootNode;
     private $_generatedXML;
+    /**
+     * @var Method[]
+     */
     private $_methods;
     private $_parsedClass;
 
@@ -97,15 +101,13 @@ class XMLWrapperGenerator
 
     public function setMessage()
     {
-        $parsedComments = $this->_parsedClass;
-
         foreach ($this->_methods as $method) {
             $messageInputElement = $this->_createElement('message');
-            $nameInput = $method . 'Request';
+            $nameInput = $method->getName() . 'Request';
             $nameMessageInputAttribute = $this->_createAttributeWithValue('name', $nameInput);
             $messageInputElement->appendChild($nameMessageInputAttribute);
 
-            $generatedParts = $this->_createXMLMessageParams($parsedComments[$method]['params']);
+            $generatedParts = $this->_createXMLMessageParams($method->parameters());
             foreach ($generatedParts as $part) {
                 $messageInputElement->appendChild($part);
             }
@@ -113,16 +115,15 @@ class XMLWrapperGenerator
             $this->_definitionsRootNode->appendChild($messageInputElement);
 
             $messageOutputElement = $this->_createElement('message');
-            $nameOutput = $method . 'Response';
+            $nameOutput = $method->getName() . 'Response';
             $nameMessageOutputAttribute = $this->_createAttributeWithValue('name', $nameOutput);
             $messageOutputElement->appendChild($nameMessageOutputAttribute);
 
-            $generatedReturn = $this->_createXMLMessageReturn($nameOutput, $parsedComments[$method]['return']);
+            $generatedReturn = $this->_createXMLMessageReturn($nameOutput, $method->returning());
             $messageOutputElement->appendChild($generatedReturn);
 
             $this->_definitionsRootNode->appendChild($messageOutputElement);
         }
-
         return $this;
     }
 
@@ -154,7 +155,6 @@ class XMLWrapperGenerator
 
         $paramTypeAttribute = $this->_createAttributeWithValue('type', $this->_parametersTypes[$return]);
         $returnElement->appendChild($paramTypeAttribute);
-
         return $returnElement;
     }
 
@@ -167,27 +167,27 @@ class XMLWrapperGenerator
         $portTypeElement->appendChild($nameAttribute);
 
         foreach ($this->_methods as $method) {
+            $methodName = $method->getName();
+
             $operationElement = $this->_createElement('operation');
-            $name = $this->_createAttributeWithValue('name', $method);
+            $name = $this->_createAttributeWithValue('name', $methodName);
             $operationElement->appendChild($name);
 
             $inputElement = $this->_createElement('input');
-            $methodInputMessage = $method . 'Request';
+            $methodInputMessage = $methodName . 'Request';
             $messageInputAttribute = $this->_createAttributeWithValue('message', 'tns:' . $methodInputMessage);
             $inputElement->appendChild($messageInputAttribute);
             $operationElement->appendChild($inputElement);
 
             $outputElement = $this->_createElement('output');
-            $methodOutputMessage = $method . 'Response';
+            $methodOutputMessage = $methodName . 'Response';
             $messageOutputAttribute = $this->_createAttributeWithValue('message', 'tns:' . $methodOutputMessage);
             $outputElement->appendChild($messageOutputAttribute);
             $operationElement->appendChild($outputElement);
 
             $portTypeElement->appendChild($operationElement);
         }
-
         $this->_definitionsRootNode->appendChild($portTypeElement);
-
         return $this;
     }
 
@@ -211,6 +211,8 @@ class XMLWrapperGenerator
         $bindingElement->appendChild($soapBindingElement);
 
         foreach ($this->_methods as $method) {
+            $methodName = $method->getName();
+
             $soapBodyElementInput = $this->_createElement('soap:body');
             $use = $this->_createAttributeWithValue('use', 'literal');
             $soapBodyElementInput->appendChild($use);
@@ -220,11 +222,11 @@ class XMLWrapperGenerator
             $soapBodyElementOutput->appendChild($use);
 
             $operationElement = $this->_createElement('operation');
-            $name = $this->_createAttributeWithValue('name', $method);
+            $name = $this->_createAttributeWithValue('name', $methodName);
             $operationElement->appendChild($name);
 
             $soapOperationElement = $this->_createElement('soap:operation');
-            $soapActionAttribute = $this->_createAttributeWithValue('soapAction', $this->_namespace . $method);
+            $soapActionAttribute = $this->_createAttributeWithValue('soapAction', $this->_namespace . $methodName);
             $soapOperationElement->appendChild($soapActionAttribute);
             $operationElement->appendChild($soapOperationElement);
 
@@ -238,7 +240,6 @@ class XMLWrapperGenerator
 
             $bindingElement->appendChild($operationElement);
         }
-
         $this->_definitionsRootNode->appendChild($bindingElement);
         $this->_saveXML();
         return $this;

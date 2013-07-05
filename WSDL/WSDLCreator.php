@@ -3,9 +3,7 @@
  * WSDLCreator
  *
  * @author Piotr Olaszewski
- * @see http://www.xfront.com/GlobalVersusLocal.html
  */
-
 namespace WSDL;
 
 use WSDL\Parser\ClassParser;
@@ -16,7 +14,6 @@ require_once 'XML/XMLWrapperGenerator.php';
 class WSDLCreator
 {
     private $_class;
-
     /**
      * @var ClassParser
      */
@@ -37,13 +34,10 @@ class WSDLCreator
     public function renderWSDL()
     {
         header("Content-Type: text/xml");
-        $methods = $this->_classParser->getAllMethods();
-        $parsedComments = $this->_classParser->getParsedComments();
-
+        $methods = $this->_classParser->getMethods();
         $xml = new XMLWrapperGenerator($this->_class, "http://example.com/");
         $xml
             ->setMethods($methods)
-            ->setParsedClass($parsedComments)
             ->setDefinitions()
             ->setMessage()
             ->setPortType()
