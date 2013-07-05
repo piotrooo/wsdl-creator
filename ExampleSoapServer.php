@@ -10,7 +10,7 @@ if (isset($_GET['wsdl'])) {
 class ExampleSoapServer
 {
     /**
-     * @desc Method to logging
+     * @desc MethodParser to logging
      * @param string $message
      */
     private function _toLog($message)
@@ -19,7 +19,7 @@ class ExampleSoapServer
     }
 
     /**
-     * @desc Method to sum two integers
+     * @desc MethodParser to sum two integers
      * @param int $a
      * @param int $b
      * @return int

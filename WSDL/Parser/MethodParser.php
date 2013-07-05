@@ -1,12 +1,12 @@
 <?php
 /**
- * Method
+ * MethodParser
  *
  * @author Piotr Olaszewski
  */
 namespace WSDL\Parser;
 
-class Method
+class MethodParser
 {
     private $_name;
     private $_doc;

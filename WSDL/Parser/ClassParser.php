@@ -7,9 +7,9 @@
 namespace WSDL\Parser;
 
 use ReflectionClass;
-use WSDL\Parser\Method;
+use WSDL\Parser\MethodParser;
 
-require_once 'Method.php';
+require_once 'MethodParser.php';
 
 class ClassParser
 {
@@ -33,7 +33,7 @@ class ClassParser
             if ($method->isPublic()) {
                 $methodName = $method->getName();
                 $methodDocComment = $method->getDocComment();
-                $this->_methodDocComments[] = new Method($methodName, $methodDocComment);
+                $this->_methodDocComments[] = new MethodParser($methodName, $methodDocComment);
             }
         }
         return $this;

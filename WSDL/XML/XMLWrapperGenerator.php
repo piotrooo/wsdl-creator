@@ -8,7 +8,7 @@
 namespace WSDL;
 
 use DOMDocument;
-use WSDL\Parser\Method;
+use WSDL\Parser\MethodParser;
 
 class XMLWrapperGenerator
 {
@@ -20,7 +20,7 @@ class XMLWrapperGenerator
     private $_definitionsRootNode;
     private $_generatedXML;
     /**
-     * @var Method[]
+     * @var MethodParser[]
      */
     private $_methods;
     private $_parsedClass;
