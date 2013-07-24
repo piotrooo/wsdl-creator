@@ -6,6 +6,8 @@
  */
 namespace WSDL\Parser;
 
+require_once 'ParameterParser.php';
+
 class MethodParser
 {
     private $_name;

@@ -90,12 +90,21 @@ class XMLWrapperGenerator
         $this->_definitionsRootNode = $definitionsElement;
 
         $this->_saveXML();
-
         return $this;
     }
 
     public function setTypes()
     {
+        $typesElement = $this->_createElement('types');
+
+        $schemaElement = $this->_createElement('schema');
+        $targetNamespaceAttribute = $this->_createAttributeWithValue('targetNamespace', $this->_xsd1);
+        $schemaElement->appendChild($targetNamespaceAttribute);
+        $xmlnsAttribute = $this->_createAttributeWithValue('xmlns', 'http://www.w3.org/2000/10/XMLSchema');
+        $schemaElement->appendChild($xmlnsAttribute);
+        $typesElement->appendChild($schemaElement);
+
+        $this->_definitionsRootNode->appendChild($typesElement);
         return $this;
     }
 
@@ -140,7 +149,8 @@ class XMLWrapperGenerator
             $paramNameAttribute = $this->_createAttributeWithValue('name', $name);
             $XMLparam[$i]->appendChild($paramNameAttribute);
 
-            $paramTypeAttribute = $this->_createAttributeWithValue('type', $this->_parametersTypes[$paramType[0]]);
+            $type = $this->_parametersTypes[$paramType[0]] ? : 'xsd1:' . $name;
+            $paramTypeAttribute = $this->_createAttributeWithValue('type', $type);
             $XMLparam[$i]->appendChild($paramTypeAttribute);
         }
         return $XMLparam;

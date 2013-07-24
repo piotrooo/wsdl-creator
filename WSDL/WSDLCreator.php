@@ -39,6 +39,7 @@ class WSDLCreator
         $xml
             ->setMethods($methods)
             ->setDefinitions()
+            ->setTypes()
             ->setMessage()
             ->setPortType()
             ->setBinding()
