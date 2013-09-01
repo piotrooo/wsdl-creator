@@ -7,9 +7,8 @@
 namespace WSDL;
 
 use WSDL\Parser\ClassParser;
-
-require_once 'Parser/ClassParser.php';
-require_once 'XML/XMLWrapperGenerator.php';
+use WSDL\WSDLObject\WSDLObject;
+use WSDL\XML\XMLWrapperGenerator;
 
 class WSDLCreator
 {
@@ -23,12 +22,21 @@ class WSDLCreator
     {
         $this->_class = $class;
         $this->parseClass();
+        $this->_generateWSDLObject();
     }
 
     public function parseClass()
     {
         $this->_classParser = new ClassParser($this->_class);
         $this->_classParser->parse();
+    }
+
+    private function _generateWSDLObject()
+    {
+        $object = new WSDLObject();
+        $object
+            ->setMethods($this->_classParser->getMethods());
+//        print_r($object->getTypes());
     }
 
     public function renderWSDL()

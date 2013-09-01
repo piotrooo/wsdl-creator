@@ -9,8 +9,6 @@ namespace WSDL\Parser;
 use ReflectionClass;
 use WSDL\Parser\MethodParser;
 
-require_once 'MethodParser.php';
-
 class ClassParser
 {
     private $_reflectedClass;

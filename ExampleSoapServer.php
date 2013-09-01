@@ -1,10 +1,10 @@
 <?php
-require_once 'WSDL/WSDLCreator.php';
+require_once 'vendor/autoload.php';
 
 use WSDL\WSDLCreator;
 
 if (isset($_GET['wsdl'])) {
-    $wsdl = new WSDLCreator('ExampleSoapServer');
+    $wsdl = new WSDL\WSDLCreator('ExampleSoapServer');
     $wsdl->renderWSDL();
 }
 class ExampleSoapServer
@@ -30,13 +30,12 @@ class ExampleSoapServer
     }
 
     /**
-     * @param array $arr1 @string=name @int=id
-     * @param array $arr2
+     * @param object $object1 @string=name @int=id
      * @param string $name
      * @return array
      */
-    public function arrayTest(array $arr1, array $arr2, $name)
+    public function arrayTest($object1, $name)
     {
-        return array('name' => $name);
+        return array('obj1' => $object1, 'name' => $name);
     }
 }

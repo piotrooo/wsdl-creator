@@ -5,7 +5,7 @@
  * @author Piotr Olaszewski
  * @see http://www.xfront.com/GlobalVersusLocal.html
  */
-namespace WSDL;
+namespace WSDL\XML;
 
 use DOMDocument;
 use WSDL\Parser\MethodParser;
@@ -116,7 +116,7 @@ class XMLWrapperGenerator
             $nameMessageInputAttribute = $this->_createAttributeWithValue('name', $nameInput);
             $messageInputElement->appendChild($nameMessageInputAttribute);
 
-            $generatedParts = $this->_createXMLMessageParams($method->parameters());
+            $generatedParts = $this->_createXMLMessageParams($method);
             foreach ($generatedParts as $part) {
                 $messageInputElement->appendChild($part);
             }
@@ -136,22 +136,27 @@ class XMLWrapperGenerator
         return $this;
     }
 
-    private function _createXMLMessageParams($params)
+    private function _createXMLMessageParams(MethodParser $method)
     {
         $XMLparam = array();
-        foreach ($params as $i => $param) {
-            $paramType = array_keys($param);
-            $paramName = array_values($param);
-            $name = is_array(current($param)) ? $i : $paramName[0];
-
+        foreach ($method->parameters() as $i => $param) {
             $XMLparam[$i] = $this->_createElement('part');
 
-            $paramNameAttribute = $this->_createAttributeWithValue('name', $name);
-            $XMLparam[$i]->appendChild($paramNameAttribute);
+            $paramType = $param->getType();
+            if ($param->isComplex()) {
+                $paramNameAttribute = $this->_createAttributeWithValue('name', $param->getName());
+                $XMLparam[$i]->appendChild($paramNameAttribute);
 
-            $type = $this->_parametersTypes[$paramType[0]] ? : 'xsd1:' . $name;
-            $paramTypeAttribute = $this->_createAttributeWithValue('type', $type);
-            $XMLparam[$i]->appendChild($paramTypeAttribute);
+                $paramTypeAttribute = $this->_createAttributeWithValue('element', 'tns:' . $method->getName() . 'Input');
+                $XMLparam[$i]->appendChild($paramTypeAttribute);
+            } else {
+                $paramNameAttribute = $this->_createAttributeWithValue('name', $param->getName());
+                $XMLparam[$i]->appendChild($paramNameAttribute);
+
+                $type = $this->_parametersTypes[$paramType] ? : 'xsd:' . $paramType;
+                $paramTypeAttribute = $this->_createAttributeWithValue('type', $type);
+                $XMLparam[$i]->appendChild($paramTypeAttribute);
+            }
         }
         return $XMLparam;
     }

@@ -3,20 +3,23 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "3b4f3a2ca28dacd1376a57fc05d4af1f",
+    "hash": "e75008b91fe1f93f5caa8b83bfdef78b",
     "packages": [
+
+    ],
+    "packages-dev": [
         {
             "name": "phpunit/php-code-coverage",
             "version": "1.2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "1.2.9"
+                "reference": "906a767726f5bd451fbbe1d300ed46600d6c0934"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/1.2.9",
-                "reference": "1.2.9",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/906a767726f5bd451fbbe1d300ed46600d6c0934",
+                "reference": "906a767726f5bd451fbbe1d300ed46600d6c0934",
                 "shasum": ""
             },
             "require": {
@@ -25,11 +28,19 @@
                 "phpunit/php-text-template": ">=1.1.1@stable",
                 "phpunit/php-token-stream": ">=1.1.3@stable"
             },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*@dev"
+            },
             "suggest": {
                 "ext-dom": "*",
                 "ext-xdebug": ">=2.0.5"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2.x-dev"
+                }
+            },
             "autoload": {
                 "classmap": [
                     "PHP/"
@@ -56,7 +67,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2013-02-26 18:55:56"
+            "time": "2013-08-13 01:20:13"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -197,12 +208,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "c25dd88e1592e66dee2553c99ef244203d5a1b98"
+                "reference": "31babf400e5b5868573bf49a000a3519d3978233"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/c25dd88e1592e66dee2553c99ef244203d5a1b98",
-                "reference": "c25dd88e1592e66dee2553c99ef244203d5a1b98",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/31babf400e5b5868573bf49a000a3519d3978233",
+                "reference": "31babf400e5b5868573bf49a000a3519d3978233",
                 "shasum": ""
             },
             "require": {
@@ -210,6 +221,11 @@
                 "php": ">=5.3.3"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2-dev"
+                }
+            },
             "autoload": {
                 "classmap": [
                     "PHP/"
@@ -234,7 +250,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2013-01-07 10:56:35"
+            "time": "2013-08-04 05:57:48"
         },
         {
             "name": "phpunit/phpunit",
@@ -316,22 +332,31 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "d49b5683200b5db9b1c64cb06f52f50d147891c4"
+                "reference": "3e40f3b3f18c044a24688fe406440d7fd537744a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/d49b5683200b5db9b1c64cb06f52f50d147891c4",
-                "reference": "d49b5683200b5db9b1c64cb06f52f50d147891c4",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/3e40f3b3f18c044a24688fe406440d7fd537744a",
+                "reference": "3e40f3b3f18c044a24688fe406440d7fd537744a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
                 "phpunit/php-text-template": ">=1.1.1@stable"
             },
+            "require-dev": {
+                "pear-pear/pear": "1.9.4",
+                "phpunit/phpunit": "3.7.*@dev"
+            },
             "suggest": {
                 "ext-soap": "*"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2.x-dev"
+                }
+            },
             "autoload": {
                 "classmap": [
                     "PHPUnit/"
@@ -357,7 +382,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2013-02-05 07:46:41"
+            "time": "2013-07-23 04:42:59"
         },
         {
             "name": "symfony/yaml",
@@ -366,12 +391,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "v2.2.1"
+                "reference": "d135717c1a42cb566cc09433658e7e8dbbe30b0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/v2.2.1",
-                "reference": "v2.2.1",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/d135717c1a42cb566cc09433658e7e8dbbe30b0a",
+                "reference": "d135717c1a42cb566cc09433658e7e8dbbe30b0a",
                 "shasum": ""
             },
             "require": {
@@ -404,11 +429,8 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2013-03-23 07:49:54"
+            "time": "2013-08-24 06:36:00"
         }
-    ],
-    "packages-dev": [
-
     ],
     "aliases": [
 
