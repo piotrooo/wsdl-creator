@@ -9,6 +9,7 @@ namespace WSDL\XML;
 
 use DOMDocument;
 use WSDL\Parser\MethodParser;
+use WSDL\WSDLObject\WSDLObject;
 
 class XMLWrapperGenerator
 {
@@ -20,10 +21,9 @@ class XMLWrapperGenerator
     private $_definitionsRootNode;
     private $_generatedXML;
     /**
-     * @var MethodParser[]
+     * @var WSDLObject
      */
-    private $_methods;
-    private $_parsedClass;
+    private $_WSDLObject;
 
     /**
      * @see http://infohost.nmt.edu/tcc/help/pubs/rnc/xsd.html
@@ -51,15 +51,9 @@ class XMLWrapperGenerator
         $this->_generatedXML = $this->_DOMDocument->saveXML();
     }
 
-    public function setMethods($methods)
+    public function setWSDLObject($WSDLObject)
     {
-        $this->_methods = $methods;
-        return $this;
-    }
-
-    public function setParsedClass($parsedClass)
-    {
-        $this->_parsedClass = $parsedClass;
+        $this->_WSDLObject = $WSDLObject;
         return $this;
     }
 
@@ -102,15 +96,49 @@ class XMLWrapperGenerator
         $schemaElement->appendChild($targetNamespaceAttribute);
         $xmlnsAttribute = $this->_createAttributeWithValue('xmlns', 'http://www.w3.org/2000/10/XMLSchema');
         $schemaElement->appendChild($xmlnsAttribute);
+
+        $complexTypes = $this->_WSDLObject->getTypes();
+        foreach ($complexTypes as $complex) {
+            $elementElement = $this->_createElement('element');
+            $elementNameAttribute = $this->_createAttributeWithValue('name', $complex->getTypeName());
+            $elementElement->appendChild($elementNameAttribute);
+
+            $complexTypeElement = $this->_createElement('complexType');
+            $sequenceElement = $this->_createElement('sequence');
+
+            foreach ($complex->getComplexTypes() as $type) {
+                $typeElement = $this->_createElement('element');
+
+                $typeNameAttribute = $this->_createAttributeWithValue('name', $type->getName());
+                $typeElement->appendChild($typeNameAttribute);
+
+
+                $typeTypeAttribute = $this->_createAttributeWithValue('type', $this->_getXsdType($type->getType()));
+                $typeElement->appendChild($typeTypeAttribute);
+
+                $sequenceElement->appendChild($typeElement);
+            }
+
+            $complexTypeElement->appendChild($sequenceElement);
+            $elementElement->appendChild($complexTypeElement);
+            $schemaElement->appendChild($elementElement);
+        }
+
         $typesElement->appendChild($schemaElement);
 
         $this->_definitionsRootNode->appendChild($typesElement);
+        $this->_saveXML();
         return $this;
+    }
+
+    private function _getXsdType($type)
+    {
+        return isset($this->_parametersTypes[$type]) ? $this->_parametersTypes[$type] : 'xds:' . $type;
     }
 
     public function setMessage()
     {
-        foreach ($this->_methods as $method) {
+        foreach ($this->_WSDLObject as $method) {
             $messageInputElement = $this->_createElement('message');
             $nameInput = $method->getName() . 'Request';
             $nameMessageInputAttribute = $this->_createAttributeWithValue('name', $nameInput);
@@ -181,7 +209,7 @@ class XMLWrapperGenerator
         $nameAttribute = $this->_createAttributeWithValue('name', $name);
         $portTypeElement->appendChild($nameAttribute);
 
-        foreach ($this->_methods as $method) {
+        foreach ($this->_WSDLObject as $method) {
             $methodName = $method->getName();
 
             $operationElement = $this->_createElement('operation');
@@ -225,7 +253,7 @@ class XMLWrapperGenerator
         $soapBindingElement->appendChild($transportAttribute);
         $bindingElement->appendChild($soapBindingElement);
 
-        foreach ($this->_methods as $method) {
+        foreach ($this->_WSDLObject as $method) {
             $methodName = $method->getName();
 
             $soapBodyElementInput = $this->_createElement('soap:body');

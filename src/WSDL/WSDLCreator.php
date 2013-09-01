@@ -21,11 +21,10 @@ class WSDLCreator
     public function __construct($class)
     {
         $this->_class = $class;
-        $this->parseClass();
-        $this->_generateWSDLObject();
+        $this->_parseClass();
     }
 
-    public function parseClass()
+    private function _parseClass()
     {
         $this->_classParser = new ClassParser($this->_class);
         $this->_classParser->parse();
@@ -34,23 +33,21 @@ class WSDLCreator
     private function _generateWSDLObject()
     {
         $object = new WSDLObject();
-        $object
-            ->setMethods($this->_classParser->getMethods());
-//        print_r($object->getTypes());
+        $object->setMethods($this->_classParser->getMethods());
+        return $object;
     }
 
     public function renderWSDL()
     {
         header("Content-Type: text/xml");
-        $methods = $this->_classParser->getMethods();
         $xml = new XMLWrapperGenerator($this->_class, "http://example.com/");
         $xml
-            ->setMethods($methods)
+            ->setWSDLObject($this->_generateWSDLObject())
             ->setDefinitions()
             ->setTypes()
-            ->setMessage()
-            ->setPortType()
-            ->setBinding()
+//            ->setMessage()
+//            ->setPortType()
+//            ->setBinding()
             ->setService();
         $xml->render();
     }

@@ -21,11 +21,16 @@ class WSDLObject
         return $this;
     }
 
+    /**
+     * @return WSDLTypesObject[]
+     */
     public function getTypes()
     {
         $types = array();
         foreach ($this->_methods as $method) {
-            $types[] = new WSDLTypesObject($method);
+            if ($method->hasComplexTypes()) {
+                $types[] = new WSDLTypesObject($method);
+            }
         }
         return $types;
     }

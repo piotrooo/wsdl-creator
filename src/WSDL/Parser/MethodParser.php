@@ -24,6 +24,9 @@ class MethodParser
         return !empty($trimGroupMatches[1]) ? $trimGroupMatches[1] : '';
     }
 
+    /**
+     * @return ParameterParser[]
+     */
     public function parameters()
     {
         preg_match_all('#@param(.+)#', $this->_doc, $groupMatches);
@@ -45,5 +48,15 @@ class MethodParser
     public function getName()
     {
         return $this->_name;
+    }
+
+    public function hasComplexTypes()
+    {
+        foreach ($this->parameters() as $parameter) {
+            if ($parameter->isComplex()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
