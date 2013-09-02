@@ -16,7 +16,8 @@ class XMLGenerator
     private $_name;
     private $_namespace;
     private $_targetNamespace;
-    private $_xsd1;
+    private $_targetNamespaceTypes;
+    private $_xsd;
     private $_DOMDocument;
     private $_definitionsRootNode;
     private $_generatedXML;
@@ -41,8 +42,9 @@ class XMLGenerator
         $this->_namespace = $namespace;
         $this->_location = $location;
 
-        $this->_targetNamespace = $this->_namespace;
-        $this->_xsd1 = $this->_namespace ;
+        $this->_targetNamespace = $this->_namespace . strtolower($name);
+        $this->_xsd = 'http://www.w3.org/2001/XMLSchema';
+        $this->_targetNamespaceTypes = $this->_targetNamespace . '/types';
 
         $this->_DOMDocument = new DOMDocument("1.0", "UTF-8");
         $this->_saveXML();
@@ -72,14 +74,17 @@ class XMLGenerator
         $xmlnsTnsAttribute = $this->_createAttributeWithValue('xmlns:tns', $this->_targetNamespace);
         $definitionsElement->appendChild($xmlnsTnsAttribute);
 
-        $xmlnsXSDAttribute = $this->_createAttributeWithValue('xmlns:xsd', $this->_xsd1);
+        $xmlnsXSDAttribute = $this->_createAttributeWithValue('xmlns:xsd', $this->_xsd);
         $definitionsElement->appendChild($xmlnsXSDAttribute);
 
-        $xmlnsSoapAttribute = $this->_createAttributeWithValue('xmlns:soap', 'http://schemas.xmlsoap.org/WSDL/soap/');
+        $xmlnsSoapAttribute = $this->_createAttributeWithValue('xmlns:soap', 'http://schemas.xmlsoap.org/wsdl/soap/');
         $definitionsElement->appendChild($xmlnsSoapAttribute);
 
         $xmlnsAttribute = $this->_createAttributeWithValue('xmlns', 'http://schemas.xmlsoap.org/wsdl/');
         $definitionsElement->appendChild($xmlnsAttribute);
+
+        $xmlnsTypesAttribute = $this->_createAttributeWithValue('xmlns:ns', $this->_targetNamespaceTypes);
+        $definitionsElement->appendChild($xmlnsTypesAttribute);
 
         $this->_DOMDocument->appendChild($definitionsElement);
 
@@ -93,23 +98,23 @@ class XMLGenerator
     {
         $typesElement = $this->_createElement('types');
 
-        $schemaElement = $this->_createElement('schema');
-        $targetNamespaceAttribute = $this->_createAttributeWithValue('targetNamespace', $this->_xsd1);
+        $schemaElement = $this->_createElement('xsd:schema');
+        $targetNamespaceAttribute = $this->_createAttributeWithValue('targetNamespace', $this->_targetNamespaceTypes);
         $schemaElement->appendChild($targetNamespaceAttribute);
-        $xmlnsAttribute = $this->_createAttributeWithValue('xmlns', 'http://www.w3.org/2000/10/XMLSchema');
+        $xmlnsAttribute = $this->_createAttributeWithValue('xmlns', $this->_targetNamespaceTypes);
         $schemaElement->appendChild($xmlnsAttribute);
 
         $complexTypes = $this->_WSDLObject->getTypes();
         foreach ($complexTypes as $complex) {
-            $elementElement = $this->_createElement('element');
+            $elementElement = $this->_createElement('xsd:element');
             $elementNameAttribute = $this->_createAttributeWithValue('name', $complex->getTypeName() . 'Input');
             $elementElement->appendChild($elementNameAttribute);
 
             foreach ($complex->getComplexTypes() as $type) {
-                $complexTypeElement = $this->_createElement('complexType');
-                $sequenceElement = $this->_createElement('sequence');
+                $complexTypeElement = $this->_createElement('xsd:complexType');
+                $sequenceElement = $this->_createElement('xsd:sequence');
                 foreach ($type as $complexSingle) {
-                    $typeElement = $this->_createElement('element');
+                    $typeElement = $this->_createElement('xsd:element');
 
                     $typeNameAttribute = $this->_createAttributeWithValue('name', $complexSingle->getName());
                     $typeElement->appendChild($typeNameAttribute);
@@ -178,7 +183,7 @@ class XMLGenerator
                 $paramNameAttribute = $this->_createAttributeWithValue('name', $param->getName());
                 $XMLParam[$i]->appendChild($paramNameAttribute);
 
-                $paramTypeAttribute = $this->_createAttributeWithValue('element', 'tns:' . $method->getName() . 'Input');
+                $paramTypeAttribute = $this->_createAttributeWithValue('element', 'ns:' . $method->getName() . 'Input');
                 $XMLParam[$i]->appendChild($paramTypeAttribute);
             } else {
                 $paramNameAttribute = $this->_createAttributeWithValue('name', $param->getName());
@@ -271,7 +276,7 @@ class XMLGenerator
             $operationElement->appendChild($name);
 
             $soapOperationElement = $this->_createElement('soap:operation');
-            $soapActionAttribute = $this->_createAttributeWithValue('soapAction', $this->_namespace . $this->_name . 'PortType/' . $methodName);
+            $soapActionAttribute = $this->_createAttributeWithValue('soapAction', $this->_namespace . strtolower($this->_name) . '/#' . $methodName);
             $soapOperationElement->appendChild($soapActionAttribute);
             $operationElement->appendChild($soapOperationElement);
 

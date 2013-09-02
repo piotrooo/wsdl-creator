@@ -4,13 +4,13 @@ require_once 'vendor/autoload.php';
 use WSDL\WSDLCreator;
 
 if (isset($_GET['wsdl'])) {
-    $wsdl = new WSDL\WSDLCreator('ExampleSoapServer', 'http://localhost:8080/wsdl-creator/ExampleSoapServer.php');
+    $wsdl = new WSDL\WSDLCreator('ExampleSoapServer', 'http://localhost/wsdl-creator/ExampleSoapServer.php');
     $wsdl->renderWSDL();
     exit;
 }
 
 $server = new SoapServer(NULL, array(
-    'uri' => 'http://localhost:8080/wsdl-creator/ExampleSoapServer.php'
+    'uri' => 'http://localhost/wsdl-creator/ExampleSoapServer.php'
 ));
 $server->setClass('ExampleSoapServer');
 $server->handle();
@@ -39,13 +39,10 @@ class ExampleSoapServer
 
     /**
      * @param object $object1 @string=name @int=id
-     * @param string $name
-     * @return string
+     * @return anyType
      */
-    public function arrayTest($object1, $name)
+    public function arrayTest($object1)
     {
-        $this->_toLog(print_r($object1));
-        $this->_toLog(print_r($name));
-        return 'good';
+        return $object1;
     }
 }
