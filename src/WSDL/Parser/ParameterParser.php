@@ -2,7 +2,7 @@
 /**
  * ParameterParser
  *
- * @author Piotr Olaszewski
+ * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
  */
 namespace WSDL\Parser;
 
@@ -53,10 +53,14 @@ class ParameterParser
         return $this->getType() == 'object';
     }
 
+    /**
+     * @return ComplexTypeParser[]
+     * @throws ParameterParserException
+     */
     public function complexTypes()
     {
         if (!$this->isComplex()) {
-            throw new ParameterParserExcepion("This paramater is not complex type.");
+            throw new ParameterParserException("This parameter is not complex type.");
         }
         preg_match("#@(.+)#", $this->_parameter, $complexTypes);
         return ComplexTypeParser::create($complexTypes[1]);
@@ -76,6 +80,6 @@ class ParameterParser
     }
 }
 
-class ParameterParserExcepion extends Exception
+class ParameterParserException extends Exception
 {
 }

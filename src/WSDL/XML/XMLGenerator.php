@@ -2,7 +2,7 @@
 /**
  * XMLWrapperGenerator
  *
- * @author Piotr Olaszewski
+ * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
  * @see http://www.xfront.com/GlobalVersusLocal.html
  */
 namespace WSDL\XML;
@@ -11,7 +11,7 @@ use DOMDocument;
 use WSDL\Parser\MethodParser;
 use WSDL\WSDLObject\WSDLObject;
 
-class XMLWrapperGenerator
+class XMLGenerator
 {
     private $_name;
     private $_namespace;
@@ -51,7 +51,7 @@ class XMLWrapperGenerator
         $this->_generatedXML = $this->_DOMDocument->saveXML();
     }
 
-    public function setWSDLObject($WSDLObject)
+    public function setWSDLObject(WSDLObject $WSDLObject)
     {
         $this->_WSDLObject = $WSDLObject;
         return $this;

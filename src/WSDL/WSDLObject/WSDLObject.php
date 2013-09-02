@@ -2,7 +2,7 @@
 /**
  * WSDLObject
  *
- * @author Piotr Olaszewski
+ * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
  */
 namespace WSDL\WSDLObject;
 
@@ -15,10 +15,12 @@ class WSDLObject
      */
     private $_methods;
 
-    public function setMethods($methods)
+    /**
+     * @param MethodParser[] $methods
+     */
+    public function __construct($methods)
     {
         $this->_methods = $methods;
-        return $this;
     }
 
     /**

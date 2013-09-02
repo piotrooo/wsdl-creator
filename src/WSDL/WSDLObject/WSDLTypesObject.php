@@ -2,7 +2,7 @@
 /**
  * WSDLTypesObject
  *
- * @author Piotr Olaszewski
+ * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
  */
 namespace WSDL\WSDLObject;
 
@@ -28,9 +28,9 @@ class WSDLTypesObject
     public function getComplexTypes()
     {
         $complexTypes = array();
-        foreach ($this->_method->parameters() as $paramater) {
-            if ($paramater->isComplex()) {
-                $complexTypes = $paramater->complexTypes();
+        foreach ($this->_method->parameters() as $parameter) {
+            if ($parameter->isComplex()) {
+                $complexTypes = $parameter->complexTypes();
             }
         }
         return $complexTypes;

@@ -2,13 +2,13 @@
 /**
  * WSDLCreator
  *
- * @author Piotr Olaszewski
+ * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
  */
 namespace WSDL;
 
 use WSDL\Parser\ClassParser;
 use WSDL\WSDLObject\WSDLObject;
-use WSDL\XML\XMLWrapperGenerator;
+use WSDL\XML\XMLGenerator;
 
 class WSDLCreator
 {
@@ -32,15 +32,13 @@ class WSDLCreator
 
     private function _generateWSDLObject()
     {
-        $object = new WSDLObject();
-        $object->setMethods($this->_classParser->getMethods());
-        return $object;
+        return new WSDLObject($this->_classParser->getMethods());
     }
 
     public function renderWSDL()
     {
         header("Content-Type: text/xml");
-        $xml = new XMLWrapperGenerator($this->_class, "http://example.com/");
+        $xml = new XMLGenerator($this->_class, "http://example.com/");
         $xml
             ->setWSDLObject($this->_generateWSDLObject())
             ->setDefinitions()

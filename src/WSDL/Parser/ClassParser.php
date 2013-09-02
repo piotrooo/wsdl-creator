@@ -2,7 +2,7 @@
 /**
  * ClassParser
  *
- * @author Piotr Olaszewski
+ * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
  */
 namespace WSDL\Parser;
 
@@ -12,6 +12,9 @@ use WSDL\Parser\MethodParser;
 class ClassParser
 {
     private $_reflectedClass;
+    /**
+     * @var MethodParser[]
+     */
     private $_methodDocComments = array();
 
     public function __construct($className)

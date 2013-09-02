@@ -2,7 +2,7 @@
 /**
  * ComplexTypeParser
  *
- * @author Piotr Olaszewski
+ * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
  */
 namespace WSDL\Parser;
 
