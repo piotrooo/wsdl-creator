@@ -30,7 +30,7 @@ class WSDLTypesObject
         $complexTypes = array();
         foreach ($this->_method->parameters() as $parameter) {
             if ($parameter->isComplex()) {
-                $complexTypes = $parameter->complexTypes();
+                $complexTypes[] = $parameter->complexTypes();
             }
         }
         return $complexTypes;

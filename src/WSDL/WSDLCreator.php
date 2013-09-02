@@ -13,14 +13,16 @@ use WSDL\XML\XMLGenerator;
 class WSDLCreator
 {
     private $_class;
+    private $_location;
     /**
      * @var ClassParser
      */
     private $_classParser;
 
-    public function __construct($class)
+    public function __construct($class, $location)
     {
         $this->_class = $class;
+        $this->_location = $location;
         $this->_parseClass();
     }
 
@@ -38,14 +40,14 @@ class WSDLCreator
     public function renderWSDL()
     {
         header("Content-Type: text/xml");
-        $xml = new XMLGenerator($this->_class, "http://example.com/");
+        $xml = new XMLGenerator($this->_class, "http://example.com/", $this->_location);
         $xml
             ->setWSDLObject($this->_generateWSDLObject())
             ->setDefinitions()
             ->setTypes()
-//            ->setMessage()
-//            ->setPortType()
-//            ->setBinding()
+            ->setMessage()
+            ->setPortType()
+            ->setBinding()
             ->setService();
         $xml->render();
     }

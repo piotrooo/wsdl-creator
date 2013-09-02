@@ -36,4 +36,9 @@ class WSDLObject
         }
         return $types;
     }
+
+    public function getMethods()
+    {
+        return $this->_methods;
+    }
 }

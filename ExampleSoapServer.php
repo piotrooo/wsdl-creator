@@ -4,9 +4,17 @@ require_once 'vendor/autoload.php';
 use WSDL\WSDLCreator;
 
 if (isset($_GET['wsdl'])) {
-    $wsdl = new WSDL\WSDLCreator('ExampleSoapServer');
+    $wsdl = new WSDL\WSDLCreator('ExampleSoapServer', 'http://localhost:8080/wsdl-creator/ExampleSoapServer.php');
     $wsdl->renderWSDL();
+    exit;
 }
+
+$server = new SoapServer(NULL, array(
+    'uri' => 'http://localhost:8080/wsdl-creator/ExampleSoapServer.php'
+));
+$server->setClass('ExampleSoapServer');
+$server->handle();
+
 class ExampleSoapServer
 {
     /**
@@ -19,7 +27,7 @@ class ExampleSoapServer
     }
 
     /**
-     * @desc MethodParser to sum two integers
+     * @desc to sum two integers
      * @param int $a
      * @param int $b
      * @return int
@@ -32,10 +40,12 @@ class ExampleSoapServer
     /**
      * @param object $object1 @string=name @int=id
      * @param string $name
-     * @return array
+     * @return string
      */
     public function arrayTest($object1, $name)
     {
-        return array('obj1' => $object1, 'name' => $name);
+        $this->_toLog(print_r($object1));
+        $this->_toLog(print_r($name));
+        return 'good';
     }
 }
