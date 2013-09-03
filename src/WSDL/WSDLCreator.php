@@ -7,7 +7,6 @@
 namespace WSDL;
 
 use WSDL\Parser\ClassParser;
-use WSDL\WSDLObject\WSDLObject;
 use WSDL\XML\XMLGenerator;
 
 class WSDLCreator
@@ -18,7 +17,7 @@ class WSDLCreator
      * @var ClassParser
      */
     private $_classParser;
-    private $_namespace;
+    private $_namespace = 'http://example.com/';
 
     public function __construct($class, $location)
     {
@@ -33,21 +32,22 @@ class WSDLCreator
         $this->_classParser->parse();
     }
 
-    private function _generateWSDLObject()
-    {
-        return new WSDLObject($this->_classParser->getMethods());
-    }
-
     public function renderWSDL()
     {
         header("Content-Type: text/xml");
         $xml = new XMLGenerator($this->_class, $this->_namespace, $this->_location);
-        $xml->setWSDLObject($this->_generateWSDLObject())->generate();
+        $xml->setWSDLMethods($this->_classParser->getMethods())->generate();
         $xml->render();
     }
 
     public function setNamespace($namespace)
     {
+        $namespace = $this->_addShlashAtEndIfNoExists($namespace);
         $this->_namespace = $namespace;
+    }
+
+    private function _addShlashAtEndIfNoExists($namespace)
+    {
+        return rtrim($namespace, '/') . '/';
     }
 }

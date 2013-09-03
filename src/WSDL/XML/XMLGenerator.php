@@ -9,11 +9,12 @@ namespace WSDL\XML;
 
 use DOMDocument;
 use WSDL\Parser\MethodParser;
-use WSDL\WSDLObject\WSDLObject;
+use WSDL\Parser\ParameterParser;
 
 class XMLGenerator
 {
     private $_name;
+    private $_location;
     private $_targetNamespace;
     private $_targetNamespaceTypes;
     /**
@@ -29,9 +30,9 @@ class XMLGenerator
      */
     private $_generatedXML;
     /**
-     * @var WSDLObject
+     * @var MethodParser[]
      */
-    private $_WSDLObject;
+    private $_WSDLMethods;
     /**
      * @see http://infohost.nmt.edu/tcc/help/pubs/rnc/xsd.html
      */
@@ -40,7 +41,6 @@ class XMLGenerator
         'integer' => 'xsd:int',
         'int' => 'xsd:int'
     );
-    private $_location;
 
     public function __construct($name, $namespace, $location)
     {
@@ -54,9 +54,9 @@ class XMLGenerator
         $this->_saveXML();
     }
 
-    public function setWSDLObject(WSDLObject $WSDLObject)
+    public function setWSDLMethods($WSDLMethods)
     {
-        $this->_WSDLObject = $WSDLObject;
+        $this->_WSDLMethods = $WSDLMethods;
         return $this;
     }
 
@@ -92,66 +92,47 @@ class XMLGenerator
     {
         $typesElement = $this->_createElement('types');
 
-        $schemaElement = $this->_createElement('xsd:schema');
-        $targetNamespaceAttribute = $this->_createAttributeWithValue('targetNamespace', $this->_targetNamespaceTypes);
-        $schemaElement->appendChild($targetNamespaceAttribute);
-        $xmlnsAttribute = $this->_createAttributeWithValue('xmlns', $this->_targetNamespaceTypes);
-        $schemaElement->appendChild($xmlnsAttribute);
+        $schemaElement = $this->_createElementWithAttributes('xsd:schema', array(
+            'targetNamespace' => $this->_targetNamespaceTypes,
+            'xmlns' => $this->_targetNamespaceTypes
+        ));
 
-        $complexTypes = $this->_WSDLObject->getTypes();
-        foreach ($complexTypes as $i => $complex) {
-            $elementElement = $this->_createElement('xsd:element');
-            $elementNameAttribute = $this->_createAttributeWithValue('name', $complex->getTypeName() . ($i + 1) . 'Input');
-            $elementElement->appendChild($elementNameAttribute);
-
-            foreach ($complex->getComplexTypes() as $type) {
-                $complexTypeElement = $this->_createElement('xsd:complexType');
-                $sequenceElement = $this->_createElement('xsd:sequence');
-                foreach ($type as $complexSingle) {
-                    $typeElement = $this->_createElement('xsd:element');
-
-                    $typeNameAttribute = $this->_createAttributeWithValue('name', $complexSingle->getName());
-                    $typeElement->appendChild($typeNameAttribute);
-
-
-                    $typeTypeAttribute = $this->_createAttributeWithValue('type', $this->_getXsdType($complexSingle->getType()));
-                    $typeElement->appendChild($typeTypeAttribute);
-
-                    $sequenceElement->appendChild($typeElement);
-                }
-                $complexTypeElement->appendChild($sequenceElement);
+        foreach ($this->_WSDLMethods as $method) {
+            foreach ($method->parameters() as $i => $parameter) {
+                $this->_generateComplexType($parameter, $method, $i, $schemaElement);
             }
 
-            $elementElement->appendChild($complexTypeElement);
-            $schemaElement->appendChild($elementElement);
-
-            $elementReturningElement = $this->_createElement('xsd:element');
-            $elementReturningNameAttribute = $this->_createAttributeWithValue('name', $complex->getTypeName() . 'Output');
-            $elementReturningElement->appendChild($elementReturningNameAttribute);
-
-            $complexTypeReturningElement = $this->_createElement('xsd:complexType');
-            $sequenceReturningElement = $this->_createElement('xsd:sequence');
-            foreach ($complex->getReturningComplexType() as $returningComplexType) {
-                $elementPartReturningElement = $this->_createElement('xsd:element');
-
-                $typeNameReturningAttribute = $this->_createAttributeWithValue('name', $returningComplexType->getName());
-                $elementPartReturningElement->appendChild($typeNameReturningAttribute);
-
-                $typeTypeReturningAttribute = $this->_createAttributeWithValue('type', $this->_getXsdType($returningComplexType->getType()));
-                $elementPartReturningElement->appendChild($typeTypeReturningAttribute);
-
-                $sequenceReturningElement->appendChild($elementPartReturningElement);
-            }
-            $complexTypeReturningElement->appendChild($sequenceReturningElement);
-            $elementReturningElement->appendChild($complexTypeReturningElement);
-            $schemaElement->appendChild($elementReturningElement);
+            $this->_generateComplexType($method->returning(), $method, null, $schemaElement);
         }
 
         $typesElement->appendChild($schemaElement);
-
         $this->_definitionsRootNode->appendChild($typesElement);
         $this->_saveXML();
         return $this;
+    }
+
+    private function _generateComplexType(ParameterParser $parameter, MethodParser $method, $index, $schemaElement)
+    {
+        if ($parameter->isComplex()) {
+            $name = isset($index) ? $method->getName() . ($index + 1) . 'Input' : $method->getName() . 'Output';
+            $element = $this->_createElementWithAttributes('xsd:element', array(
+                'name' => $name
+            ));
+            $complexTypeElement = $this->_createElement('xsd:complexType');
+            $sequenceElement = $this->_createElement('xsd:sequence');
+
+            foreach ($parameter->complexTypes() as $complexType) {
+                $elementPartElement = $this->_createElementWithAttributes('xsd:element', array(
+                    'name' => $complexType->getName(),
+                    'type' => $this->_getXsdType($complexType->getType())
+                ));
+                $sequenceElement->appendChild($elementPartElement);
+            }
+
+            $complexTypeElement->appendChild($sequenceElement);
+            $element->appendChild($complexTypeElement);
+            $schemaElement->appendChild($element);
+        }
     }
 
     /**
@@ -159,7 +140,7 @@ class XMLGenerator
      */
     private function _message()
     {
-        foreach ($this->_WSDLObject->getMethods() as $method) {
+        foreach ($this->_WSDLMethods as $method) {
             $messageInputElement = $this->_createElementWithAttributes('message', array(
                 'name' => $method->getName() . 'Request'
             ));
@@ -181,13 +162,9 @@ class XMLGenerator
     {
         $partElements = array();
         foreach ($method->parameters() as $i => $param) {
-            if ($param->isComplex()) {
-                $type = 'element';
-                $value = 'ns:' . $method->getName() . ($i + 1) . 'Input';
-            } else {
-                $type = 'type';
-                $value = $this->_getXsdType($param->getType());
-            }
+            $type = $param->isComplex() ? 'element' : 'type';
+            $value = $param->isComplex() ? 'ns:' . $method->getName() . ($i + 1) . 'Input' : $this->_getXsdType($param->getType());
+
             $partElements[] = $this->_createElementWithAttributes('part', array(
                 'name' => $param->getName(),
                 $type => $value
@@ -199,13 +176,9 @@ class XMLGenerator
     private function _createXMLMessageOutput(MethodParser $method)
     {
         $parameter = $method->returning();
-        if ($parameter->isComplex()) {
-            $type = 'element';
-            $value = 'ns:' . $method->getName() . 'Output';
-        } else {
-            $type = 'type';
-            $value = $this->_getXsdType($parameter->getType());
-        }
+        $type = $parameter->isComplex() ? 'element' : 'type';
+        $value = $parameter->isComplex() ? 'ns:' . $method->getName() . 'Output' : $this->_getXsdType($parameter->getType());
+
         $returnElement = $this->_createElementWithAttributes('part', array(
             'name' => $parameter->getName() ? $parameter->getName() : $method->getName() . 'Output',
             $type => $value
@@ -222,7 +195,7 @@ class XMLGenerator
             'name' => $this->_name . 'PortType'
         ));
 
-        foreach ($this->_WSDLObject->getMethods() as $method) {
+        foreach ($this->_WSDLMethods as $method) {
             $operationElement = $this->_createElementWithAttributes('operation', array('name' => $method->getName()));
 
             if ($method->description()) {
@@ -239,6 +212,7 @@ class XMLGenerator
             $portTypeElement->appendChild($operationElement);
         }
         $this->_definitionsRootNode->appendChild($portTypeElement);
+        $this->_saveXML();
         return $this;
     }
 
@@ -258,7 +232,7 @@ class XMLGenerator
         ));
         $bindingElement->appendChild($soapBindingElement);
 
-        foreach ($this->_WSDLObject->getMethods() as $method) {
+        foreach ($this->_WSDLMethods as $method) {
             $soapBodyElement = $this->_createElementWithAttributes('soap:body', array(
                 'use' => 'literal'
             ));
