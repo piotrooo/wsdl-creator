@@ -37,7 +37,7 @@ class MethodParser
     {
         preg_match('#@return(.+)#', $this->_doc, $groupMatches);
         $trimGroupMatches = array_map('trim', $groupMatches);
-        return $trimGroupMatches[1];
+        return new ParameterParser($trimGroupMatches[1]);
     }
 
     public function getDoc()

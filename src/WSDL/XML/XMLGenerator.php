@@ -110,9 +110,9 @@ class XMLGenerator
         $schemaElement->appendChild($xmlnsAttribute);
 
         $complexTypes = $this->_WSDLObject->getTypes();
-        foreach ($complexTypes as $complex) {
+        foreach ($complexTypes as $i => $complex) {
             $elementElement = $this->_createElement('xsd:element');
-            $elementNameAttribute = $this->_createAttributeWithValue('name', $complex->getTypeName() . 'Input');
+            $elementNameAttribute = $this->_createAttributeWithValue('name', $complex->getTypeName() . ($i + 1) . 'Input');
             $elementElement->appendChild($elementNameAttribute);
 
             foreach ($complex->getComplexTypes() as $type) {
@@ -135,6 +135,27 @@ class XMLGenerator
 
             $elementElement->appendChild($complexTypeElement);
             $schemaElement->appendChild($elementElement);
+
+            $elementReturningElement = $this->_createElement('xsd:element');
+            $elementReturningNameAttribute = $this->_createAttributeWithValue('name', $complex->getTypeName() . 'Output');
+            $elementReturningElement->appendChild($elementReturningNameAttribute);
+
+            $complexTypeReturningElement = $this->_createElement('xsd:complexType');
+            $sequenceReturningElement = $this->_createElement('xsd:sequence');
+            foreach ($complex->getReturningComplexType() as $returningComplexType) {
+                $elementPartReturningElement = $this->_createElement('xsd:element');
+
+                $typeNameReturningAttribute = $this->_createAttributeWithValue('name', $returningComplexType->getName());
+                $elementPartReturningElement->appendChild($typeNameReturningAttribute);
+
+                $typeTypeReturningAttribute = $this->_createAttributeWithValue('type', $this->_getXsdType($returningComplexType->getType()));
+                $elementPartReturningElement->appendChild($typeTypeReturningAttribute);
+
+                $sequenceReturningElement->appendChild($elementPartReturningElement);
+            }
+            $complexTypeReturningElement->appendChild($sequenceReturningElement);
+            $elementReturningElement->appendChild($complexTypeReturningElement);
+            $schemaElement->appendChild($elementReturningElement);
         }
 
         $typesElement->appendChild($schemaElement);
@@ -157,7 +178,7 @@ class XMLGenerator
             $nameMessageInputAttribute = $this->_createAttributeWithValue('name', $nameInput);
             $messageInputElement->appendChild($nameMessageInputAttribute);
 
-            $generatedParts = $this->_createXMLMessageParams($method);
+            $generatedParts = $this->_createXMLMessageInputParams($method);
             foreach ($generatedParts as $part) {
                 $messageInputElement->appendChild($part);
             }
@@ -169,7 +190,7 @@ class XMLGenerator
             $nameMessageOutputAttribute = $this->_createAttributeWithValue('name', $nameOutput);
             $messageOutputElement->appendChild($nameMessageOutputAttribute);
 
-            $generatedReturn = $this->_createXMLMessageReturn($nameOutput, $method->returning());
+            $generatedReturn = $this->_createXMLMessageOutput($method);
             $messageOutputElement->appendChild($generatedReturn);
 
             $this->_definitionsRootNode->appendChild($messageOutputElement);
@@ -177,7 +198,7 @@ class XMLGenerator
         return $this;
     }
 
-    private function _createXMLMessageParams(MethodParser $method)
+    private function _createXMLMessageInputParams(MethodParser $method)
     {
         $XMLParam = array();
         foreach ($method->parameters() as $i => $param) {
@@ -188,7 +209,7 @@ class XMLGenerator
                 $paramNameAttribute = $this->_createAttributeWithValue('name', $param->getName());
                 $XMLParam[$i]->appendChild($paramNameAttribute);
 
-                $paramTypeAttribute = $this->_createAttributeWithValue('element', 'ns:' . $method->getName() . 'Input');
+                $paramTypeAttribute = $this->_createAttributeWithValue('element', 'ns:' . $method->getName() . ($i + 1) . 'Input');
                 $XMLParam[$i]->appendChild($paramTypeAttribute);
             } else {
                 $paramNameAttribute = $this->_createAttributeWithValue('name', $param->getName());
@@ -201,15 +222,23 @@ class XMLGenerator
         return $XMLParam;
     }
 
-    private function _createXMLMessageReturn($method, $return)
+    private function _createXMLMessageOutput(MethodParser $method)
     {
+        $parameter = $method->returning();
+
         $returnElement = $this->_createElement('part');
 
-        $paramNameAttribute = $this->_createAttributeWithValue('name', $method);
+        $name = $parameter->getName() ? $parameter->getName() : $method->getName() . 'Output';
+        $paramNameAttribute = $this->_createAttributeWithValue('name', $name);
         $returnElement->appendChild($paramNameAttribute);
 
-        $paramTypeAttribute = $this->_createAttributeWithValue('type', $this->_parametersTypes[$return]);
-        $returnElement->appendChild($paramTypeAttribute);
+        if ($parameter->isComplex()) {
+            $paramTypeAttribute = $this->_createAttributeWithValue('element', 'ns:' . $method->getName() . 'Output');
+            $returnElement->appendChild($paramTypeAttribute);
+        } else {
+            $paramTypeAttribute = $this->_createAttributeWithValue('type', $this->_getXsdType($parameter->getType()));
+            $returnElement->appendChild($paramTypeAttribute);
+        }
         return $returnElement;
     }
 

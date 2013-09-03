@@ -40,4 +40,9 @@ class WSDLTypesObject
     {
         return $this->_method->getName();
     }
+
+    public function getReturningComplexType()
+    {
+        return $this->_method->returning()->complexTypes();
+    }
 }

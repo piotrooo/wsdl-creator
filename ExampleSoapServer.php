@@ -40,10 +40,13 @@ class ExampleSoapServer
 
     /**
      * @param object $object1 @string=name @int=id
-     * @return anyType
+     * @return object $return @string=new_name @int=new_id
      */
     public function arrayTest($object1)
     {
-        return $object1;
+        $o = new stdClass();
+        $o->new_name = 'new:' . $object1->name;
+        $o->new_id = $object1->id + 2;
+        return $o;
     }
 }
