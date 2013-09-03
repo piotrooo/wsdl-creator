@@ -45,7 +45,7 @@ class ParameterParser
     private function _parseAndSetName()
     {
         preg_match('#\\$(\w+)#', $this->_parameter, $name);
-        $this->_name = $name[1];
+        $this->_name = isset($name[1]) ? $name[1] : '';
     }
 
     public function isComplex()

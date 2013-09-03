@@ -14,18 +14,24 @@ use WSDL\WSDLObject\WSDLObject;
 class XMLGenerator
 {
     private $_name;
-    private $_namespace;
     private $_targetNamespace;
     private $_targetNamespaceTypes;
-    private $_xsd;
+    /**
+     * @var DOMDocument
+     */
     private $_DOMDocument;
+    /**
+     * @var DOMDocument
+     */
     private $_definitionsRootNode;
+    /**
+     * @var DOMDocument
+     */
     private $_generatedXML;
     /**
      * @var WSDLObject
      */
     private $_WSDLObject;
-
     /**
      * @see http://infohost.nmt.edu/tcc/help/pubs/rnc/xsd.html
      */
@@ -39,20 +45,13 @@ class XMLGenerator
     public function __construct($name, $namespace, $location)
     {
         $this->_name = $name;
-        $this->_namespace = $namespace;
         $this->_location = $location;
 
-        $this->_targetNamespace = $this->_namespace . strtolower($name);
-        $this->_xsd = 'http://www.w3.org/2001/XMLSchema';
+        $this->_targetNamespace = $namespace . strtolower($name);
         $this->_targetNamespaceTypes = $this->_targetNamespace . '/types';
 
         $this->_DOMDocument = new DOMDocument("1.0", "UTF-8");
         $this->_saveXML();
-    }
-
-    private function _saveXML()
-    {
-        $this->_generatedXML = $this->_DOMDocument->saveXML();
     }
 
     public function setWSDLObject(WSDLObject $WSDLObject)
@@ -63,43 +62,33 @@ class XMLGenerator
 
     public function generate()
     {
-        $this->setDefinitions()->setTypes()->setMessage()->setPortType()->setBinding()->setService();
+        $this->_definitions()->_types()->_message()->_portType()->_binding()->_service();
     }
 
-    public function setDefinitions()
+    /**
+     * @return XMLGenerator
+     */
+    private function _definitions()
     {
-        $definitionsElement = $this->_createElement('definitions');
-
-        $name = $this->_createAttributeWithValue('name', $this->_name);
-        $definitionsElement->appendChild($name);
-
-        $targetNamespaceAttribute = $this->_createAttributeWithValue('targetNamespace', $this->_targetNamespace);
-        $definitionsElement->appendChild($targetNamespaceAttribute);
-
-        $xmlnsTnsAttribute = $this->_createAttributeWithValue('xmlns:tns', $this->_targetNamespace);
-        $definitionsElement->appendChild($xmlnsTnsAttribute);
-
-        $xmlnsXSDAttribute = $this->_createAttributeWithValue('xmlns:xsd', $this->_xsd);
-        $definitionsElement->appendChild($xmlnsXSDAttribute);
-
-        $xmlnsSoapAttribute = $this->_createAttributeWithValue('xmlns:soap', 'http://schemas.xmlsoap.org/wsdl/soap/');
-        $definitionsElement->appendChild($xmlnsSoapAttribute);
-
-        $xmlnsAttribute = $this->_createAttributeWithValue('xmlns', 'http://schemas.xmlsoap.org/wsdl/');
-        $definitionsElement->appendChild($xmlnsAttribute);
-
-        $xmlnsTypesAttribute = $this->_createAttributeWithValue('xmlns:ns', $this->_targetNamespaceTypes);
-        $definitionsElement->appendChild($xmlnsTypesAttribute);
-
+        $definitionsElement = $this->_createElementWithAttributes('definitions', array(
+            'name' => $this->_name,
+            'targetNamespace' => $this->_targetNamespace,
+            'xmlns:tns' => $this->_targetNamespace,
+            'xmlns:xsd' => 'http://www.w3.org/2001/XMLSchema',
+            'xmlns:soap' => 'http://schemas.xmlsoap.org/wsdl/soap/',
+            'xmlns' => 'http://schemas.xmlsoap.org/wsdl/',
+            'xmlns:ns' => $this->_targetNamespaceTypes
+        ));
         $this->_DOMDocument->appendChild($definitionsElement);
-
         $this->_definitionsRootNode = $definitionsElement;
-
         $this->_saveXML();
         return $this;
     }
 
-    public function setTypes()
+    /**
+     * @return XMLGenerator
+     */
+    private function _types()
     {
         $typesElement = $this->_createElement('types');
 
@@ -165,113 +154,86 @@ class XMLGenerator
         return $this;
     }
 
-    private function _getXsdType($type)
-    {
-        return isset($this->_parametersTypes[$type]) ? $this->_parametersTypes[$type] : 'xds:' . $type;
-    }
-
-    public function setMessage()
+    /**
+     * @return XMLGenerator
+     */
+    private function _message()
     {
         foreach ($this->_WSDLObject->getMethods() as $method) {
-            $messageInputElement = $this->_createElement('message');
-            $nameInput = $method->getName() . 'Request';
-            $nameMessageInputAttribute = $this->_createAttributeWithValue('name', $nameInput);
-            $messageInputElement->appendChild($nameMessageInputAttribute);
-
-            $generatedParts = $this->_createXMLMessageInputParams($method);
-            foreach ($generatedParts as $part) {
+            $messageInputElement = $this->_createElementWithAttributes('message', array(
+                'name' => $method->getName() . 'Request'
+            ));
+            foreach ($this->_createXMLMessageInputParts($method) as $part) {
                 $messageInputElement->appendChild($part);
             }
-
             $this->_definitionsRootNode->appendChild($messageInputElement);
 
-            $messageOutputElement = $this->_createElement('message');
-            $nameOutput = $method->getName() . 'Response';
-            $nameMessageOutputAttribute = $this->_createAttributeWithValue('name', $nameOutput);
-            $messageOutputElement->appendChild($nameMessageOutputAttribute);
-
-            $generatedReturn = $this->_createXMLMessageOutput($method);
-            $messageOutputElement->appendChild($generatedReturn);
-
+            $messageOutputElement = $this->_createElementWithAttributes('message', array(
+                'name' => $method->getName() . 'Response'
+            ));
+            $messageOutputElement->appendChild($this->_createXMLMessageOutput($method));
             $this->_definitionsRootNode->appendChild($messageOutputElement);
         }
         return $this;
     }
 
-    private function _createXMLMessageInputParams(MethodParser $method)
+    private function _createXMLMessageInputParts(MethodParser $method)
     {
-        $XMLParam = array();
+        $partElements = array();
         foreach ($method->parameters() as $i => $param) {
-            $XMLParam[$i] = $this->_createElement('part');
-
-            $paramType = $param->getType();
             if ($param->isComplex()) {
-                $paramNameAttribute = $this->_createAttributeWithValue('name', $param->getName());
-                $XMLParam[$i]->appendChild($paramNameAttribute);
-
-                $paramTypeAttribute = $this->_createAttributeWithValue('element', 'ns:' . $method->getName() . ($i + 1) . 'Input');
-                $XMLParam[$i]->appendChild($paramTypeAttribute);
+                $type = 'element';
+                $value = 'ns:' . $method->getName() . ($i + 1) . 'Input';
             } else {
-                $paramNameAttribute = $this->_createAttributeWithValue('name', $param->getName());
-                $XMLParam[$i]->appendChild($paramNameAttribute);
-
-                $paramTypeAttribute = $this->_createAttributeWithValue('type', $this->_getXsdType($paramType));
-                $XMLParam[$i]->appendChild($paramTypeAttribute);
+                $type = 'type';
+                $value = $this->_getXsdType($param->getType());
             }
+            $partElements[] = $this->_createElementWithAttributes('part', array(
+                'name' => $param->getName(),
+                $type => $value
+            ));
         }
-        return $XMLParam;
+        return $partElements;
     }
 
     private function _createXMLMessageOutput(MethodParser $method)
     {
         $parameter = $method->returning();
-
-        $returnElement = $this->_createElement('part');
-
-        $name = $parameter->getName() ? $parameter->getName() : $method->getName() . 'Output';
-        $paramNameAttribute = $this->_createAttributeWithValue('name', $name);
-        $returnElement->appendChild($paramNameAttribute);
-
         if ($parameter->isComplex()) {
-            $paramTypeAttribute = $this->_createAttributeWithValue('element', 'ns:' . $method->getName() . 'Output');
-            $returnElement->appendChild($paramTypeAttribute);
+            $type = 'element';
+            $value = 'ns:' . $method->getName() . 'Output';
         } else {
-            $paramTypeAttribute = $this->_createAttributeWithValue('type', $this->_getXsdType($parameter->getType()));
-            $returnElement->appendChild($paramTypeAttribute);
+            $type = 'type';
+            $value = $this->_getXsdType($parameter->getType());
         }
+        $returnElement = $this->_createElementWithAttributes('part', array(
+            'name' => $parameter->getName() ? $parameter->getName() : $method->getName() . 'Output',
+            $type => $value
+        ));
         return $returnElement;
     }
 
-    public function setPortType()
+    /**
+     * @return XMLGenerator
+     */
+    private function _portType()
     {
-        $portTypeElement = $this->_createElement('portType');
-
-        $name = $this->_name . 'PortType';
-        $nameAttribute = $this->_createAttributeWithValue('name', $name);
-        $portTypeElement->appendChild($nameAttribute);
+        $portTypeElement = $this->_createElementWithAttributes('portType', array(
+            'name' => $this->_name . 'PortType'
+        ));
 
         foreach ($this->_WSDLObject->getMethods() as $method) {
-            $methodName = $method->getName();
-
-            $operationElement = $this->_createElement('operation');
-            $name = $this->_createAttributeWithValue('name', $methodName);
-            $operationElement->appendChild($name);
+            $operationElement = $this->_createElementWithAttributes('operation', array('name' => $method->getName()));
 
             if ($method->description()) {
                 $documentationElement = $this->_createElement('documentation', $method->description());
                 $operationElement->appendChild($documentationElement);
             }
 
-            $inputElement = $this->_createElement('input');
-            $methodInputMessage = $methodName . 'Request';
-            $messageInputAttribute = $this->_createAttributeWithValue('message', 'tns:' . $methodInputMessage);
-            $inputElement->appendChild($messageInputAttribute);
+            $inputElement = $this->_createElementWithAttributes('input', array('message' => 'tns:' . $method->getName() . 'Request'));
             $operationElement->appendChild($inputElement);
 
-            $outputElement = $this->_createElement('output');
-            $methodOutputMessage = $methodName . 'Response';
-            $messageOutputAttribute = $this->_createAttributeWithValue('message', 'tns:' . $methodOutputMessage);
-            $outputElement->appendChild($messageOutputAttribute);
+            $outputElement = $this->_createElementWithAttributes('output', array('message' => 'tns:' . $method->getName() . 'Response'));
             $operationElement->appendChild($outputElement);
 
             $portTypeElement->appendChild($operationElement);
@@ -280,51 +242,42 @@ class XMLGenerator
         return $this;
     }
 
-    public function setBinding()
+    /**
+     * @return XMLGenerator
+     */
+    private function _binding()
     {
-        $bindingElement = $this->_createElement('binding');
+        $bindingElement = $this->_createElementWithAttributes('binding', array(
+            'name' => $this->_name . 'Binding',
+            'type' => 'tns:' . $this->_name . 'PortType'
+        ));
 
-        $name = $this->_name . 'Binding';
-        $nameAttribute = $this->_createAttributeWithValue('name', $name);
-        $bindingElement->appendChild($nameAttribute);
-
-        $type = 'tns:' . $this->_name . 'PortType';
-        $typeAttribute = $this->_createAttributeWithValue('type', $type);
-        $bindingElement->appendChild($typeAttribute);
-
-        $soapBindingElement = $this->_createElement('soap:binding');
-        $styleAttribute = $this->_createAttributeWithValue('style', 'rpc');
-        $soapBindingElement->appendChild($styleAttribute);
-        $transportAttribute = $this->_createAttributeWithValue('transport', 'http://schemas.xmlsoap.org/soap/http');
-        $soapBindingElement->appendChild($transportAttribute);
+        $soapBindingElement = $this->_createElementWithAttributes('soap:binding', array(
+            'style' => 'rpc',
+            'transport' => 'http://schemas.xmlsoap.org/soap/http'
+        ));
         $bindingElement->appendChild($soapBindingElement);
 
         foreach ($this->_WSDLObject->getMethods() as $method) {
-            $methodName = $method->getName();
+            $soapBodyElement = $this->_createElementWithAttributes('soap:body', array(
+                'use' => 'literal'
+            ));
 
-            $soapBodyElementInput = $this->_createElement('soap:body');
-            $use = $this->_createAttributeWithValue('use', 'literal');
-            $soapBodyElementInput->appendChild($use);
+            $operationElement = $this->_createElementWithAttributes('operation', array(
+                'name' => $method->getName()
+            ));
 
-            $soapBodyElementOutput = $this->_createElement('soap:body');
-            $use = $this->_createAttributeWithValue('use', 'literal');
-            $soapBodyElementOutput->appendChild($use);
-
-            $operationElement = $this->_createElement('operation');
-            $name = $this->_createAttributeWithValue('name', $methodName);
-            $operationElement->appendChild($name);
-
-            $soapOperationElement = $this->_createElement('soap:operation');
-            $soapActionAttribute = $this->_createAttributeWithValue('soapAction', $this->_namespace . strtolower($this->_name) . '/#' . $methodName);
-            $soapOperationElement->appendChild($soapActionAttribute);
+            $soapOperationElement = $this->_createElementWithAttributes('soap:operation', array(
+                'soapAction' => $this->_targetNamespace . '/#' . $method->getName()
+            ));
             $operationElement->appendChild($soapOperationElement);
 
             $inputElement = $this->_createElement('input');
-            $inputElement->appendChild($soapBodyElementInput);
+            $inputElement->appendChild($soapBodyElement);
             $operationElement->appendChild($inputElement);
 
             $outputElement = $this->_createElement('output');
-            $outputElement->appendChild($soapBodyElementOutput);
+            $outputElement->appendChild($soapBodyElement->cloneNode());
             $operationElement->appendChild($outputElement);
 
             $bindingElement->appendChild($operationElement);
@@ -334,29 +287,23 @@ class XMLGenerator
         return $this;
     }
 
-    public function setService()
+    /**
+     * @return XMLGenerator
+     */
+    private function _service()
     {
-        $serviceElement = $this->_createElement('service');
+        $serviceElement = $this->_createElementWithAttributes('service', array('name' => $this->_name . 'Service'));
 
-        $name = $this->_name . 'Service';
-        $nameAttribute = $this->_createAttributeWithValue('name', $name);
-        $serviceElement->appendChild($nameAttribute);
+        $portElement = $this->_createElementWithAttributes('port', array(
+            'name' => $this->_name . 'Port',
+            'binding' => 'tns:' . $this->_name . 'Binding'
+        ));
 
-        $portElement = $this->_createElement('port');
-        $namePortAttribute = $this->_createAttributeWithValue('name', $this->_name . 'Port');
-        $portElement->appendChild($namePortAttribute);
-        $bindingAttribute = $this->_createAttributeWithValue('binding', 'tns:' . $this->_name . 'Binding');
-        $portElement->appendChild($bindingAttribute);
-
-        $soapAddressElement = $this->_createElement('soap:address');
-        $locationSoapAttribute = $this->_createAttributeWithValue('location', $this->_location);
-        $soapAddressElement->appendChild($locationSoapAttribute);
+        $soapAddressElement = $this->_createElementWithAttributes('soap:address', array('location' => $this->_location));
         $portElement->appendChild($soapAddressElement);
 
         $serviceElement->appendChild($portElement);
-
         $this->_definitionsRootNode->appendChild($serviceElement);
-
         $this->_saveXML();
     }
 
@@ -370,6 +317,26 @@ class XMLGenerator
         $attribute = $this->_DOMDocument->createAttribute($attributeName);
         $attribute->value = $value;
         return $attribute;
+    }
+
+    private function _createElementWithAttributes($elementName, $attributes, $value = '')
+    {
+        $element = $this->_createElement($elementName, $value);
+        foreach ($attributes as $attributeName => $attributeValue) {
+            $tmpAttr = $this->_createAttributeWithValue($attributeName, $attributeValue);
+            $element->appendChild($tmpAttr);
+        }
+        return $element;
+    }
+
+    private function _getXsdType($type)
+    {
+        return isset($this->_parametersTypes[$type]) ? $this->_parametersTypes[$type] : 'xds:' . $type;
+    }
+
+    private function _saveXML()
+    {
+        $this->_generatedXML = $this->_DOMDocument->saveXML();
     }
 
     public function render()

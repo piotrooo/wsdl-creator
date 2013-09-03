@@ -4,14 +4,14 @@ require_once 'vendor/autoload.php';
 use WSDL\WSDLCreator;
 
 if (isset($_GET['wsdl'])) {
-    $wsdl = new WSDL\WSDLCreator('ExampleSoapServer', 'http://localhost:8080/wsdl-creator/ExampleSoapServer.php');
+    $wsdl = new WSDL\WSDLCreator('ExampleSoapServer', 'http://localhost/wsdl-creator/ExampleSoapServer.php');
     $wsdl->setNamespace("http://foo.bar/");
     $wsdl->renderWSDL();
     exit;
 }
 
 $server = new SoapServer(NULL, array(
-    'uri' => 'http://localhost:8080/wsdl-creator/ExampleSoapServer.php'
+    'uri' => 'http://localhost/wsdl-creator/ExampleSoapServer.php'
 ));
 $server->setClass('ExampleSoapServer');
 $server->handle();
