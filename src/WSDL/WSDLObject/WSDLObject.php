@@ -15,9 +15,6 @@ class WSDLObject
      */
     private $_methods;
 
-    /**
-     * @param MethodParser[] $methods
-     */
     public function __construct($methods)
     {
         $this->_methods = $methods;

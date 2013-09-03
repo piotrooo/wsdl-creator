@@ -61,6 +61,11 @@ class XMLGenerator
         return $this;
     }
 
+    public function generate()
+    {
+        $this->setDefinitions()->setTypes()->setMessage()->setPortType()->setBinding()->setService();
+    }
+
     public function setDefinitions()
     {
         $definitionsElement = $this->_createElement('definitions');
@@ -223,6 +228,11 @@ class XMLGenerator
             $name = $this->_createAttributeWithValue('name', $methodName);
             $operationElement->appendChild($name);
 
+            if ($method->description()) {
+                $documentationElement = $this->_createElement('documentation', $method->description());
+                $operationElement->appendChild($documentationElement);
+            }
+
             $inputElement = $this->_createElement('input');
             $methodInputMessage = $methodName . 'Request';
             $messageInputAttribute = $this->_createAttributeWithValue('message', 'tns:' . $methodInputMessage);
@@ -254,7 +264,7 @@ class XMLGenerator
         $bindingElement->appendChild($typeAttribute);
 
         $soapBindingElement = $this->_createElement('soap:binding');
-        $styleAttribute = $this->_createAttributeWithValue('style', 'document');
+        $styleAttribute = $this->_createAttributeWithValue('style', 'rpc');
         $soapBindingElement->appendChild($styleAttribute);
         $transportAttribute = $this->_createAttributeWithValue('transport', 'http://schemas.xmlsoap.org/soap/http');
         $soapBindingElement->appendChild($transportAttribute);
@@ -321,9 +331,9 @@ class XMLGenerator
         $this->_saveXML();
     }
 
-    private function _createElement($elementName)
+    private function _createElement($elementName, $value = '')
     {
-        return $this->_DOMDocument->createElement($elementName);
+        return $this->_DOMDocument->createElement($elementName, $value);
     }
 
     private function _createAttributeWithValue($attributeName, $value)

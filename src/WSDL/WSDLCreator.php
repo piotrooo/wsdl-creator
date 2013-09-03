@@ -18,6 +18,7 @@ class WSDLCreator
      * @var ClassParser
      */
     private $_classParser;
+    private $_namespace;
 
     public function __construct($class, $location)
     {
@@ -40,15 +41,13 @@ class WSDLCreator
     public function renderWSDL()
     {
         header("Content-Type: text/xml");
-        $xml = new XMLGenerator($this->_class, "http://example.com/", $this->_location);
-        $xml
-            ->setWSDLObject($this->_generateWSDLObject())
-            ->setDefinitions()
-            ->setTypes()
-            ->setMessage()
-            ->setPortType()
-            ->setBinding()
-            ->setService();
+        $xml = new XMLGenerator($this->_class, $this->_namespace, $this->_location);
+        $xml->setWSDLObject($this->_generateWSDLObject())->generate();
         $xml->render();
+    }
+
+    public function setNamespace($namespace)
+    {
+        $this->_namespace = $namespace;
     }
 }
