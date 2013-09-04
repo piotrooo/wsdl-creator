@@ -19,7 +19,7 @@ class MethodParser
 
     public function description()
     {
-        preg_match('#@desc(.+)#', $this->_doc, $groupMatches);
+        preg_match('#@desc (.+)#', $this->_doc, $groupMatches);
         $trimGroupMatches = array_map('trim', $groupMatches);
         return !empty($trimGroupMatches[1]) ? $trimGroupMatches[1] : '';
     }
@@ -29,13 +29,13 @@ class MethodParser
      */
     public function parameters()
     {
-        preg_match_all('#@param(.+)#', $this->_doc, $groupMatches);
+        preg_match_all('#@param (.+)#', $this->_doc, $groupMatches);
         return ParameterParser::create($groupMatches[1]);
     }
 
     public function returning()
     {
-        preg_match('#@return(.+)#', $this->_doc, $groupMatches);
+        preg_match('#@return (.+)#', $this->_doc, $groupMatches);
         $trimGroupMatches = array_map('trim', $groupMatches);
         return new ParameterParser($trimGroupMatches[1]);
     }
