@@ -33,14 +33,6 @@ class XMLGenerator
      * @var MethodParser[]
      */
     private $_WSDLMethods;
-    /**
-     * @see http://infohost.nmt.edu/tcc/help/pubs/rnc/xsd.html
-     */
-    private $_parametersTypes = array(
-        'string' => 'xsd:string',
-        'integer' => 'xsd:int',
-        'int' => 'xsd:int'
-    );
 
     public function __construct($name, $namespace, $location)
     {
@@ -305,7 +297,7 @@ class XMLGenerator
 
     private function _getXsdType($type)
     {
-        return isset($this->_parametersTypes[$type]) ? $this->_parametersTypes[$type] : 'xds:' . $type;
+        return 'xds:' . $type;
     }
 
     private function _saveXML()
