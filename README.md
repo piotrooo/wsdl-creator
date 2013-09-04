@@ -18,7 +18,7 @@ Supporting annotations:
 	---------------------------------------------------------------------------------
 	@desc       |   method description          |   @desc Sample description method
 	@param      |   parameter type definition   |   @param [param_type] $param1
-	@return     |   return type definiotion     |   @return [return_type]
+	@return     |   return type definiotion     |   @return [return_type] $return
 	
 	[param_type] => string, int, integer, object @type1=name1 @type2=name2
 	[return_type] => string, int, integer, object
