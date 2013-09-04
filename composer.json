@@ -13,7 +13,8 @@
     },
     "autoload": {
         "psr-0": {
-            "WSDL\\": "src/"
+            "WSDL\\": "src/",
+            "Mocks\\": "tests/"
         }
     }
 }

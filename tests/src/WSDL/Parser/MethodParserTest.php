@@ -23,7 +23,7 @@ class MethodParserTest extends PHPUnit_Framework_TestCase
  * @return bool $return
  */
 DOC;
-;
+
         //when
         $parser = new MethodParser($methodName, $methodDoc);
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * XMLWrapperGenerator
+ * XMLGenerator
  *
  * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
  * @see http://www.xfront.com/GlobalVersusLocal.html
@@ -311,6 +311,11 @@ class XMLGenerator
     private function _saveXML()
     {
         $this->_generatedXML = $this->_DOMDocument->saveXML();
+    }
+
+    public function getGeneratedXML()
+    {
+        return $this->_generatedXML;
     }
 
     public function render()
