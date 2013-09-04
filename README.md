@@ -21,6 +21,6 @@ Supporting annotations:
 	@return     |   return type definiotion     |   @return [return_type] $return
 	
 	[param_type] => string, int, integer, object @type1=name1 @type2=name2
-	[return_type] => string, int, integer, object
+	[return_type] => string, int, integer, object @type1=name1 @type2=name2
 
 Live example in file `ExampleSoapServer.php`.
