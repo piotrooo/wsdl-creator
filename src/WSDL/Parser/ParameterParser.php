@@ -6,8 +6,6 @@
  */
 namespace WSDL\Parser;
 
-use Exception;
-
 class ParameterParser
 {
     private $_parameter;
@@ -78,8 +76,4 @@ class ParameterParser
         }
         return $obj;
     }
-}
-
-class ParameterParserException extends Exception
-{
 }

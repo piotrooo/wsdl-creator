@@ -49,14 +49,4 @@ class MethodParser
     {
         return $this->_name;
     }
-
-    public function hasComplexTypes()
-    {
-        foreach ($this->parameters() as $parameter) {
-            if ($parameter->isComplex()) {
-                return true;
-            }
-        }
-        return false;
-    }
 }
