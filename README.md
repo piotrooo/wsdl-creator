@@ -17,10 +17,9 @@ Supporting annotations:
 	anotation   |   desc                        |   example
 	---------------------------------------------------------------------------------
 	@desc       |   method description          |   @desc Sample description method
-	@param      |   parameter type definition   |   @param [param_type] $param1
-	@return     |   return type definiotion     |   @return [return_type] $return
+	@param      |   parameter type definition   |   @param [type] $param1
+	@return     |   return type definiotion     |   @return [type] $return
 	
-	[param_type] => string, int, integer, object @type1=name1 @type2=name2
-	[return_type] => string, int, integer, object @type1=name1 @type2=name2
+Parameters type are defined here: <http://infohost.nmt.edu/tcc/help/pubs/rnc/xsd.html#xsd-types> or if you use complex types type `object` as `[type]`.
 
 Live example in file `ExampleSoapServer.php`.
