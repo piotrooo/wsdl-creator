@@ -297,7 +297,7 @@ class XMLGenerator
 
     private function _getXsdType($type)
     {
-        return 'xds:' . $type;
+        return 'xsd:' . $type;
     }
 
     private function _saveXML()

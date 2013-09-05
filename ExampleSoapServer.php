@@ -4,17 +4,38 @@ require_once 'vendor/autoload.php';
 use WSDL\WSDLCreator;
 
 if (isset($_GET['wsdl'])) {
-    $wsdl = new WSDL\WSDLCreator('ExampleSoapServer', 'http://localhost/wsdl-creator/ExampleSoapServer.php');
+    $wsdl = new WSDL\WSDLCreator('ExampleSoapServer', 'http://localhost:8080/wsdl-creator/ExampleSoapServer.php');
     $wsdl->setNamespace("http://foo.bar/");
     $wsdl->renderWSDL();
     exit;
 }
 
 $server = new SoapServer(NULL, array(
-    'uri' => 'http://localhost/wsdl-creator/ExampleSoapServer.php'
+    'uri' => 'http://localhost/wsdl-creator:8080/ExampleSoapServer.php'
 ));
 $server->setClass('ExampleSoapServer');
 $server->handle();
+
+class UserWrapper
+{
+    /**
+     * @type int
+     */
+    public $id;
+    /**
+     * @type string
+     */
+    public $name;
+    /**
+     * @type int
+     */
+    public $age;
+
+    public function getName()
+    {
+        return 'Name: '. $this->name;
+    }
+}
 
 class ExampleSoapServer
 {
@@ -47,6 +68,18 @@ class ExampleSoapServer
         $o = new stdClass();
         $o->new_name = 'new:' . $object1->name;
         $o->new_id = $object1->id + 2;
+        return $o;
+    }
+
+    /**
+     * @param wrapper $wrapper @className=UserWrapper
+     * @return object $return @string=name @int=age
+     */
+    public function userWrapper($wrapper)
+    {
+        $o = new stdClass();
+        $o->name = $wrapper->name;
+        $o->age = $wrapper->age;
         return $o;
     }
 }

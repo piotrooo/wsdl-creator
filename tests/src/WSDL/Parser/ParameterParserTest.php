@@ -75,4 +75,22 @@ class ParameterParserTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($parser->isComplex());
         $this->assertCount(2, $parser->complexTypes());
     }
+
+    /**
+     * @test
+     */
+    public function shouldParseObjectWrapper()
+    {
+        //given
+        $parameter = 'wrapper $user @className=\Mocks\MockUserWrapper';
+
+        //when
+        $parser = new ParameterParser($parameter);
+
+        //then
+        $this->assertEquals('user', $parser->getName());
+        $this->assertEquals('wrapper', $parser->getType());
+        $this->assertTrue($parser->isComplex());
+        $this->assertCount(3, $parser->complexTypes());
+    }
 }

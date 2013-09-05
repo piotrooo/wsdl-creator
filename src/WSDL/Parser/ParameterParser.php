@@ -48,7 +48,7 @@ class ParameterParser
 
     public function isComplex()
     {
-        return $this->getType() == 'object';
+        return $this->getType() == 'object' || $this->getType() == 'wrapper';
     }
 
     /**
