@@ -1,11 +1,11 @@
 <?php
-use WSDL\Parser\WrapperParser;
-
 /**
- * WrapperParser
+ * WrapperParserTest
  *
  * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
  */
+use WSDL\Parser\WrapperParser;
+
 class WrapperParserTest extends PHPUnit_Framework_TestCase
 {
     /**
