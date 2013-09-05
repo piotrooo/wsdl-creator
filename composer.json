@@ -1,6 +1,6 @@
 {
     "name": "piotrooo/WSDL-creator",
-    "description": "description_text",
+    "description": "WSDL is PHP creator using PHPdoc (annotations, reflections)",
     "minimum-stability": "dev",
     "authors": [
         {
