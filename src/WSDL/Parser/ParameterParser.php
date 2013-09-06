@@ -36,8 +36,17 @@ class ParameterParser
 
     private function _parseAndSetType()
     {
-        preg_match('#(\w+)#', $this->_parameter, $type);
-        $this->_type = $type[1];
+        preg_match('#(\w*\[?\]?)#', $this->_parameter, $type);
+        if ($this->_isArray($type[1])) {
+
+        } else {
+            $this->_type = $type[1];
+        }
+    }
+
+    private function _isArray($type)
+    {
+        return preg_match('#\[\]#', $type);
     }
 
     private function _parseAndSetName()
@@ -48,7 +57,7 @@ class ParameterParser
 
     public function isComplex()
     {
-        return $this->getType() == 'object' || $this->getType() == 'wrapper';
+        return in_array($this->getType(), array('object', 'wrapper', 'array'));
     }
 
     /**
