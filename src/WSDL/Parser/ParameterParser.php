@@ -11,6 +11,7 @@ class ParameterParser
     private $_parameter;
     private $_type;
     private $_name;
+    private $_isArray = false;
 
     public function __construct($parameter)
     {
@@ -28,6 +29,11 @@ class ParameterParser
         return $this->_name;
     }
 
+    public function getArrayName()
+    {
+        return 'ArrayOf' . ucfirst($this->getType());
+    }
+
     private function _parse()
     {
         $this->_parseAndSetType();
@@ -38,7 +44,9 @@ class ParameterParser
     {
         preg_match('#(\w*\[?\]?)#', $this->_parameter, $type);
         if ($this->_isArray($type[1])) {
-
+            $this->_isArray = true;
+            $type = str_replace(array('[', ']'), '', $type[1]);
+            $this->_type = $type;
         } else {
             $this->_type = $type[1];
         }
@@ -57,7 +65,12 @@ class ParameterParser
 
     public function isComplex()
     {
-        return in_array($this->getType(), array('object', 'wrapper', 'array'));
+        return in_array($this->getType(), array('object', 'wrapper'));
+    }
+
+    public function isArray()
+    {
+        return $this->_isArray;
     }
 
     /**

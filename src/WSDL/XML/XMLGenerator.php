@@ -68,6 +68,7 @@ class XMLGenerator
             'xmlns:tns' => $this->_targetNamespace,
             'xmlns:xsd' => 'http://www.w3.org/2001/XMLSchema',
             'xmlns:soap' => 'http://schemas.xmlsoap.org/wsdl/soap/',
+            'xmlns:soapenc' => "http://schemas.xmlsoap.org/soap/encoding/",
             'xmlns' => 'http://schemas.xmlsoap.org/wsdl/',
             'xmlns:ns' => $this->_targetNamespaceTypes
         ));
@@ -106,25 +107,50 @@ class XMLGenerator
     private function _generateComplexType(ParameterParser $parameter, MethodParser $method, $index, $schemaElement)
     {
         if ($parameter->isComplex()) {
-            $name = isset($index) ? $method->getName() . ($index + 1) . 'Input' : $method->getName() . 'Output';
-            $element = $this->_createElementWithAttributes('xsd:element', array(
-                'name' => $name
-            ));
-            $complexTypeElement = $this->_createElement('xsd:complexType');
-            $sequenceElement = $this->_createElement('xsd:sequence');
-
-            foreach ($parameter->complexTypes() as $complexType) {
-                $elementPartElement = $this->_createElementWithAttributes('xsd:element', array(
-                    'name' => $complexType->getName(),
-                    'type' => $this->_getXsdType($complexType->getType())
-                ));
-                $sequenceElement->appendChild($elementPartElement);
-            }
-
-            $complexTypeElement->appendChild($sequenceElement);
-            $element->appendChild($complexTypeElement);
-            $schemaElement->appendChild($element);
+            $this->_generateObject($parameter, $method, $index, $schemaElement);
         }
+        if ($parameter->isArray()) {
+            $this->_generateArray($parameter, $method, $index, $schemaElement);
+        }
+    }
+
+    private function _generateObject(ParameterParser $parameter, MethodParser $method, $index, $schemaElement)
+    {
+        $name = isset($index) ? $method->getName() . ($index + 1) . 'Input' : $method->getName() . 'Output';
+        $element = $this->_createElementWithAttributes('xsd:element', array(
+            'name' => $name
+        ));
+        $complexTypeElement = $this->_createElement('xsd:complexType');
+        $sequenceElement = $this->_createElement('xsd:sequence');
+
+        foreach ($parameter->complexTypes() as $complexType) {
+            $elementPartElement = $this->_createElementWithAttributes('xsd:element', array(
+                'name' => $complexType->getName(),
+                'type' => $this->_getXsdType($complexType->getType())
+            ));
+            $sequenceElement->appendChild($elementPartElement);
+        }
+
+        $complexTypeElement->appendChild($sequenceElement);
+        $element->appendChild($complexTypeElement);
+        $schemaElement->appendChild($element);
+    }
+
+    private function _generateArray(ParameterParser $parameter, MethodParser $method, $index, $schemaElement)
+    {
+
+        $name = $method->getName() . $parameter->getArrayName() . (isset($index) ? ($index + 1) . 'Input' : 'Output');
+        $complexTypeElement = $this->_createElementWithAttributes('xsd:complexType', array('name' => $name));
+        $complexContentElement = $this->_createElement('xsd:complexContent');
+        $restrictionElement = $this->_createElementWithAttributes('xsd:restriction', array('base' => 'soapenc:Array'));
+        $attributeElement = $this->_createElementWithAttributes('xsd:attribute', array(
+            'ref' => 'soapenc:arrayType',
+            'arrayType' => 'xsd:' . $parameter->getType()
+        ));
+        $restrictionElement->appendChild($attributeElement);
+        $complexContentElement->appendChild($restrictionElement);
+        $complexTypeElement->appendChild($complexContentElement);
+        $schemaElement->appendChild($complexTypeElement);
     }
 
     /**
@@ -153,12 +179,12 @@ class XMLGenerator
     private function _createXMLMessageInputParts(MethodParser $method)
     {
         $partElements = array();
-        foreach ($method->parameters() as $i => $param) {
-            $type = $param->isComplex() ? 'element' : 'type';
-            $value = $param->isComplex() ? 'ns:' . $method->getName() . ($i + 1) . 'Input' : $this->_getXsdType($param->getType());
+        foreach ($method->parameters() as $i => $parameter) {
+            $type = $parameter->isComplex() ? 'element' : 'type';
+            $value = $this->_prepareElementValue($parameter, $method, $i, 'Input');
 
             $partElements[] = $this->_createElementWithAttributes('part', array(
-                'name' => $param->getName(),
+                'name' => $parameter->getName(),
                 $type => $value
             ));
         }
@@ -169,13 +195,27 @@ class XMLGenerator
     {
         $parameter = $method->returning();
         $type = $parameter->isComplex() ? 'element' : 'type';
-        $value = $parameter->isComplex() ? 'ns:' . $method->getName() . 'Output' : $this->_getXsdType($parameter->getType());
+        $value = $this->_prepareElementValue($parameter, $method, null, 'Output');
+
 
         $returnElement = $this->_createElementWithAttributes('part', array(
             'name' => $parameter->getName() ? $parameter->getName() : $method->getName() . 'Output',
             $type => $value
         ));
         return $returnElement;
+    }
+
+    private function _prepareElementValue(ParameterParser $parameter, MethodParser $method, $i = 0, $sufix)
+    {
+        $i = isset($i) ? ($i + 1) : '';
+        if ($parameter->isComplex()) {
+            $value = 'ns:' . $method->getName() . $i . $sufix;
+        } else if ($parameter->isArray()) {
+            $value = 'ns:' . $method->getName() . $parameter->getArrayName() . $i . $sufix;
+        } else {
+            $value = $this->_getXsdType($parameter->getType());
+        }
+        return $value;
     }
 
     /**

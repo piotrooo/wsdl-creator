@@ -4,14 +4,14 @@ require_once 'vendor/autoload.php';
 use WSDL\WSDLCreator;
 
 if (isset($_GET['wsdl'])) {
-    $wsdl = new WSDL\WSDLCreator('ExampleSoapServer', 'http://localhost:8080/wsdl-creator/ExampleSoapServer.php');
+    $wsdl = new WSDL\WSDLCreator('ExampleSoapServer', 'http://localhost/wsdl-creator/ExampleSoapServer.php');
     $wsdl->setNamespace("http://foo.bar/");
     $wsdl->renderWSDL();
     exit;
 }
 
 $server = new SoapServer(NULL, array(
-    'uri' => 'http://localhost/wsdl-creator:8080/ExampleSoapServer.php'
+    'uri' => 'http://localhost/wsdl-creator/ExampleSoapServer.php'
 ));
 $server->setClass('ExampleSoapServer');
 $server->handle();
@@ -33,7 +33,7 @@ class UserWrapper
 
     public function getName()
     {
-        return 'Name: '. $this->name;
+        return 'Name: ' . $this->name;
     }
 }
 
@@ -81,5 +81,18 @@ class ExampleSoapServer
         $o->name = $wrapper->name;
         $o->age = $wrapper->age;
         return $o;
+    }
+
+    /**
+     * @param string[] $strings
+     * @return int[] $return
+     */
+    public function stringsMethod($strings)
+    {
+        $int = array();
+        foreach ($strings as $i => $string) {
+            $int[] = $i + 1;
+        }
+        return $int;
     }
 }
