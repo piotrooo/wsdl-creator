@@ -30,14 +30,14 @@ class MethodParser
     public function parameters()
     {
         preg_match_all('#@param (.+)#', $this->_doc, $groupMatches);
-        return ParameterParser::create($groupMatches[1]);
+        return ParameterParser::create($groupMatches[1], $this->getName());
     }
 
     public function returning()
     {
         preg_match('#@return (.+)#', $this->_doc, $groupMatches);
         $trimGroupMatches = array_map('trim', $groupMatches);
-        return new ParameterParser($trimGroupMatches[1]);
+        return new ParameterParser($trimGroupMatches[1], $this->getName());
     }
 
     public function getDoc()

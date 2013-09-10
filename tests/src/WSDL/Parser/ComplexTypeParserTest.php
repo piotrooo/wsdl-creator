@@ -29,7 +29,7 @@ class ComplexTypeParserTest extends PHPUnit_Framework_TestCase
     public function shouldCorrectCreateComplexType()
     {
         //given
-        $complexType = '@string=name @int=id';
+        $complexType = '@string=$name @int=$id';
 
         //when
         $parser = ComplexTypeParser::create($complexType);

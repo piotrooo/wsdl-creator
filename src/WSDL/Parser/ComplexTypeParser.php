@@ -33,20 +33,17 @@ class ComplexTypeParser
      */
     public static function create($types)
     {
-        $obj = array();
-        if (self::_isReflectionType($types)) {
-            $wrapperClass = str_replace('className=', '', $types);
-            $wrapperParser = new WrapperParser($wrapperClass);
-            $wrapperParser->parse();
-            $obj = array_merge($obj, $wrapperParser->getComplexTypes());
-        } else {
-            $types = trim(str_replace('@', '', $types));
-            $typesArray = explode(' ', $types);
-            foreach ($typesArray as $type) {
-                $typeData = explode('=', $type);
-                $obj[] = new self($typeData[0], $typeData[1]);
+        preg_match_all('#@(\((?:.+)\)|(?:.+?))(?: |$)#', $types, $matches);
+        $typesArray = $matches[1];
+        $obj = array_map(function ($type) {
+            if (self::_isReflectionType($type)) {
+                $type = str_replace(array('(', ')'), '', $type);
+            } else {
+                $type = str_replace('=', ' ', $type);
             }
-        }
+            $parser = new ParameterParser($type, '');
+            return $parser->parse();
+        }, $typesArray);
         return $obj;
     }
 

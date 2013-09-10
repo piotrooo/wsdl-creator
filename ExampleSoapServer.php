@@ -30,29 +30,15 @@ class UserWrapper
      * @type int
      */
     public $age;
-
-    public function getName()
-    {
-        return 'Name: ' . $this->name;
-    }
 }
 
 class ExampleSoapServer
 {
     /**
-     * @desc MethodParser to logging
-     * @param string $message
-     */
-    private function _toLog($message)
-    {
-        file_put_contents('/tmp/logs_soap.log', $message);
-    }
-
-    /**
      * @desc to sum two integers
      * @param int $a
      * @param int $b
-     * @return int
+     * @return int $return
      */
     public function sum($a, $b)
     {
@@ -94,5 +80,30 @@ class ExampleSoapServer
             $int[] = $i + 1;
         }
         return $int;
+    }
+
+    /**
+     * @param wrapper[] $strings @className=UserWrapper
+     * @return bool $return
+     */
+    public function usersMethod($strings)
+    {
+        $int = array();
+        foreach ($strings as $i => $string) {
+            $int[] = $i + 1;
+        }
+        return $int;
+    }
+
+    /**
+     * @param object[] $object1 @string=name @int=id
+     * @return wrapper $return @className=UserWrapper
+     */
+    public function objectsTest($object1)
+    {
+        $o = new stdClass();
+        $o->new_name = 'new:' . $object1->name;
+        $o->new_id = $object1->id + 2;
+        return $o;
     }
 }

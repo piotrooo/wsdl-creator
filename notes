@@ -16,3 +16,16 @@ array of methods
 array of parameters
 
 http://cxf.apache.org/docs/developing-a-service.html
+
+[x] int $a
+[] int[] $a
+[x] object $obj @string=name @int=id
+[] object $obj @string[]=name @int=id
+[x] object $obj @(wrapper $wrap @className=Class) @int=id
+[] object $obj @(wrapper[] $wrap @className=Class) @int=id
+[] object[] $obj @string=name @int=id
+[] object[] $obj @string[]=name @int=id
+[] object[] $obj @(wrapper $wrap @className=Class) @int=id
+[] object[] $obj @(wrapper[] $wrap @className=Class) @int=id
+[x] wrapper $wrapp @className=Class
+[] wrapper[] $wrapp @className=Class

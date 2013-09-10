@@ -21,7 +21,7 @@ class ParameterParserTest extends PHPUnit_Framework_TestCase
         );
 
         //when
-        $create = ParameterParser::create($arrayOfParameters);
+        $create = ParameterParser::create($arrayOfParameters, '');
 
         //then
         $this->assertCount(3, $create);
@@ -34,9 +34,10 @@ class ParameterParserTest extends PHPUnit_Framework_TestCase
     {
         //given
         $parameter = 'int $a';
+        $parser = new ParameterParser($parameter);
 
         //when
-        $parser = new ParameterParser($parameter);
+        $parser->parse();
 
         //then
         $this->assertEquals('a', $parser->getName());
@@ -64,10 +65,11 @@ class ParameterParserTest extends PHPUnit_Framework_TestCase
     public function shouldParseComplexType()
     {
         //given
-        $parameter = 'object $object1 @string=name @int=id';
+        $parameter = 'object $object1 @string=$name @int=$id';
+        $parser = new ParameterParser($parameter);
 
         //when
-        $parser = new ParameterParser($parameter);
+        $parser->parse();
 
         //then
         $this->assertEquals('object1', $parser->getName());
@@ -83,14 +85,27 @@ class ParameterParserTest extends PHPUnit_Framework_TestCase
     {
         //given
         $parameter = 'wrapper $user @className=\Mocks\MockUserWrapper';
+        $parser = new ParameterParser($parameter);
 
         //when
-        $parser = new ParameterParser($parameter);
+        $parser->parse();
 
         //then
         $this->assertEquals('user', $parser->getName());
-        $this->assertEquals('wrapper', $parser->getType());
-        $this->assertTrue($parser->isComplex());
-        $this->assertCount(3, $parser->complexTypes());
+        $this->assertEquals('MocksMockUserWrapper', $parser->getType());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldParseParams()
+    {
+        $array = array(
+            'int $simple1',
+            'object $object1 @string=$name1 @int=$id',
+            'object $object2 @(wrapper $wrapp @className=\Mocks\MockUserWrapper) @int=$id',
+            'wrapper $wrapp @className=\Mocks\MockUserWrapper'
+        );
+        ParameterParser::create($array, 'sampleMethod');
     }
 }
