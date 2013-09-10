@@ -6,11 +6,13 @@
  */
 namespace WSDL\Parser;
 
+use WSDL\Types\Arrays;
 use WSDL\Types\Object;
 use WSDL\Types\Simple;
 
 class ParameterParser
 {
+    private $_strategy;
     private $_parameter;
     private $_type;
     private $_name;
@@ -32,13 +34,22 @@ class ParameterParser
         $this->_parseAndSetType();
         $this->_parseAndSetName();
 
-        switch ($this->getType()) {
+        switch ($this->_strategy) {
             case 'object':
                 return new Object($this->getType(), $this->getName(), $this->complexTypes());
                 break;
             case 'wrapper':
                 $wrapper = $this->wrapper();
                 return new Object($this->getType(), $this->getName(), $wrapper->getComplexTypes());
+                break;
+            case 'array':
+                $complex = null;
+                if ($this->_type == 'wrapper') {
+                    $complex = $this->wrapper()->getComplexTypes();
+                } else if ($this->isComplex()) {
+                    $complex = $this->complexTypes();
+                }
+                return new Arrays($this->getType(), $this->getName(), $complex);
                 break;
             default:
                 return new Simple($this->getType(), $this->getName());
@@ -47,8 +58,14 @@ class ParameterParser
 
     private function _parseAndSetType()
     {
-        preg_match('#(\w+)#', $this->_parameter, $type);
-        $this->_type = $type[1];
+        if (preg_match('#^(\w*)\[\]#', $this->_parameter, $type)) {
+            $this->_type = $type[1];
+            $this->_strategy = 'array';
+        } else {
+            preg_match('#(\w+)#', $this->_parameter, $type);
+            $this->_type = $type[1];
+            $this->_strategy = $type[1];
+        }
     }
 
     private function _parseAndSetName()
