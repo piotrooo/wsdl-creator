@@ -10,6 +10,9 @@ namespace WSDL\XML;
 use DOMDocument;
 use WSDL\Parser\MethodParser;
 use WSDL\Parser\ParameterParser;
+use WSDL\Types\Arrays;
+use WSDL\Types\Simple;
+use WSDL\Types\Type;
 
 class XMLGenerator
 {
@@ -91,11 +94,12 @@ class XMLGenerator
         ));
 
         foreach ($this->_WSDLMethods as $method) {
-            foreach ($method->parameters() as $i => $parameter) {
-                $this->_generateComplexType($parameter, $method, $i, $schemaElement);
+            foreach ($method->parameters() as $parameter) {
+                if (!$this->_isSimpleType($parameter)) {
+                    $this->_generateComplexType($parameter, $schemaElement);
+                }
             }
-
-            $this->_generateComplexType($method->returning(), $method, null, $schemaElement);
+            $this->_generateComplexType($method->returning(), $schemaElement);
         }
 
         $typesElement->appendChild($schemaElement);
@@ -104,14 +108,31 @@ class XMLGenerator
         return $this;
     }
 
-    private function _generateComplexType(ParameterParser $parameter, MethodParser $method, $index, $schemaElement)
+    private function _generateComplexType(Type $parameter, $schemaElement)
     {
-        if ($parameter->isComplex()) {
-            $this->_generateObject($parameter, $method, $index, $schemaElement);
+        if ($this->_isArrayType($parameter)) {
+            $this->_generateArray($parameter, $schemaElement);
         }
-        if ($parameter->isArray()) {
-            $this->_generateArray($parameter, $method, $index, $schemaElement);
-        }
+//        if ($parameter->isComplex()) {
+//            $this->_generateObject($parameter, $method, $index, $schemaElement);
+//        }
+    }
+
+    private function _generateArray(Type $parameter, $schemaElement)
+    {
+
+        $name = 'ArrayOf' . ucfirst($parameter->getName());
+        $complexTypeElement = $this->_createElementWithAttributes('xsd:complexType', array('name' => $name));
+        $complexContentElement = $this->_createElement('xsd:complexContent');
+        $restrictionElement = $this->_createElementWithAttributes('xsd:restriction', array('base' => 'soapenc:Array'));
+        $attributeElement = $this->_createElementWithAttributes('xsd:attribute', array(
+            'ref' => 'soapenc:arrayType',
+            'arrayType' => 'xsd:' . $parameter->getType() . '[]'
+        ));
+        $restrictionElement->appendChild($attributeElement);
+        $complexContentElement->appendChild($restrictionElement);
+        $complexTypeElement->appendChild($complexContentElement);
+        $schemaElement->appendChild($complexTypeElement);
     }
 
     private function _generateObject(ParameterParser $parameter, MethodParser $method, $index, $schemaElement)
@@ -134,23 +155,6 @@ class XMLGenerator
         $complexTypeElement->appendChild($sequenceElement);
         $element->appendChild($complexTypeElement);
         $schemaElement->appendChild($element);
-    }
-
-    private function _generateArray(ParameterParser $parameter, MethodParser $method, $index, $schemaElement)
-    {
-
-        $name = $method->getName() . $parameter->getArrayName() . (isset($index) ? ($index + 1) . 'Input' : 'Output');
-        $complexTypeElement = $this->_createElementWithAttributes('xsd:complexType', array('name' => $name));
-        $complexContentElement = $this->_createElement('xsd:complexContent');
-        $restrictionElement = $this->_createElementWithAttributes('xsd:restriction', array('base' => 'soapenc:Array'));
-        $attributeElement = $this->_createElementWithAttributes('xsd:attribute', array(
-            'ref' => 'soapenc:arrayType',
-            'arrayType' => 'xsd:' . $parameter->getType()
-        ));
-        $restrictionElement->appendChild($attributeElement);
-        $complexContentElement->appendChild($restrictionElement);
-        $complexTypeElement->appendChild($complexContentElement);
-        $schemaElement->appendChild($complexTypeElement);
     }
 
     /**
@@ -179,9 +183,8 @@ class XMLGenerator
     private function _createXMLMessageInputParts(MethodParser $method)
     {
         $partElements = array();
-        foreach ($method->parameters() as $i => $parameter) {
-            $type = $parameter->isComplex() ? 'element' : 'type';
-            $value = $this->_prepareElementValue($parameter, $method, $i, 'Input');
+        foreach ($method->parameters() as $parameter) {
+            list($type, $value) = $this->_prepareTypeAndValue($parameter);
 
             $partElements[] = $this->_createElementWithAttributes('part', array(
                 'name' => $parameter->getName(),
@@ -194,28 +197,35 @@ class XMLGenerator
     private function _createXMLMessageOutput(MethodParser $method)
     {
         $parameter = $method->returning();
-        $type = $parameter->isComplex() ? 'element' : 'type';
-        $value = $this->_prepareElementValue($parameter, $method, null, 'Output');
-
+        list($type, $value) = $this->_prepareTypeAndValue($parameter);
 
         $returnElement = $this->_createElementWithAttributes('part', array(
-            'name' => $parameter->getName() ? $parameter->getName() : $method->getName() . 'Output',
+            'name' => $parameter->getName(),
             $type => $value
         ));
         return $returnElement;
     }
 
-    private function _prepareElementValue(ParameterParser $parameter, MethodParser $method, $i = 0, $sufix)
+    private function _prepareTypeAndValue(Type $parameter)
     {
-        $i = isset($i) ? ($i + 1) : '';
-        if ($parameter->isComplex()) {
-            $value = 'ns:' . $method->getName() . $i . $sufix;
-        } else if ($parameter->isArray()) {
-            $value = 'ns:' . $method->getName() . $parameter->getArrayName() . $i . $sufix;
-        } else {
+        if ($this->_isSimpleType($parameter)) {
+            $type = 'type';
             $value = $this->_getXsdType($parameter->getType());
+        } else if ($this->_isArrayType($parameter)) {
+            $type = 'type';
+            $value = 'ns:' . 'ArrayOf' . ucfirst($parameter->getName());
         }
-        return $value;
+        return array($type, $value);
+    }
+
+    private function _isSimpleType($type)
+    {
+        return $type instanceof Simple;
+    }
+
+    private function _isArrayType($type)
+    {
+        return $type instanceof Arrays;
     }
 
     /**

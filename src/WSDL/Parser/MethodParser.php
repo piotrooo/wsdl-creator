@@ -6,6 +6,8 @@
  */
 namespace WSDL\Parser;
 
+use WSDL\Types\Type;
+
 class MethodParser
 {
     private $_name;
@@ -25,7 +27,7 @@ class MethodParser
     }
 
     /**
-     * @return ParameterParser[]
+     * @return Type[]
      */
     public function parameters()
     {
@@ -37,7 +39,8 @@ class MethodParser
     {
         preg_match('#@return (.+)#', $this->_doc, $groupMatches);
         $trimGroupMatches = array_map('trim', $groupMatches);
-        return new ParameterParser($trimGroupMatches[1], $this->getName());
+        $parameterParser = new ParameterParser($trimGroupMatches[1], $this->getName());
+        return $parameterParser->parse();
     }
 
     public function getDoc()
