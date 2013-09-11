@@ -11,6 +11,7 @@ use DOMDocument;
 use WSDL\Parser\MethodParser;
 use WSDL\Parser\ParameterParser;
 use WSDL\Types\Arrays;
+use WSDL\Types\Object;
 use WSDL\Types\Simple;
 use WSDL\Types\Type;
 
@@ -57,7 +58,9 @@ class XMLGenerator
 
     public function generate()
     {
-        $this->_definitions()->_types()->_message()->_portType()->_binding()->_service();
+        $this->_definitions()
+            ->_types()
+            ->_message()->_portType()->_binding()->_service();
     }
 
     /**
@@ -113,9 +116,9 @@ class XMLGenerator
         if ($this->_isArrayType($parameter)) {
             $this->_generateArray($parameter, $schemaElement);
         }
-//        if ($parameter->isComplex()) {
-//            $this->_generateObject($parameter, $method, $index, $schemaElement);
-//        }
+        if ($this->_isObjectType($parameter)) {
+            $this->_generateObject($parameter, $schemaElement);
+        }
     }
 
     private function _generateArray(Type $parameter, $schemaElement)
@@ -135,16 +138,16 @@ class XMLGenerator
         $schemaElement->appendChild($complexTypeElement);
     }
 
-    private function _generateObject(ParameterParser $parameter, MethodParser $method, $index, $schemaElement)
+    private function _generateObject(Type $parameter, $schemaElement)
     {
-        $name = isset($index) ? $method->getName() . ($index + 1) . 'Input' : $method->getName() . 'Output';
+        $name = ucfirst($parameter->getType());
         $element = $this->_createElementWithAttributes('xsd:element', array(
             'name' => $name
         ));
         $complexTypeElement = $this->_createElement('xsd:complexType');
         $sequenceElement = $this->_createElement('xsd:sequence');
 
-        foreach ($parameter->complexTypes() as $complexType) {
+        foreach ($parameter->getComplexType() as $complexType) {
             $elementPartElement = $this->_createElementWithAttributes('xsd:element', array(
                 'name' => $complexType->getName(),
                 'type' => $this->_getXsdType($complexType->getType())
@@ -214,6 +217,9 @@ class XMLGenerator
         } else if ($this->_isArrayType($parameter)) {
             $type = 'type';
             $value = 'ns:' . 'ArrayOf' . ucfirst($parameter->getName());
+        } else if ($this->_isObjectType($parameter)) {
+            $type = 'element';
+            $value = 'ns:' . ucfirst($parameter->getType());
         }
         return array($type, $value);
     }
@@ -226,6 +232,11 @@ class XMLGenerator
     private function _isArrayType($type)
     {
         return $type instanceof Arrays;
+    }
+
+    private function _isObjectType($type)
+    {
+        return $type instanceof Object;
     }
 
     /**
