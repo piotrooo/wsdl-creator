@@ -114,6 +114,6 @@ class ParameterParserTest extends PHPUnit_Framework_TestCase
             'wrapper $wrapp1 @className=\Mocks\MockUserWrapper',
             'wrapper[] $wrapp2 @className=\Mocks\MockUserWrapper',
         );
-        ParameterParser::create($array, 'sampleMethod');
+        $a = ParameterParser::create($array, 'sampleMethod');
     }
 }

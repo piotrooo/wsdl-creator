@@ -143,6 +143,10 @@ class XMLGenerator
         $complexContentElement->appendChild($restrictionElement);
         $complexTypeElement->appendChild($complexContentElement);
         $schemaElement->appendChild($complexTypeElement);
+
+        if($parameter->getComplexType()) {
+            $this->_generateObject($parameter->getComplexType(), $schemaElement);
+        }
     }
 
     private function _generateObject(Type $parameter, $schemaElement)

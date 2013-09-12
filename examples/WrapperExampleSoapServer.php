@@ -86,4 +86,17 @@ class WrapperSoapServer
         }
         return $employees;
     }
+
+    /**
+     * @param wrapper[] $employeesList @className=Employee
+     * @return string
+     */
+    public function getEmployeesDepartments($employeesList)
+    {
+        $names = array();
+        foreach ($employeesList as $employee) {
+            $names[] = $employee->department;
+        }
+        return implode(', ', $names);
+    }
 }

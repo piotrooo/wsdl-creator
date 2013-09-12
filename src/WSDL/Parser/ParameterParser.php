@@ -43,13 +43,15 @@ class ParameterParser
                 return new Object($this->getType(), $this->getName(), $wrapper->getComplexTypes());
                 break;
             case 'array':
-                $complex = null;
+                $object = null;
                 if ($this->_type == 'wrapper') {
                     $complex = $this->wrapper()->getComplexTypes();
+                    $object = new Object($this->getType(), $this->getName(), $complex);
                 } else if ($this->isComplex()) {
                     $complex = $this->complexTypes();
+                    $object = new Object($this->getType(), $this->getName(), $complex);
                 }
-                return new Arrays($this->getType(), $this->getName(), $complex);
+                return new Arrays($this->getType(), $this->getName(), $object);
                 break;
             default:
                 return new Simple($this->getType(), $this->getName());
