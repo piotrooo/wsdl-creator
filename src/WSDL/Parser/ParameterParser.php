@@ -40,7 +40,11 @@ class ParameterParser
                 break;
             case 'wrapper':
                 $wrapper = $this->wrapper();
-                return new Object($this->getType(), $this->getName(), $wrapper->getComplexTypes());
+                $object = null;
+                if ($wrapper->getComplexTypes()) {
+                    $object = new Object($this->getType(), $this->getName(), $wrapper->getComplexTypes());
+                }
+                return new Object($this->getType(), $this->getName(), $object);
                 break;
             case 'array':
                 $object = null;

@@ -144,17 +144,18 @@ class XMLGenerator
         $complexTypeElement->appendChild($complexContentElement);
         $schemaElement->appendChild($complexTypeElement);
 
-        if($parameter->getComplexType()) {
+        if ($parameter->getComplexType()) {
             $this->_generateObject($parameter->getComplexType(), $schemaElement);
         }
     }
 
     private function _generateObject(Type $parameter, $schemaElement)
     {
-        $name = ucfirst($parameter->getType());
+        $name = ucfirst($this->_getObjectName($parameter));
         if ($this->_isAlreadyGenerated($name)) {
             return;
         }
+
         $element = $this->_createElementWithAttributes('xsd:element', array(
             'name' => $name
         ));
@@ -162,11 +163,18 @@ class XMLGenerator
         $sequenceElement = $this->_createElement('xsd:sequence');
 
         foreach ($parameter->getComplexType() as $complexType) {
+            print_r($complexType);
+            list($type, $value) = $this->_prepareTypeAndValue($complexType);
             $elementPartElement = $this->_createElementWithAttributes('xsd:element', array(
                 'name' => $complexType->getName(),
-                'type' => $this->_getXsdType($complexType->getType())
+                $type => $value
             ));
             $sequenceElement->appendChild($elementPartElement);
+
+            if (!$this->_isSimpleType($complexType) && $complexType->getComplexType()) {
+//                print_r($complexType->getComplexType());
+//                $this->_generateObject($complexType->getComplexType(), $schemaElement);
+            }
         }
 
         $complexTypeElement->appendChild($sequenceElement);
@@ -243,7 +251,7 @@ class XMLGenerator
             $value = 'ns:' . 'ArrayOf' . ucfirst($parameter->getName());
         } else if ($this->_isObjectType($parameter)) {
             $type = 'element';
-            $value = 'ns:' . ucfirst($parameter->getType());
+            $value = 'ns:' . ucfirst($this->_getObjectName($parameter));
         }
         return array($type, $value);
     }
@@ -261,6 +269,11 @@ class XMLGenerator
     private function _isObjectType($type)
     {
         return $type instanceof Object;
+    }
+
+    private function _getObjectName(Type $parameter)
+    {
+        return $parameter->getType() == 'object' ? $parameter->getName() : $parameter->getType();
     }
 
     /**
