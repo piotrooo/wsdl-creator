@@ -37,6 +37,7 @@ class XMLGenerator
      * @var MethodParser[]
      */
     private $_WSDLMethods;
+    private $_alreadyGeneratedComplexTypes = array();
 
     public function __construct($name, $namespace, $location)
     {
@@ -125,12 +126,18 @@ class XMLGenerator
     {
 
         $name = 'ArrayOf' . ucfirst($parameter->getName());
+        if ($this->_isAlreadyGenerated($name)) {
+            return;
+        }
+
+        $type = $parameter->getComplexType() ? 'ns:' : 'xsd:';
+
         $complexTypeElement = $this->_createElementWithAttributes('xsd:complexType', array('name' => $name));
         $complexContentElement = $this->_createElement('xsd:complexContent');
         $restrictionElement = $this->_createElementWithAttributes('xsd:restriction', array('base' => 'soapenc:Array'));
         $attributeElement = $this->_createElementWithAttributes('xsd:attribute', array(
             'ref' => 'soapenc:arrayType',
-            'arrayType' => 'xsd:' . $parameter->getType() . '[]'
+            'arrayType' => $type . $parameter->getType() . '[]'
         ));
         $restrictionElement->appendChild($attributeElement);
         $complexContentElement->appendChild($restrictionElement);
@@ -141,6 +148,9 @@ class XMLGenerator
     private function _generateObject(Type $parameter, $schemaElement)
     {
         $name = ucfirst($parameter->getType());
+        if ($this->_isAlreadyGenerated($name)) {
+            return;
+        }
         $element = $this->_createElementWithAttributes('xsd:element', array(
             'name' => $name
         ));
@@ -158,6 +168,16 @@ class XMLGenerator
         $complexTypeElement->appendChild($sequenceElement);
         $element->appendChild($complexTypeElement);
         $schemaElement->appendChild($element);
+    }
+
+    private function _isAlreadyGenerated($name)
+    {
+        if (in_array($name, $this->_alreadyGeneratedComplexTypes)) {
+            return true;
+        } else {
+            $this->_alreadyGeneratedComplexTypes[] = $name;
+            return false;
+        }
     }
 
     /**

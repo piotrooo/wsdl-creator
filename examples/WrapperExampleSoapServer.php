@@ -32,6 +32,18 @@ class User
     public $payment;
 }
 
+class Employee
+{
+    /**
+     * @type int
+     */
+    public $id;
+    /**
+     * @type string
+     */
+    public $department;
+}
+
 class WrapperSoapServer
 {
     /**
@@ -57,5 +69,21 @@ class WrapperSoapServer
         $user->age = $age;
         $user->payment = $payment;
         return $user;
+    }
+
+    /**
+     * @return wrapper[] $employees @className=Employee
+     */
+    public function getEmployees()
+    {
+        $employees = array();
+        $departments = array('IT', 'Logistics', 'Management');
+        for ($i = 0; $i < 3; $i++) {
+            $employee = new Employee();
+            $employee->id = 2 + $i + 1;
+            $employee->department = $departments[$i];
+            $employees[] = $employee;
+        }
+        return $employees;
     }
 }
