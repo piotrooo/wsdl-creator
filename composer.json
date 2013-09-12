@@ -2,6 +2,8 @@
     "name": "piotrooo/wsdl-creator",
     "description": "PHP WSDL creator using PHPdoc (annotations, reflections).",
     "minimum-stability": "dev",
+    "license": "MIT",
+    "keywords": ["php", "wsdl", "generator", "creator", "annotations", "reflections", "soap"],
     "authors": [
         {
             "name": "Piotr Olaszewski",
