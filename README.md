@@ -9,6 +9,19 @@ WSDL creator allows generating WSDL documents based on PHP classes using annotat
 Simple type
 -----------
 
+Simple types are described here: <http://infohost.nmt.edu/tcc/help/pubs/rnc/xsd.html#xsd-types>
+
+###Usage:
+```
+/**
+* @param string $name
+* @param int $age
+* @return string $nameWithAge
+*/
+```
+
+So you type `@param` next type one of simple types (`string`) after name of variable (`$name`).
+
 Wrapper type
 ------------
 
