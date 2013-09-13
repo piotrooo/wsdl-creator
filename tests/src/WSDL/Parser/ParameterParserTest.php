@@ -110,11 +110,10 @@ class ParameterParserTest extends PHPUnit_Framework_TestCase
             'object[] $object5 @string=$name3 @int=$id',
             'object[] $object6 @string[]=$name4 @int=$id',
             'object[] $object7 @(wrapper $wr3 @className=\Mocks\MockUserWrapper) @int=$id',
-//            'object[] $object8 @(wrapper[] $wr4 @className=\Mocks\MockUserWrapper) @int=$id',
+            'object[] $object8 @(wrapper[] $wr4 @className=\Mocks\MockUserWrapper) @int=$id',
             'wrapper $wrapp1 @className=\Mocks\MockUserWrapper',
             'wrapper[] $wrapp2 @className=\Mocks\MockUserWrapper',
         );
-        $a = ParameterParser::create($array, 'sampleMethod');
-        print_r($a);
+        ParameterParser::create($array, 'sampleMethod');
     }
 }

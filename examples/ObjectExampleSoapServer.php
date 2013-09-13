@@ -122,4 +122,21 @@ class ObjectSoapServer
         $obj[1]->payment = '6546.56';
         return $obj;
     }
+
+    /**
+     * @return object[] $employeesList @(wrapper[] $agents @className=Agent)
+     */
+    public function getEmployeesWithAgents()
+    {
+        $obj = new stdClass();
+        $obj[0]->agent[0] = new Agent();
+        $obj[0]->agent[0]->name = 'agent1';
+        $obj[0]->agent[1] = new Agent();
+        $obj[0]->agent[1]->name = 'agent2';
+        $obj[1]->agent[0] = new Agent();
+        $obj[1]->agent[0]->name = 'agent3';
+        $obj[1]->agent[1] = new Agent();
+        $obj[1]->agent[1]->name = 'agent4';
+        return $obj;
+    }
 }
