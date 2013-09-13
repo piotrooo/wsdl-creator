@@ -101,18 +101,18 @@ class ParameterParserTest extends PHPUnit_Framework_TestCase
     public function shouldParseParams()
     {
         $array = array(
-//            'int $simple1',
-//            'int[] $simple2',
-//            'object $object1 @string=$name1 @int=$id',
+            'int $simple1',
+            'int[] $simple2',
+            'object $object1 @string=$name1 @int=$id',
             'object $object2 @(wrapper $wr1 @className=\Mocks\MockUserWrapper) @int=$id',
-//            'object $object3 @string[]=$name2 @int=$id',
+            'object $object3 @string[]=$name2 @int=$id',
 //            'object $object4 @(wrapper[] $wr2 @className=\Mocks\MockUserWrapper) @int=$id',
-//            'object[] $object5 @string=$name3 @int=$id',
+            'object[] $object5 @string=$name3 @int=$id',
 //            'object[] $object6 @string[]=$name4 @int=$id',
 //            'object[] $object7 @(wrapper $wr3 @className=\Mocks\MockUserWrapper) @int=$id',
 //            'object[] $object8 @(wrapper[] $wr4 @className=\Mocks\MockUserWrapper) @int=$id',
-//            'wrapper $wrapp1 @className=\Mocks\MockUserWrapper',
-//            'wrapper[] $wrapp2 @className=\Mocks\MockUserWrapper',
+            'wrapper $wrapp1 @className=\Mocks\MockUserWrapper',
+            'wrapper[] $wrapp2 @className=\Mocks\MockUserWrapper',
         );
         $a = ParameterParser::create($array, 'sampleMethod');
         print_r($a);

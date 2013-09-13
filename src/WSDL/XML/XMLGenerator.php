@@ -124,7 +124,6 @@ class XMLGenerator
 
     private function _generateArray(Type $parameter, $schemaElement)
     {
-
         $name = 'ArrayOf' . ucfirst($parameter->getName());
         if ($this->_isAlreadyGenerated($name)) {
             return;
@@ -137,7 +136,7 @@ class XMLGenerator
         $restrictionElement = $this->_createElementWithAttributes('xsd:restriction', array('base' => 'soapenc:Array'));
         $attributeElement = $this->_createElementWithAttributes('xsd:attribute', array(
             'ref' => 'soapenc:arrayType',
-            'arrayType' => $type . $parameter->getType() . '[]'
+            'arrayType' => $type . $this->_getObjectName($parameter) . '[]'
         ));
         $restrictionElement->appendChild($attributeElement);
         $complexContentElement->appendChild($restrictionElement);
@@ -163,17 +162,22 @@ class XMLGenerator
         $sequenceElement = $this->_createElement('xsd:sequence');
 
         foreach ($parameter->getComplexType() as $complexType) {
-            print_r($complexType);
-            list($type, $value) = $this->_prepareTypeAndValue($complexType);
+            if ($complexType instanceof Type) {
+                list($type, $value) = $this->_prepareTypeAndValue($complexType);
+            } else {
+                $type = 'type';
+                $value = $this->_getXsdType($complexType->getType());
+            }
             $elementPartElement = $this->_createElementWithAttributes('xsd:element', array(
                 'name' => $complexType->getName(),
                 $type => $value
             ));
             $sequenceElement->appendChild($elementPartElement);
 
-            if (!$this->_isSimpleType($complexType) && $complexType->getComplexType()) {
-//                print_r($complexType->getComplexType());
-//                $this->_generateObject($complexType->getComplexType(), $schemaElement);
+            if ($this->_isArrayType($complexType)) {
+                $this->_generateArray($complexType, $schemaElement);
+            } else if ($complexType instanceof Type && !$this->_isSimpleType($complexType) && $complexType->getComplexType()) {
+                $this->_generateComplexType($complexType->getComplexType(), $schemaElement);
             }
         }
 
@@ -273,7 +277,7 @@ class XMLGenerator
 
     private function _getObjectName(Type $parameter)
     {
-        return $parameter->getType() == 'object' ? $parameter->getName() : $parameter->getType();
+        return $parameter->getType() == 'object' ? ucfirst($parameter->getName()) : $parameter->getType();
     }
 
     /**
