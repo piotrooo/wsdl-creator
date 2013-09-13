@@ -100,10 +100,11 @@ class ObjectSoapServer
      */
     public function setPayment($payments)
     {
-        $paymentsUsers = new stdClass();
-        foreach ($payments as $payment) {
-            $paymentsUsers->user = $payment->user;
-            $paymentsUsers->countPayment = count($payment->payment);
+        $paymentsUsers = array();
+        foreach ($payments as $i => $payment) {
+            $paymentsUsers[$i] = new stdClass();
+            $paymentsUsers[$i]->user = $payment->user;
+            $paymentsUsers[$i]->countPayment = count($payment->payment);
         }
         return $paymentsUsers;
     }
@@ -113,10 +114,12 @@ class ObjectSoapServer
      */
     public function getAgentsWithPayment()
     {
-        $obj = new stdClass();
+        $obj = array();
+        $obj[0] = new stdClass();
         $obj[0]->agent = new Agent();
         $obj[0]->agent->name = 'agent1';
         $obj[0]->payment = '123.56';
+        $obj[1] = new stdClass();
         $obj[1]->agent = new Agent();
         $obj[1]->agent->name = 'agent2';
         $obj[1]->payment = '6546.56';
@@ -128,11 +131,14 @@ class ObjectSoapServer
      */
     public function getEmployeesWithAgents()
     {
-        $obj = new stdClass();
+        $obj = array();
+        $obj[0] = new stdClass();
         $obj[0]->agent[0] = new Agent();
         $obj[0]->agent[0]->name = 'agent1';
         $obj[0]->agent[1] = new Agent();
         $obj[0]->agent[1]->name = 'agent2';
+        $obj[1] = new stdClass();
+        $obj[1]->agent[0] = new Agent();
         $obj[1]->agent[0] = new Agent();
         $obj[1]->agent[0]->name = 'agent3';
         $obj[1]->agent[1] = new Agent();
