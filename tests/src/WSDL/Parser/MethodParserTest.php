@@ -30,7 +30,7 @@ DOC;
         //then
         $this->assertEquals('Method to adding user', $parser->description());
         $this->assertCount(2, $parser->parameters());
-        $this->assertInstanceOf('WSDL\Parser\ParameterParser', $parser->returning());
+        $this->assertInstanceOf('WSDL\Types\Simple', $parser->returning());
         $this->assertEquals($methodDoc, $parser->getDoc());
         $this->assertEquals($methodName, $parser->getName());
     }

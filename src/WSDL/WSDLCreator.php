@@ -7,6 +7,7 @@
 namespace WSDL;
 
 use WSDL\Parser\ClassParser;
+use WSDL\Service\Service;
 use WSDL\XML\XMLGenerator;
 
 class WSDLCreator
@@ -49,5 +50,14 @@ class WSDLCreator
     private function _addShlashAtEndIfNotExists($namespace)
     {
         return rtrim($namespace, '/') . '/';
+    }
+
+    public function renderWSDLService()
+    {
+        $headers = apache_request_headers();
+        if (empty($headers['Content-Type']) || !preg_match('#xml#i', $headers['Content-Type'])) {
+            $service = new Service($this->_class, $this->_classParser->getMethods());
+            $service->render();
+        }
     }
 }
