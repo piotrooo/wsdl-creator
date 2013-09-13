@@ -20,6 +20,7 @@ $wsdl->setNamespace("http://foo.bar/");
 ```
 
 `SOAP` server must be created in location specified in `WSDLCreator`.
+
 ```php
 $server = new SoapServer(null, array(
     'uri' => 'http://localhost/wsdl-creator/ClassName.php'
@@ -31,6 +32,7 @@ $server->handle();
 To render `XML` use method `renderWSDL`. To properly load generator classes use composer loader which is in `vendor/autoload.php`.
 
 Full configutaion listing:
+
 ```php
 require_once 'vendor/autoload.php';
 
@@ -55,14 +57,13 @@ Now if we try call address `http://localhost/wsdl-creator/ClassName.php?wsdl` yo
 Simple type
 -----------
 
-Simple types are described here: <http://infohost.nmt.edu/tcc/help/pubs/rnc/xsd.html#xsd-types>
+Simple types are described [here](http://infohost.nmt.edu/tcc/help/pubs/rnc/xsd.html#xsd-types).
 
-###Usage:
+###Usage
+
 ```
 /**
 * @param string $name
-* @param int $age
-* @return string $nameWithAge
 */
 ```
 
@@ -70,13 +71,13 @@ So you type `@param` next type one of simple types (`string`) after name of vari
 
 ---
 
-You can also use `arrays` of the simple types:
+You can also use `arrays` of the simple types.
 
-###Usage:
+###Usage
+
 ```
 /**
 * @param string[] $names
-* @return string $name
 */
 ```
 
@@ -84,12 +85,13 @@ In input parameter now you must define what type of array you pass (`string[]`).
 
 ---
 
-###Example:
+###Example
+
 [SimpleTypeExample](examples/SimpleExampleSoapServer.php)
 
 ---
 
-###Annotations:
+###Annotations
 
 - @desc Method description
 - @param type $varialbe_name
@@ -98,13 +100,13 @@ In input parameter now you must define what type of array you pass (`string[]`).
 Wrapper type
 ------------
 
-Wrapper types are user defined clases which you can generate `WSDL` complex types. Simplest example:
+Wrapper types are user defined clases which you can generate `WSDL` complex types.
 
-###Usage:
+###Usage
+
 ```
 /**
 * @param wrapper $user @className=User
-* @return string $nameWithAge
 */
 ```
 
@@ -128,9 +130,10 @@ This mechanism use [reflection](http://php.net/manual/en/book.reflection.php), i
 
 ---
 
-You can define arrays of wrappers:
+You can define arrays of wrappers.
 
-###Usage:
+###Usage
+
 ```
 /**
 * @return wrapper[] $users @className=User
@@ -141,7 +144,8 @@ This annotation will generate array of users.
 
 ---
 
-###Example:
+###Example
+
 [WrapperTypeExample](examples/WrapperExampleSoapServer.php)
 
 ---
@@ -154,3 +158,64 @@ This annotation will generate array of users.
 
 Object type
 -----------
+
+You can dynamically create object at runtime. Use `object` parameter type.
+
+###Usage
+
+```
+/**
+* @param object $info @string=$name @int=$age
+*/
+```
+
+This annotation create complex type with `name` and `age` elements.
+
+---
+
+Also you can wrapp classes in object.
+
+###Usage
+
+```
+/**
+* @return object $userNameWithId @(wrapper $user @className=User) @int=$id
+*/
+```
+
+Above example will return `UserNameWithId` object which contains pointer to `User` complex type and `int` type.
+
+---
+
+Another option is creating array of objects.
+
+###Usage
+
+```
+/**
+* @param object[] $payments @float=$payment @string=$user
+*/
+```
+
+This annotation creata array of objects with `payment` and `user` on each element of array.
+
+---
+
+###Example
+
+[ObjectTypeExample](examples/ObjectExampleSoapServer.php)
+
+---
+
+###Additional info
+
+In `object` you can use array of wrappers and array of simple types.
+
+---
+
+###Annotations
+
+- @desc Method description
+- @param object $object @type1=$name1 @type2=$name2
+- @param object $object @(wrapper $nameWrapper @className=User) @type1=$name1
+- @return
