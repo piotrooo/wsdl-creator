@@ -50,7 +50,7 @@ $server->setClass('ClassName');
 $server->handle();
 ```
 
-Now if we try call address `http://localhost/wsdl-creator/ClassName.php?wsdl` we recive `WSDL` document.
+Now if we try call address `http://localhost/wsdl-creator/ClassName.php?wsdl` you recive `WSDL` document.
 
 Simple type
 -----------
@@ -82,11 +82,75 @@ You can also use `arrays` of the simple types:
 
 In input parameter now you must define what type of array you pass (`string[]`).
 
+---
+
 ###Example:
 [SimpleTypeExample](examples/SimpleExampleSoapServer.php)
 
+---
+
+###Annotations:
+
+- @desc Method description
+- @param type $varialbe_name
+- @return type $return
+
 Wrapper type
 ------------
+
+Wrapper types are user defined clases which you can generate `WSDL` complex types. Simplest example:
+
+###Usage:
+```
+/**
+* @param wrapper $user @className=User
+* @return string $nameWithAge
+*/
+```
+
+You must define class `User` with public fields and doc comments which contains field type as example:
+
+```php
+class User
+{
+	/**
+	* @type string
+	*/
+	public $name;
+	/**
+	* @type int
+	*/
+	public $age;
+}
+```
+
+This mechanism use [reflection](http://php.net/manual/en/book.reflection.php), i.e. `User` class must be visible to the generated class - possible use [namespaces](http://php.net/manual/en/language.namespaces.php) (`\Namespace\To\User`).
+
+---
+
+You can define arrays of wrappers:
+
+###Usage:
+```
+/**
+* @return wrapper[] $users @className=User
+*/
+```
+
+This annotation will generate array of users.
+
+---
+
+###Example:
+[WrapperTypeExample](examples/WrapperExampleSoapServer.php)
+
+---
+
+###Annotations
+
+- @desc Method description
+- @param wrapper[] @className=ClassName
+- @return wrapper @className=\Namespace\To\ClassName
 
 Object type
 -----------
