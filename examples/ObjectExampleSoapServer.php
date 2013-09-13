@@ -4,14 +4,14 @@ require_once '../vendor/autoload.php';
 use WSDL\WSDLCreator;
 
 if (isset($_GET['wsdl'])) {
-    $wsdl = new WSDL\WSDLCreator('ObjectSoapServer', 'http://localhost:8080/wsdl-creator/examples/ObjectExampleSoapServer.php');
+    $wsdl = new WSDL\WSDLCreator('ObjectSoapServer', 'http://localhost/wsdl-creator/examples/ObjectExampleSoapServer.php');
     $wsdl->setNamespace("http://foo.bar/");
     $wsdl->renderWSDL();
     exit;
 }
 
 $server = new SoapServer(null, array(
-    'uri' => 'http://localhost:8080/wsdl-creator/examples/ObjectExampleSoapServer.php'
+    'uri' => 'http://localhost/wsdl-creator/examples/ObjectExampleSoapServer.php'
 ));
 $server->setClass('ObjectSoapServer');
 $server->handle();
@@ -78,5 +78,48 @@ class ObjectSoapServer
         $companies[1]->name = 'Example2';
         $companies[1]->id = '3';
         return $companies;
+    }
+
+    /**
+     * @return object $listOfAgents @(wrapper[] $agents @className=Agent) @int=$id
+     */
+    public function getListOfAgentsWithId()
+    {
+        $obj = new stdClass();
+        $obj->agent[0] = new Agent();
+        $obj->agent[0]->name = 'agent1';
+        $obj->agent[1] = new Agent();
+        $obj->agent[1]->name = 'agent2';
+        $obj->id = '555';
+        return $obj;
+    }
+
+    /**
+     * @param object[] $payments @float[]=$payment @string=$user
+     * @return object[] $paymentsUsers @string=$user @int=$countPayment
+     */
+    public function setPayment($payments)
+    {
+        $paymentsUsers = new stdClass();
+        foreach ($payments as $payment) {
+            $paymentsUsers->user = $payment->user;
+            $paymentsUsers->countPayment = count($payment->payment);
+        }
+        return $paymentsUsers;
+    }
+
+    /**
+     * @return object[] $agentsWithPayment @(wrapper $agent @className=Agent) @float=$payment
+     */
+    public function getAgentsWithPayment()
+    {
+        $obj = new stdClass();
+        $obj[0]->agent = new Agent();
+        $obj[0]->agent->name = 'agent1';
+        $obj[0]->payment = '123.56';
+        $obj[1]->agent = new Agent();
+        $obj[1]->agent->name = 'agent2';
+        $obj[1]->payment = '6546.56';
+        return $obj;
     }
 }
