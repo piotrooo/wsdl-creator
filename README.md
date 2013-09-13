@@ -207,7 +207,7 @@ This annotation creata array of objects with `payment` and `user` on each elemen
 
 ###Additional info
 
-In `object` you can user arrays of wrappers and arrays of simple types.
+In `object` you can use array of wrappers and array of simple types.
 
 ###Annotations
 
