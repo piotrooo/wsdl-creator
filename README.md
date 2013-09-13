@@ -22,6 +22,23 @@ Simple types are described here: <http://infohost.nmt.edu/tcc/help/pubs/rnc/xsd.
 
 So you type `@param` next type one of simple types (`string`) after name of variable (`$name`).
 
+---
+
+You can also use `arrays` of the simple types:
+
+###Usage:
+```
+/**
+* @param string[] $names
+* @return string $name
+*/
+```
+
+In input parameter now you must define what type of array you pass (`string[]`).
+
+###Example:
+[SimpleTypeExample](examples/SimpleExampleSoapServer.php)
+
 Wrapper type
 ------------
 
