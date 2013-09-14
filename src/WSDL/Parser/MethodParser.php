@@ -12,6 +12,8 @@ class MethodParser
 {
     private $_name;
     private $_doc;
+    private $_rawParameters;
+    private $_rawReturn;
 
     public function __construct($name, $doc)
     {
@@ -32,6 +34,7 @@ class MethodParser
     public function parameters()
     {
         preg_match_all('#@param (.+)#', $this->_doc, $groupMatches);
+        $this->_rawParameters = $groupMatches[1];
         return ParameterParser::create($groupMatches[1], $this->getName());
     }
 
@@ -39,6 +42,7 @@ class MethodParser
     {
         preg_match('#@return (.+)#', $this->_doc, $groupMatches);
         $trimGroupMatches = array_map('trim', $groupMatches);
+        $this->_rawReturn = $trimGroupMatches[1];
         $parameterParser = new ParameterParser($trimGroupMatches[1], $this->getName());
         return $parameterParser->parse();
     }
@@ -51,5 +55,17 @@ class MethodParser
     public function getName()
     {
         return $this->_name;
+    }
+
+    public function getRawParameters()
+    {
+        $this->parameters();
+        return $this->_rawParameters;
+    }
+
+    public function getRawReturn()
+    {
+        $this->returning();
+        return $this->_rawReturn;
     }
 }

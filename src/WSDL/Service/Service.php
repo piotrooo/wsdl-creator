@@ -19,6 +19,7 @@ class Service
 
     public function render()
     {
-
+        $this->template->methods = $this->_methods;
+        require_once 'service_template.phtml';
     }
 }
