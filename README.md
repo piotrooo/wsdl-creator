@@ -219,3 +219,8 @@ In `object` you can use array of wrappers and array of simple types.
 - @param object $object @type1=$name1 @type2=$name2
 - @param object $object @(wrapper $nameWrapper @className=User) @type1=$name1
 - @return
+
+Service overview
+----------------
+
+You can generate service overview through `renderWSDLService` method. This show all infos about method and parameters used in service with sample `SOAP` *request* and *response*.
