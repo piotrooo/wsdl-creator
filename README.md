@@ -218,6 +218,7 @@ In `object` you can use array of wrappers and array of simple types.
 - @desc Method description
 - @param object $object @type1=$name1 @type2=$name2
 - @param object $object @(wrapper $nameWrapper @className=User) @type1=$name1
+- @param object[] $object @type1[]=$name1
 - @return
 
 Service overview
