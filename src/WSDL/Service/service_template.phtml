@@ -55,6 +55,7 @@
             border: 1px #128085 dotted;
             padding-left: 10px;
             background-color: #E5E5CC;
+            font-family: Courier New, monospace;
         }
 
         div.parameters ul {
@@ -94,6 +95,7 @@
                         <p>Request:</p>
 
                         <div class="border">
+                            <?= $method->getMethodSampleRequest()->getXML() ?>
                         </div>
                     </div>
                     <div class="response">

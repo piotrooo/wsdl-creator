@@ -5,6 +5,7 @@ use WSDL\WSDLCreator;
 
 $wsdl = new WSDL\WSDLCreator('SimpleSoapServer', 'http://localhost/wsdl-creator/examples/SimpleExampleSoapServer.php');
 $wsdl->setNamespace("http://foo.bar/");
+
 if (isset($_GET['wsdl'])) {
     $wsdl->renderWSDL();
     exit;
