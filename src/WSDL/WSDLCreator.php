@@ -56,7 +56,7 @@ class WSDLCreator
     {
         $headers = apache_request_headers();
         if (empty($headers['Content-Type']) || !preg_match('#xml#i', $headers['Content-Type'])) {
-            $service = new Service($this->_class, $this->_classParser->getMethods());
+            $service = new Service($this->_class, $this->_classParser->getMethods(), $this->_namespace);
             $service->render();
         }
     }

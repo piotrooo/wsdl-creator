@@ -70,8 +70,8 @@ class MethodParser
         return $this->_rawReturn;
     }
 
-    public function getMethodSampleRequest()
+    public function getMethodSampleRequest($url)
     {
-        return new SOAPGenerator($this->parameters());
+        return new SOAPGenerator($this->parameters(), $this->getName(), $url);
     }
 }

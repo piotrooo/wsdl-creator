@@ -66,7 +66,7 @@
 </head>
 <body>
 <div id="root">
-    <div id="header">ExampleClass Service</div>
+    <div id="header"><?= $this->template->serviceName ?> Service (<?= $this->template->serviceUrl ?>)</div>
     <div id="content">
         <? foreach ($this->template->methods as $method): ?>
             <div class="method">
@@ -95,7 +95,7 @@
                         <p>Request:</p>
 
                         <div class="border">
-                            <?= $method->getMethodSampleRequest()->getXML() ?>
+                            <pre><?= htmlspecialchars($method->getMethodSampleRequest($this->template->serviceUrl)->getXML()) ?></pre>
                         </div>
                     </div>
                     <div class="response">
