@@ -7,6 +7,7 @@
 namespace WSDL\XML;
 
 use DOMDocument;
+use WSDL\Types\Arrays;
 use WSDL\Types\Simple;
 
 class SOAPGenerator
@@ -36,6 +37,12 @@ class SOAPGenerator
         foreach ($this->_types as $type) {
             if ($type instanceof Simple) {
                 $element = $DOMDocument->createElement($type->getName(), '?');
+                $method->appendChild($element);
+            }
+            if ($type instanceof Arrays) {
+                $element = $DOMDocument->createElement($type->getName());
+                $element->setAttribute('soapenc:arrayType', $type->getType() . '[]');
+                $element->setAttribute('soapenc:offset', '?');
                 $method->appendChild($element);
             }
         }

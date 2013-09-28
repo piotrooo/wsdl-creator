@@ -55,12 +55,17 @@
             border: 1px #128085 dotted;
             padding-left: 10px;
             background-color: #E5E5CC;
-            font-family: Courier New, monospace;
+            font-family: Courier New, monospace !important;
+            font-size: 13px;
         }
 
         div.parameters ul {
             padding: 0;
             list-style: none;
+        }
+
+        pre {
+            font-family: Courier New, monospace !important;
         }
     </style>
 </head>
@@ -96,12 +101,6 @@
 
                         <div class="border">
                             <pre><?= htmlspecialchars($method->getMethodSampleRequest($this->template->serviceUrl)->getXML()) ?></pre>
-                        </div>
-                    </div>
-                    <div class="response">
-                        <p>Response:</p>
-
-                        <div class="border">
                         </div>
                     </div>
                 </div>
