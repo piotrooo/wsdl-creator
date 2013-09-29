@@ -9,6 +9,7 @@ namespace WSDL\XML;
 use DOMDocument;
 use WSDL\Types\Arrays;
 use WSDL\Types\Simple;
+use WSDL\Utilities\Strings;
 
 class SOAPGenerator
 {
@@ -43,6 +44,10 @@ class SOAPGenerator
                 $element = $DOMDocument->createElement($type->getName());
                 $element->setAttribute('soapenc:arrayType', $type->getType() . '[]');
                 $element->setAttribute('soapenc:offset', '?');
+
+                $el = $DOMDocument->createElement(Strings::depluralize($type->getName()));
+                $element->appendChild($el);
+
                 $method->appendChild($element);
             }
         }
