@@ -223,5 +223,8 @@ In `object` you can use array of wrappers and array of simple types.
 
 Service overview
 ----------------
-//experimental
-You can generate service overview through `renderWSDLService` method. This show all infos about method and parameters used in service with sample `SOAP` *request* and *response*.
+You can generate service overview through `renderWSDLService` method. This show all infos about method and parameters used in service with sample `SOAP` *request*.
+
+###Example
+
+![Wrapper image](examples/wrapper.png)
