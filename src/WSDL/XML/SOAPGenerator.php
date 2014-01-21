@@ -53,7 +53,7 @@ class SOAPGenerator
             }
             if ($type instanceof Object) {
                 $element = $DOMDocument->createElement($type->getName());
-                foreach($type->getComplexType()->getComplexType() as $complexType) {
+                foreach ($type->getComplexType()->getComplexType() as $complexType) {
                     $el = $DOMDocument->createElement($complexType->getName(), '?');
                     $element->appendChild($el);
                 }
