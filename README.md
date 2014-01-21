@@ -6,6 +6,24 @@ Introduction
 
 WSDL creator allows generating WSDL documents based on PHP classes using annotations and reflection mechanism. This generator also give possibilty to generating overview methods and parameters with SOAP examples used in WSDL.
 
+Installation
+------------
+
+To install wsdl-creator at your project use [composer](http://getcomposer.org).
+
+###Create new project:
+
+`composer.phar create-project piotrooo/wsdl-creator myproject`
+
+###or add to the composer.json file:
+
+```
+require: {
+	"piotrooo/wsdl-creator": "1.0.0"
+}
+```
+
+
 Configuration
 -------------
 
