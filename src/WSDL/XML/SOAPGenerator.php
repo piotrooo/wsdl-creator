@@ -8,6 +8,7 @@ namespace WSDL\XML;
 
 use DOMDocument;
 use WSDL\Types\Arrays;
+use WSDL\Types\Object;
 use WSDL\Types\Simple;
 use WSDL\Utilities\Strings;
 
@@ -45,9 +46,17 @@ class SOAPGenerator
                 $element->setAttribute('soapenc:arrayType', $type->getType() . '[]');
                 $element->setAttribute('soapenc:offset', '?');
 
-                $el = $DOMDocument->createElement(Strings::depluralize($type->getName()));
+                $el = $DOMDocument->createElement(Strings::depluralize($type->getName()), '?');
                 $element->appendChild($el);
 
+                $method->appendChild($element);
+            }
+            if ($type instanceof Object) {
+                $element = $DOMDocument->createElement($type->getName());
+                foreach($type->getComplexType()->getComplexType() as $complexType) {
+                    $el = $DOMDocument->createElement($complexType->getName(), '?');
+                    $element->appendChild($el);
+                }
                 $method->appendChild($element);
             }
         }

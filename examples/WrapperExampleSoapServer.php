@@ -92,7 +92,7 @@ class WrapperSoapServer
 
     /**
      * @param wrapper[] $employeesList @className=Employee
-     * @return string
+     * @return string $str
      */
     public function getEmployeesDepartments($employeesList)
     {
