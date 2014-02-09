@@ -6,6 +6,8 @@ Introduction
 
 WSDL creator allows generating WSDL documents based on PHP classes using annotations and reflection mechanism. This generator also give possibilty to generating overview methods and parameters with SOAP examples used in WSDL.
 
+Support: PHP4 & PHP5.
+
 Installation
 ------------
 
