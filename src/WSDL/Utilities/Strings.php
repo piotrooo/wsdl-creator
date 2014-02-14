@@ -11,7 +11,6 @@ class Strings
             'ies' => 'y',
             'xes' => 'x',
             'oes' => 'o',
-            'ies' => 'y',
             'ves' => 'f',
             's' => '');
         foreach (array_keys($rules) as $key) {
