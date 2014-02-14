@@ -8,14 +8,14 @@ use WSDL\Parser\MethodParser;
 
 class MethodParserTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldParseMethodData()
+    private $_methodName;
+    private $_methodDoc;
+
+    protected function setUp()
     {
-        //given
-        $methodName = 'addUser';
-        $methodDoc = <<<'DOC'
+        parent::setUp();
+        $this->_methodName = 'addUser';
+        $this->_methodDoc = <<<'DOC'
 /**
  * @desc Method to adding user
  * @param string $name
@@ -23,15 +23,45 @@ class MethodParserTest extends PHPUnit_Framework_TestCase
  * @return bool $return
  */
 DOC;
+    }
 
+    /**
+     * @test
+     */
+    public function shouldParseMethodData()
+    {
         //when
-        $parser = new MethodParser($methodName, $methodDoc);
+        $parser = new MethodParser($this->_methodName, $this->_methodDoc);
 
         //then
         $this->assertEquals('Method to adding user', $parser->description());
         $this->assertCount(2, $parser->parameters());
         $this->assertInstanceOf('WSDL\Types\Simple', $parser->returning());
-        $this->assertEquals($methodDoc, $parser->getDoc());
-        $this->assertEquals($methodName, $parser->getName());
+        $this->assertEquals($this->_methodDoc, $parser->getDoc());
+        $this->assertEquals($this->_methodName, $parser->getName());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldParseMethodAndReturnRawParameters()
+    {
+        //when
+        $parser = new MethodParser($this->_methodName, $this->_methodDoc);
+
+        //then
+        $this->assertEquals(array('string $name', 'object $address @string=ip @string=mac'), $parser->getRawParameters());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldParseMethodAndReturnRawReturn()
+    {
+        //when
+        $parser = new MethodParser($this->_methodName, $this->_methodDoc);
+
+        //then
+        $this->assertEquals('bool $return', $parser->getRawReturn());
     }
 }
