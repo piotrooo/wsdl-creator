@@ -1,4 +1,9 @@
 <?php
+/**
+ * Strings
+ *
+ * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
+ */
 namespace WSDL\Utilities;
 
 class Strings
