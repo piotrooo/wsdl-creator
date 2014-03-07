@@ -14,10 +14,10 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
      */
     private $_XMLGenerator;
     private $_XML;
-    private $_class = 'MockClass';
+    private $_class = '\Mocks\MockClass';
     private $_namespace = 'http://example.com/';
-    private $_targetNamespace = 'http://example.com/mockclass';
-    private $_targetNamespaceTypes = 'http://example.com/mockclass/types';
+    private $_targetNamespace = 'http://example.com/mocks/mockclass';
+    private $_targetNamespaceTypes = 'http://example.com/mocks/mockclass/types';
     private $_location = 'http://localhost/wsdl-creator/ExampleSoapServer.php';
 
     public function setUp()
@@ -41,7 +41,7 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
         $matcher = array(
             'tag' => 'definitions',
             'attributes' => array(
-                'name' => $this->_class,
+                'name' => $this->_XMLGenerator->extractClassName($this->_class),
                 'targetNamespace' => $this->_targetNamespace,
                 'xmlns:tns' => $this->_targetNamespace,
                 'xmlns:xsd' => 'http://www.w3.org/2001/XMLSchema',
@@ -154,10 +154,55 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldRenderXML ()
+    public function shouldRenderXML()
     {
         //when
         $this->expectOutputRegex('/definitions.*message.*portType.*binding.*service/');
         $this->_XMLGenerator->render();
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSanitizeClass()
+    {
+        //given
+        $xml = new XMLGenerator('\Mocks\Test\MockClassMultipleNamespace', '', '');
+
+        //when
+        $sanitized = $xml->sanitizeClassName('\Mocks\Test\MockClassMultipleNamespace');
+
+        //then
+        $this->assertEquals('Mocks/Test/MockClassMultipleNamespace', $sanitized);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCreateWSDLWithCorrectNamespace()
+    {
+        //given
+        $matcher = array(
+            'tag' => 'definitions',
+            'attributes' => array(
+                'name' => 'MockClassMultipleNamespace',
+                'targetNamespace' => 'http://example.com/mocks/test/mockclassmultiplenamespace',
+                'xmlns:tns' => 'http://example.com/mocks/test/mockclassmultiplenamespace',
+                'xmlns:xsd' => 'http://www.w3.org/2001/XMLSchema',
+                'xmlns:soap' => 'http://schemas.xmlsoap.org/wsdl/soap/',
+                'xmlns' => 'http://schemas.xmlsoap.org/wsdl/',
+                'xmlns:ns' => 'http://example.com/mocks/test/mockclassmultiplenamespace/types'
+            )
+        );
+        $classParser = new ClassParser('\Mocks\Test\MockClassMultipleNamespace');
+        $classParser->parse();
+        $xml = new XMLGenerator('\Mocks\Test\MockClassMultipleNamespace', $this->_namespace, $this->_location);
+        $xml->setWSDLMethods($classParser->getMethods())->generate();
+
+        //when
+        $wsdl = $xml->getGeneratedXML();
+
+        //then
+        $this->assertTag($matcher, $wsdl, '', false);
     }
 }

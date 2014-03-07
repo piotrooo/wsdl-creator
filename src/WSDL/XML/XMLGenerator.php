@@ -8,8 +8,8 @@
 namespace WSDL\XML;
 
 use DOMDocument;
+use ReflectionClass;
 use WSDL\Parser\MethodParser;
-use WSDL\Parser\ParameterParser;
 use WSDL\Types\Arrays;
 use WSDL\Types\Object;
 use WSDL\Types\Simple;
@@ -41,14 +41,26 @@ class XMLGenerator
 
     public function __construct($name, $namespace, $location)
     {
-        $this->_name = $name;
+        $sanitizedName = $this->sanitizeClassName($name);
+        $this->_name = $this->extractClassName($name);
         $this->_location = $location;
 
-        $this->_targetNamespace = $namespace . strtolower($name);
+        $this->_targetNamespace = $namespace . strtolower($sanitizedName);
         $this->_targetNamespaceTypes = $this->_targetNamespace . '/types';
 
         $this->_DOMDocument = new DOMDocument("1.0", "UTF-8");
         $this->_saveXML();
+    }
+
+    public function sanitizeClassName($name)
+    {
+        return ltrim(str_replace('\\', '/', $name), '/');
+    }
+
+    public function extractClassName($name)
+    {
+        $reflectedClass = new ReflectionClass($name);
+        return $reflectedClass->getShortName();
     }
 
     public function setWSDLMethods($WSDLMethods)
