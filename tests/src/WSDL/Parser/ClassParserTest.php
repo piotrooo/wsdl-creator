@@ -22,4 +22,19 @@ class ClassParserTest extends PHPUnit_Framework_TestCase
         //then
         $this->assertCount(2, $classParser->getMethods());
     }
+
+    /**
+     * @test
+     */
+    public function shouldNotParseMagicMehods()
+    {
+        //given
+        $classParser = new ClassParser('\Mocks\MockClass');
+
+        //when
+        $classParser->parse();
+
+        //then
+        $this->assertCount(2, $classParser->getMethods());
+    }
 }

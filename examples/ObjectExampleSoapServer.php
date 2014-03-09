@@ -1,9 +1,9 @@
 <?php
-require_once '../vendor/autoload.php';
-
 use WSDL\WSDLCreator;
 
-$wsdl = new WSDL\WSDLCreator('ObjectSoapServer', 'http://localhost/wsdl-creator/examples/ObjectExampleSoapServer.php');
+require_once '../vendor/autoload.php';
+
+$wsdl = new WSDLCreator('ObjectSoapServer', 'http://localhost/wsdl-creator/examples/ObjectExampleSoapServer.php');
 $wsdl->setNamespace("http://foo.bar/");
 
 if (isset($_GET['wsdl'])) {

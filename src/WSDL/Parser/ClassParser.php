@@ -7,6 +7,7 @@
 namespace WSDL\Parser;
 
 use ReflectionClass;
+use ReflectionMethod;
 
 class ClassParser
 {
@@ -30,13 +31,22 @@ class ClassParser
     {
         $reflectionClassMethods = $this->_reflectedClass->getMethods();
         foreach ($reflectionClassMethods as $method) {
-            if ($method->isPublic()) {
+            if ($this->_checkCanParseMethod($method)) {
                 $methodName = $method->getName();
                 $methodDocComment = $method->getDocComment();
                 $this->_methodDocComments[] = new MethodParser($methodName, $methodDocComment);
             }
         }
         return $this;
+    }
+
+    private function _checkCanParseMethod(ReflectionMethod $method)
+    {
+        return
+            $method->isPublic() &&
+            !$method->isConstructor() &&
+            !$method->isDestructor() &&
+            strpos($method->getName(), '__') === false;
     }
 
     public function getMethods()

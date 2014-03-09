@@ -6,8 +6,22 @@
  */
 namespace Mocks;
 
+use stdClass;
+
 class MockClass
 {
+    function __construct()
+    {
+    }
+
+    function __destruct()
+    {
+    }
+
+    function __get($name)
+    {
+    }
+
     /**
      * @desc MethodParser to logging
      * @param string $message
@@ -16,6 +30,7 @@ class MockClass
     {
         file_put_contents('/tmp/logs_soap.log', $message);
     }
+
 
     /**
      * @desc to sum two integers
