@@ -36,7 +36,7 @@ class ComplexTypeParser
         preg_match_all('#@(\((?:.+)\)|(?:.+?))(?: |$)#', $types, $matches);
         $typesArray = $matches[1];
         $obj = array_map(function ($type) {
-            if (self::_isReflectionType($type)) {
+            if (ComplexTypeParser::isReflectionType($type)) {
                 $type = str_replace(array('(', ')'), '', $type);
             } else {
                 $type = str_replace('=', ' ', $type);
@@ -47,7 +47,7 @@ class ComplexTypeParser
         return $obj;
     }
 
-    private static function _isReflectionType($types)
+    public static function isReflectionType($types)
     {
         return preg_match('#className#', $types);
     }
