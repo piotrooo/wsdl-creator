@@ -10,4 +10,4 @@ before_script:
     - composer install
     
 script:
-    phpunit --no-configuration tests
+    phpunit --configuration phpunit.xml tests
