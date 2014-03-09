@@ -11,7 +11,8 @@
         }
     ],
     "require-dev": {
-        "phpunit/phpunit": "3.7.19"
+        "phpunit/phpunit": "3.7.19",
+        "satooshi/php-coveralls": "dev-master"
     },
     "autoload": {
         "psr-0": {
