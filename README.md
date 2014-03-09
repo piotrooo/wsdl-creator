@@ -1,7 +1,8 @@
 PHP WSDL Creator
 ================
 
-[![Build Status](https://travis-ci.org/piotrooo/wsdl-creator.png?branch=master)](https://travis-ci.org/piotrooo/wsdl-creator)
+[![Build Status](https://travis-ci.org/piotrooo/wsdl-creator.png?branch=master)](https://travis-ci.org/piotrooo/wsdl-creator) 
+[![Dependency Status](https://www.versioneye.com/user/projects/531c2f2dec13752d49000040/badge.png)](https://www.versioneye.com/user/projects/531c2f2dec13752d49000040)
 
 Introduction
 ------------
