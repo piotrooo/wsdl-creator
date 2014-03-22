@@ -44,8 +44,8 @@ class MockClass
     }
 
     /**
-     * @param object $object1 @string=name @int=id
-     * @return object $return @string=new_name @int=new_id
+     * @param object $object1 @string=$name @int=$id
+     * @return object $return @string=$new_name @int=$new_id
      */
     public function arrayTest($object1)
     {
@@ -53,5 +53,14 @@ class MockClass
         $o->new_name = 'new:' . $object1->name;
         $o->new_id = $object1->id + 2;
         return $o;
+    }
+
+    /**
+     * @param wrapper $wrap @className=\Mocks\MockUserWrapper
+     * @return bool
+     */
+    public function methodWithWrapper($wrap)
+    {
+        return $wrap ? true : false;
     }
 }

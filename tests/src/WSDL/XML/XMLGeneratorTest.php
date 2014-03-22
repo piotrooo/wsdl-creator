@@ -68,8 +68,8 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
 
         //then
         $this->assertTag($matcher, $this->_XML, '', false);
-        $this->assertSelectCount('message', 4, $this->_XML);
-        $this->assertSelectCount('message part', 5, $this->_XML);
+        $this->assertSelectCount('message', 6, $this->_XML);
+        $this->assertSelectCount('message part', 7, $this->_XML);
     }
 
     /**
@@ -86,9 +86,9 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
 
         //then
         $this->assertTag($matcher, $this->_XML, '', false);
-        $this->assertSelectCount('portType operation', 2, $this->_XML);
-        $this->assertSelectCount('portType operation input', 2, $this->_XML);
-        $this->assertSelectCount('portType operation output', 2, $this->_XML);
+        $this->assertSelectCount('portType operation', 3, $this->_XML);
+        $this->assertSelectCount('portType operation input', 3, $this->_XML);
+        $this->assertSelectCount('portType operation output', 3, $this->_XML);
         $this->assertSelectCount('portType operation documentation', 1, $this->_XML);
     }
 
@@ -111,13 +111,12 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
                     'style' => 'rpc',
                     'transport' => "http://schemas.xmlsoap.org/soap/http"
                 )
-
             )
         );
 
         //then
         $this->assertTag($matcher, $this->_XML, '', false);
-        $this->assertSelectCount('binding operation', 4, $this->_XML);
+        $this->assertSelectCount('binding operation', 6, $this->_XML);
     }
 
     /**
@@ -204,5 +203,23 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
 
         //then
         $this->assertTag($matcher, $wsdl, '', false);
+    }
+
+    /**
+     * @test
+     */
+    public function should()
+    {
+        //given
+        $classParser = new ClassParser('\Mocks\MockClass');
+        $classParser->parse();
+        $xml = new XMLGenerator('\Mocks\MockClass', $this->_namespace, $this->_location);
+        $xml->setWSDLMethods($classParser->getMethods())->generate();
+
+        //when
+        $wsdl = $xml->getGeneratedXML();
+
+        //then
+        $this->assertRegExp('/MocksMockUserWrapper.*name="id" type="xsd:int".*name="name" type="xsd:string".*name="age" type="xsd:int"/', $wsdl);
     }
 }
