@@ -173,7 +173,8 @@ class XMLGenerator
         $complexTypeElement = $this->_createElement('xsd:complexType');
         $sequenceElement = $this->_createElement('xsd:sequence');
 
-        foreach ($parameter->getComplexType() as $complexType) {
+        $types = is_array($parameter->getComplexType()) ? $parameter->getComplexType() : $parameter->getComplexType()->getComplexType();
+        foreach ($types as $complexType) {
             if ($complexType instanceof Type) {
                 list($type, $value) = $this->_prepareTypeAndValue($complexType);
             } else {
