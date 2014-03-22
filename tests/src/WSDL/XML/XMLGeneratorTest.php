@@ -208,7 +208,7 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function should()
+    public function shouldCorrectParseWrapperElement()
     {
         //given
         $classParser = new ClassParser('\Mocks\MockClass');
