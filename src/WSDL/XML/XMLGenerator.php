@@ -14,6 +14,7 @@ use WSDL\Types\Arrays;
 use WSDL\Types\Object;
 use WSDL\Types\Simple;
 use WSDL\Types\Type;
+use WSDL\XML\Styles\Style;
 
 class XMLGenerator
 {
@@ -38,6 +39,10 @@ class XMLGenerator
      */
     private $_WSDLMethods;
     private $_alreadyGeneratedComplexTypes = array();
+    /**
+     * @var Style
+     */
+    private $_bindingStyle;
 
     public function __construct($name, $namespace, $location)
     {
@@ -66,6 +71,12 @@ class XMLGenerator
     public function setWSDLMethods($WSDLMethods)
     {
         $this->_WSDLMethods = $WSDLMethods;
+        return $this;
+    }
+
+    public function setBindingStyle(Style $_bindingStyle)
+    {
+        $this->_bindingStyle = $_bindingStyle;
         return $this;
     }
 
@@ -334,14 +345,14 @@ class XMLGenerator
         ));
 
         $soapBindingElement = $this->_createElementWithAttributes('soap:binding', array(
-            'style' => 'rpc',
+            'style' => $this->_bindingStyle->bindingStyle(),
             'transport' => 'http://schemas.xmlsoap.org/soap/http'
         ));
         $bindingElement->appendChild($soapBindingElement);
 
         foreach ($this->_WSDLMethods as $method) {
             $soapBodyElement = $this->_createElementWithAttributes('soap:body', array(
-                'use' => 'literal'
+                'use' => $this->_bindingStyle->bindingUse()
             ));
 
             $operationElement = $this->_createElementWithAttributes('operation', array(

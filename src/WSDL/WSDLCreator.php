@@ -8,6 +8,8 @@ namespace WSDL;
 
 use WSDL\Parser\ClassParser;
 use WSDL\Service\Service;
+use WSDL\XML\Styles\RpcLiteral;
+use WSDL\XML\Styles\Style;
 use WSDL\XML\XMLGenerator;
 
 class WSDLCreator
@@ -19,11 +21,16 @@ class WSDLCreator
      */
     private $_classParser;
     private $_namespace = 'http://example.com/';
+    /**
+     * @var Style
+     */
+    private $_bindingStyle;
 
     public function __construct($class, $location)
     {
         $this->_class = $class;
         $this->_location = $location;
+        $this->_bindingStyle = new RpcLiteral();
         $this->_parseClass();
     }
 
@@ -37,7 +44,10 @@ class WSDLCreator
     {
         header("Content-Type: text/xml");
         $xml = new XMLGenerator($this->_class, $this->_namespace, $this->_location);
-        $xml->setWSDLMethods($this->_classParser->getMethods())->generate();
+        $xml
+            ->setWSDLMethods($this->_classParser->getMethods())
+            ->setBindingStyle($this->_bindingStyle)
+            ->generate();
         $xml->render();
     }
 
@@ -45,11 +55,23 @@ class WSDLCreator
     {
         $namespace = $this->_addShlashAtEndIfNotExists($namespace);
         $this->_namespace = $namespace;
+        return $this;
     }
 
     private function _addShlashAtEndIfNotExists($namespace)
     {
         return rtrim($namespace, '/') . '/';
+    }
+
+    public function setBindingStyle($style)
+    {
+        $style = strtolower($style);
+        switch ($style) {
+            case 'rpc/literal':
+                $this->_bindingStyle = new RpcLiteral();
+                break;
+        };
+        return $this;
     }
 
     public function renderWSDLService()
