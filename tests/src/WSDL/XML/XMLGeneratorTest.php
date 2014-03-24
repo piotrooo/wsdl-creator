@@ -5,6 +5,7 @@
  * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
  */
 use WSDL\Parser\ClassParser;
+use WSDL\XML\Styles\RpcLiteral;
 use WSDL\XML\XMLGenerator;
 
 class XMLGeneratorTest extends PHPUnit_Framework_TestCase
@@ -27,7 +28,7 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
         $classParser->parse();
 
         $XMLGenerator = new XMLGenerator($this->_class, $this->_namespace, $this->_location);
-        $XMLGenerator->setWSDLMethods($classParser->getMethods())->generate();
+        $XMLGenerator->setWSDLMethods($classParser->getMethods())->setBindingStyle(new RpcLiteral())->generate();
         $this->_XMLGenerator = $XMLGenerator;
         $this->_XML = $XMLGenerator->getGeneratedXML();
     }
@@ -196,7 +197,7 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
         $classParser = new ClassParser('\Mocks\Test\MockClassMultipleNamespace');
         $classParser->parse();
         $xml = new XMLGenerator('\Mocks\Test\MockClassMultipleNamespace', $this->_namespace, $this->_location);
-        $xml->setWSDLMethods($classParser->getMethods())->generate();
+        $xml->setWSDLMethods($classParser->getMethods())->setBindingStyle(new RpcLiteral())->generate();
 
         //when
         $wsdl = $xml->getGeneratedXML();
@@ -214,7 +215,7 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
         $classParser = new ClassParser('\Mocks\MockClass');
         $classParser->parse();
         $xml = new XMLGenerator('\Mocks\MockClass', $this->_namespace, $this->_location);
-        $xml->setWSDLMethods($classParser->getMethods())->generate();
+        $xml->setWSDLMethods($classParser->getMethods())->setBindingStyle(new RpcLiteral())->generate();
 
         //when
         $wsdl = $xml->getGeneratedXML();
