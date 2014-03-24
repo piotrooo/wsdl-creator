@@ -11,4 +11,6 @@ interface Style
     public function bindingStyle();
 
     public function bindingUse();
+
+    public function methodInput($parameters);
 }

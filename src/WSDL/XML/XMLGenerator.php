@@ -229,7 +229,13 @@ class XMLGenerator
             $messageInputElement = $this->_createElementWithAttributes('message', array(
                 'name' => $method->getName() . 'Request'
             ));
-            foreach ($this->_createXMLMessageInputParts($method) as $part) {
+
+            $parts = $this->_bindingStyle->methodInput($method->parameters());
+            $parts = array_map(function ($attributes) {
+                return $this->_createElementWithAttributes('part', $attributes);
+            }, $parts);
+
+            foreach ($parts as $part) {
                 $messageInputElement->appendChild($part);
             }
             $this->_definitionsRootNode->appendChild($messageInputElement);
