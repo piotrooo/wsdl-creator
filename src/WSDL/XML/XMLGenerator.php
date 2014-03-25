@@ -188,7 +188,7 @@ class XMLGenerator
                 list($type, $value) = $this->_prepareTypeAndValue($complexType);
             } else {
                 $type = 'type';
-                $value = $this->_getXsdType($complexType->getType());
+                $value = TypeHelper::getXsdType($complexType->getType());
             }
             $elementPartElement = $this->createElementWithAttributes('xsd:element', array(
                 'name' => $complexType->getName(),
@@ -216,6 +216,26 @@ class XMLGenerator
             $this->_alreadyGeneratedComplexTypes[] = $name;
             return false;
         }
+    }
+
+    private function _prepareTypeAndValue(Type $parameter)
+    {
+        if (TypeHelper::isSimple($parameter)) {
+            $type = 'type';
+            $value = TypeHelper::getXsdType($parameter->getType());
+        } else if (TypeHelper::isArray($parameter)) {
+            $type = 'type';
+            $value = 'ns:' . 'ArrayOf' . ucfirst($parameter->getName());
+        } else if (TypeHelper::isObject($parameter)) {
+            $type = 'element';
+            $value = 'ns:' . ucfirst($this->_getObjectName($parameter));
+        }
+        return array($type, $value);
+    }
+
+    private function _getObjectName(Type $parameter)
+    {
+        return $parameter->getType() == 'object' ? ucfirst($parameter->getName()) : $parameter->getType();
     }
 
     /**
@@ -258,26 +278,6 @@ class XMLGenerator
         $partsOutput = $this->createElementWithAttributes('part', $partsOutput);
         $messageOutputElement->appendChild($partsOutput);
         return $messageOutputElement;
-    }
-
-    private function _prepareTypeAndValue(Type $parameter)
-    {
-        if (TypeHelper::isSimple($parameter)) {
-            $type = 'type';
-            $value = $this->_getXsdType($parameter->getType());
-        } else if (TypeHelper::isArray($parameter)) {
-            $type = 'type';
-            $value = 'ns:' . 'ArrayOf' . ucfirst($parameter->getName());
-        } else if (TypeHelper::isObject($parameter)) {
-            $type = 'element';
-            $value = 'ns:' . ucfirst($this->_getObjectName($parameter));
-        }
-        return array($type, $value);
-    }
-
-    private function _getObjectName(Type $parameter)
-    {
-        return $parameter->getType() == 'object' ? ucfirst($parameter->getName()) : $parameter->getType();
     }
 
     /**
@@ -395,11 +395,6 @@ class XMLGenerator
             $element->appendChild($tmpAttr);
         }
         return $element;
-    }
-
-    private function _getXsdType($type)
-    {
-        return 'xsd:' . $type;
     }
 
     private function _saveXML()
