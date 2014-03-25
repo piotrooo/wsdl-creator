@@ -17,12 +17,12 @@ class TypeHelper
         return $type instanceof Simple;
     }
 
-    public static function isArrayType($type)
+    public static function isArray($type)
     {
         return $type instanceof Arrays;
     }
 
-    public static function isObjectType($type)
+    public static function isObject($type)
     {
         return $type instanceof Object;
     }

@@ -29,14 +29,29 @@ class RpcLiteral implements Style
     {
         $partElements = array();
         foreach ($parameters as $parameter) {
-            list($type, $value) = $this->_prepareTypeAndValue($parameter);
-
-            $partElements[] = array(
-                'name' => $parameter->getName(),
-                $type => $value
-            );
+            $partElements[] = $this->_createElement($parameter);
         }
         return $partElements;
+    }
+
+    /**
+     * @param Type $returning
+     * @return array
+     */
+    public function methodOutput($returning)
+    {
+        $returnElement = $this->_createElement($returning);
+        return $returnElement;
+    }
+
+    private function _createElement(Type $returning)
+    {
+        list($type, $value) = $this->_prepareTypeAndValue($returning);
+        $element = array(
+            'name' => $returning->getName(),
+            $type => $value
+        );
+        return $element;
     }
 
     private function _prepareTypeAndValue(Type $parameter)
@@ -46,10 +61,10 @@ class RpcLiteral implements Style
         if (TypeHelper::isSimple($parameter)) {
             $type = 'type';
             $value = TypeHelper::getXsdType($parameter->getType());
-        } else if (TypeHelper::isArrayType($parameter)) {
+        } else if (TypeHelper::isArray($parameter)) {
             $type = 'type';
             $value = 'ns:' . 'ArrayOf' . ucfirst($parameter->getName());
-        } else if (TypeHelper::isObjectType($parameter)) {
+        } else if (TypeHelper::isObject($parameter)) {
             $type = 'element';
             $value = 'ns:' . ucfirst($this->_getObjectName($parameter));
         }
