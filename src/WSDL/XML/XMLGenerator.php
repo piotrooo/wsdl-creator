@@ -231,8 +231,9 @@ class XMLGenerator
             ));
 
             $parts = $this->_bindingStyle->methodInput($method->parameters());
-            $parts = array_map(function ($attributes) {
-                return $this->_createElementWithAttributes('part', $attributes);
+            $obj = $this;
+            $parts = array_map(function ($attributes) use ($obj) {
+                return $obj->_createElementWithAttributes('part', $attributes);
             }, $parts);
 
             foreach ($parts as $part) {
