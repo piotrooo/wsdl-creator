@@ -15,4 +15,6 @@ interface Style
     public function methodInput($parameters);
 
     public function methodOutput($returning);
+
+    public function typeParameters($parameters);
 }
