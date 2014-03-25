@@ -27,6 +27,7 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
         $classParser = new ClassParser('\Mocks\MockClass');
         $classParser->parse();
 
+        XMLGenerator::$alreadyGeneratedComplexTypes = array();
         $XMLGenerator = new XMLGenerator($this->_class, $this->_namespace, $this->_location);
         $XMLGenerator->setWSDLMethods($classParser->getMethods())->setBindingStyle(new RpcLiteral())->generate();
         $this->_XMLGenerator = $XMLGenerator;
@@ -196,6 +197,7 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
         );
         $classParser = new ClassParser('\Mocks\Test\MockClassMultipleNamespace');
         $classParser->parse();
+        XMLGenerator::$alreadyGeneratedComplexTypes = array();
         $xml = new XMLGenerator('\Mocks\Test\MockClassMultipleNamespace', $this->_namespace, $this->_location);
         $xml->setWSDLMethods($classParser->getMethods())->setBindingStyle(new RpcLiteral())->generate();
 
@@ -212,6 +214,7 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
     public function shouldCorrectParseWrapperElement()
     {
         //given
+        XMLGenerator::$alreadyGeneratedComplexTypes = array();
         $classParser = new ClassParser('\Mocks\MockClass');
         $classParser->parse();
         $xml = new XMLGenerator('\Mocks\MockClass', $this->_namespace, $this->_location);

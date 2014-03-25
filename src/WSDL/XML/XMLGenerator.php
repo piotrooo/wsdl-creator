@@ -36,11 +36,12 @@ class XMLGenerator
      * @var MethodParser[]
      */
     private $_WSDLMethods;
-    private $_alreadyGeneratedComplexTypes = array();
     /**
      * @var Style
      */
     private $_bindingStyle;
+
+    public static $alreadyGeneratedComplexTypes = array();
 
     public function __construct($name, $namespace, $location)
     {
@@ -146,7 +147,7 @@ class XMLGenerator
     private function _generateArray(Type $parameter, $schemaElement)
     {
         $name = 'ArrayOf' . ucfirst($parameter->getName());
-        if ($this->_isAlreadyGenerated($name)) {
+        if (self::isAlreadyGenerated($name)) {
             return;
         }
 
@@ -172,7 +173,7 @@ class XMLGenerator
     private function _generateObject(Type $parameter, $schemaElement)
     {
         $name = ucfirst($this->_getObjectName($parameter));
-        if ($this->_isAlreadyGenerated($name)) {
+        if (self::isAlreadyGenerated($name)) {
             return;
         }
 
@@ -208,16 +209,6 @@ class XMLGenerator
         $schemaElement->appendChild($element);
     }
 
-    private function _isAlreadyGenerated($name)
-    {
-        if (in_array($name, $this->_alreadyGeneratedComplexTypes)) {
-            return true;
-        } else {
-            $this->_alreadyGeneratedComplexTypes[] = $name;
-            return false;
-        }
-    }
-
     private function _prepareTypeAndValue(Type $parameter)
     {
         if (TypeHelper::isSimple($parameter)) {
@@ -235,7 +226,17 @@ class XMLGenerator
 
     private function _getObjectName(Type $parameter)
     {
-        return $parameter->getType() == 'object' ? ucfirst($parameter->getName()) : $parameter->getType();
+        return $parameter->getType() == 'object' ? $parameter->getName() : $parameter->getType();
+    }
+
+    public static function isAlreadyGenerated($name)
+    {
+        if (in_array($name, self::$alreadyGeneratedComplexTypes)) {
+            return true;
+        } else {
+            self::$alreadyGeneratedComplexTypes[] = $name;
+            return false;
+        }
     }
 
     /**
