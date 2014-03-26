@@ -10,9 +10,9 @@ namespace WSDL\XML;
 use DOMDocument;
 use ReflectionClass;
 use WSDL\Parser\MethodParser;
-use WSDL\Types\Type;
-use WSDL\Utilities\TypeHelper;
 use WSDL\XML\Styles\Style;
+use WSDL\XML\Styles\TypesComplex;
+use WSDL\XML\Styles\TypesElement;
 
 class XMLGenerator
 {
@@ -120,15 +120,13 @@ class XMLGenerator
         ));
 
         foreach ($this->_WSDLMethods as $method) {
-//            print_r($method->parameters());
-            print_r($method->returning());
-            $elements[] = $this->_bindingStyle->typeParameters($method->parameters());
-            foreach ($method->parameters() as $parameter) {
-                if (!TypeHelper::isSimple($parameter)) {
-                    $this->_generateComplexType($parameter, $schemaElement);
-                }
+            $typeParameters = $this->_bindingStyle->typeParameters($method->parameters());
+            if ($typeParameters) {
+                $this->_typesParameters($typeParameters, $schemaElement);
             }
-            $this->_generateComplexType($method->returning(), $schemaElement);
+
+            $typeReturning = $this->_bindingStyle->typeReturning($method->returning());
+            $this->_generateComplexType($typeReturning, $schemaElement);
         }
 
         $typesElement->appendChild($schemaElement);
@@ -137,45 +135,53 @@ class XMLGenerator
         return $this;
     }
 
-    private function _generateComplexType(Type $parameter, $schemaElement)
+    private function _typesParameters($parameters, $schemaElement)
     {
-        if (TypeHelper::isArray($parameter)) {
+        foreach ($parameters as $parameter) {
+            $this->_generateComplexType($parameter, $schemaElement);
+        }
+    }
+
+    private function _generateComplexType($parameter, $schemaElement)
+    {
+        if ($parameter instanceof TypesComplex) {
             $this->_generateArray($parameter, $schemaElement);
         }
-        if (TypeHelper::isObject($parameter)) {
+        if ($parameter instanceof TypesElement) {
             $this->_generateObject($parameter, $schemaElement);
         }
     }
 
-    private function _generateArray(Type $parameter, $schemaElement)
+    private function _generateArray(TypesComplex $parameter, $schemaElement)
     {
-        $name = 'ArrayOf' . ucfirst($parameter->getName());
+        $name = $parameter->getName();
+        $type = $parameter->getArrayType();
+
         if (self::isAlreadyGenerated($name)) {
             return;
         }
-
-        $type = $parameter->getComplexType() ? 'ns:' : 'xsd:';
 
         $complexTypeElement = $this->createElementWithAttributes('xsd:complexType', array('name' => $name));
         $complexContentElement = $this->_createElement('xsd:complexContent');
         $restrictionElement = $this->createElementWithAttributes('xsd:restriction', array('base' => 'soapenc:Array'));
         $attributeElement = $this->createElementWithAttributes('xsd:attribute', array(
             'ref' => 'soapenc:arrayType',
-            'arrayType' => $type . $this->_getObjectName($parameter) . '[]'
+            'arrayType' => $type
         ));
         $restrictionElement->appendChild($attributeElement);
         $complexContentElement->appendChild($restrictionElement);
         $complexTypeElement->appendChild($complexContentElement);
         $schemaElement->appendChild($complexTypeElement);
 
-        if ($parameter->getComplexType()) {
-            $this->_generateObject($parameter->getComplexType(), $schemaElement);
+        if ($parameter->getComplex()) {
+            $this->_generateComplexType($parameter->getComplex(), $schemaElement);
         }
     }
 
-    private function _generateObject(Type $parameter, $schemaElement)
+    private function  _generateObject(TypesElement $parameter, $schemaElement)
     {
-        $name = ucfirst($this->_getObjectName($parameter));
+        $name = $parameter->getName();
+
         if (self::isAlreadyGenerated($name)) {
             return;
         }
@@ -186,50 +192,22 @@ class XMLGenerator
         $complexTypeElement = $this->_createElement('xsd:complexType');
         $sequenceElement = $this->_createElement('xsd:sequence');
 
-        $types = is_array($parameter->getComplexType()) ? $parameter->getComplexType() : $parameter->getComplexType()->getComplexType();
+        $types = $parameter->getElementAttributes();
         foreach ($types as $complexType) {
-            if ($complexType instanceof Type) {
-                list($type, $value) = $this->_prepareTypeAndValue($complexType);
-            } else {
-                $type = 'type';
-                $value = TypeHelper::getXsdType($complexType->getType());
-            }
             $elementPartElement = $this->createElementWithAttributes('xsd:element', array(
-                'name' => $complexType->getName(),
-                $type => $value
+                'name' => $complexType['name'],
+                $complexType['type'] => $complexType['value']
             ));
             $sequenceElement->appendChild($elementPartElement);
+        }
 
-            if (TypeHelper::isArray($complexType)) {
-                $this->_generateArray($complexType, $schemaElement);
-            } else if ($complexType instanceof Type && !TypeHelper::isSimple($complexType) && $complexType->getComplexType()) {
-                $this->_generateComplexType($complexType->getComplexType(), $schemaElement);
-            }
+        if ($parameter->getComplex()) {
+            $this->_generateComplexType($parameter->getComplex(), $schemaElement);
         }
 
         $complexTypeElement->appendChild($sequenceElement);
         $element->appendChild($complexTypeElement);
         $schemaElement->appendChild($element);
-    }
-
-    private function _prepareTypeAndValue(Type $parameter)
-    {
-        if (TypeHelper::isSimple($parameter)) {
-            $type = 'type';
-            $value = TypeHelper::getXsdType($parameter->getType());
-        } else if (TypeHelper::isArray($parameter)) {
-            $type = 'type';
-            $value = 'ns:' . 'ArrayOf' . ucfirst($parameter->getName());
-        } else if (TypeHelper::isObject($parameter)) {
-            $type = 'element';
-            $value = 'ns:' . ucfirst($this->_getObjectName($parameter));
-        }
-        return array($type, $value);
-    }
-
-    private function _getObjectName(Type $parameter)
-    {
-        return $parameter->getType() == 'object' ? $parameter->getName() : $parameter->getType();
     }
 
     public static function isAlreadyGenerated($name)

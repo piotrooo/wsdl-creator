@@ -52,14 +52,25 @@ class RpcLiteral implements Style
     {
         $elements = array();
         foreach ($parameters as $parameter) {
-            if (!TypeHelper::isSimple($parameter)) {
-                $generateComplexType = $this->_generateComplexType($parameter);
-                if ($generateComplexType) {
-                    $elements[] = $generateComplexType;
-                }
-            }
+            $elements[] = $this->_generateType($parameter);
         }
         return $elements;
+    }
+
+    public function typeReturning($returning)
+    {
+        return $this->_generateType($returning);
+    }
+
+    private function _generateType($parameter)
+    {
+        if (!TypeHelper::isSimple($parameter)) {
+            $generateComplexType = $this->_generateComplexType($parameter);
+            if ($generateComplexType) {
+                return $generateComplexType;
+            }
+        }
+        return null;
     }
 
     private function _generateComplexType(Type $parameter)
