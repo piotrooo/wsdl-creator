@@ -82,20 +82,17 @@ class RpcLiteral implements Style
             ->setName('ArrayOf' . ucfirst($parameter->getName()))
             ->setArrayType($type . $this->_getObjectName($parameter) . '[]');
 
-//        TODO when ready _generateObejct
-//        if ($parameter->getComplexType()) {
-//            $this->_generateObject($parameter->getComplexType());
-//        }
+        if ($parameter->getComplexType()) {
+            $typesComplex->setComplex($this->_generateObject($parameter->getComplexType()));
+        }
 
         return $typesComplex;
     }
 
     private function _generateObject(Type $parameter)
     {
-        $name = ucfirst($this->_getObjectName($parameter));
-
         $typesElement = new TypesElement();
-        $typesElement->setName($name);
+        $typesElement->setName($this->_getObjectName($parameter));
 
         $types = is_array($parameter->getComplexType()) ? $parameter->getComplexType() : $parameter->getComplexType()->getComplexType();
 
@@ -106,17 +103,16 @@ class RpcLiteral implements Style
                 $type = 'type';
                 $value = TypeHelper::getXsdType($complexType->getType());
             }
-            $elementPartElement = $this->createElementWithAttributes('xsd:element', array(
-                'name' => $complexType->getName(),
-                $type => $value
-            ));
+
+            $typesElement->setElementAttributes($type, $value, $complexType->getName());
 
             if (TypeHelper::isArray($complexType)) {
-                $this->_generateArray($complexType, $schemaElement);
+                $typesElement->setComplex($this->_generateArray($complexType));
             } else if ($complexType instanceof Type && !TypeHelper::isSimple($complexType) && $complexType->getComplexType()) {
-                $this->_generateComplexType($complexType->getComplexType(), $schemaElement);
+                $typesElement->setComplex($this->_generateComplexType($complexType->getComplexType()));
             }
         }
+        return $typesElement;
     }
 
     private function _createElement(Type $returning)
@@ -148,6 +144,6 @@ class RpcLiteral implements Style
 
     private function _getObjectName(Type $parameter)
     {
-        return ucfirst($parameter->getType() == 'object' ? $parameter->getName() : $parameter->getType());
+        return $parameter->getType() == 'object' ? ucfirst($parameter->getName()) : $parameter->getType();
     }
 }

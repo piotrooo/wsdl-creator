@@ -120,8 +120,9 @@ class XMLGenerator
         ));
 
         foreach ($this->_WSDLMethods as $method) {
-//            $elements = $this->_bindingStyle->typeParameters($method->parameters());
-
+//            print_r($method->parameters());
+//            print_r($method->returning());
+            $elements[] = $this->_bindingStyle->typeParameters($method->parameters());
             foreach ($method->parameters() as $parameter) {
                 if (!TypeHelper::isSimple($parameter)) {
                     $this->_generateComplexType($parameter, $schemaElement);
