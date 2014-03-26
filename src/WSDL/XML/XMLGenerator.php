@@ -121,7 +121,7 @@ class XMLGenerator
 
         foreach ($this->_WSDLMethods as $method) {
 //            print_r($method->parameters());
-//            print_r($method->returning());
+            print_r($method->returning());
             $elements[] = $this->_bindingStyle->typeParameters($method->parameters());
             foreach ($method->parameters() as $parameter) {
                 if (!TypeHelper::isSimple($parameter)) {
