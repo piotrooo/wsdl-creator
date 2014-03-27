@@ -178,7 +178,7 @@ class XMLGenerator
         }
     }
 
-    private function  _generateObject(TypesElement $parameter, $schemaElement)
+    private function _generateObject(TypesElement $parameter, $schemaElement)
     {
         $name = $parameter->getName();
 

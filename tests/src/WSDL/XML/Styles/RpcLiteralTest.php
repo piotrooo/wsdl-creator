@@ -1,23 +1,35 @@
 <?php
-use WSDL\Parser\ComplexTypeParser;
-use WSDL\Types\Arrays;
-use WSDL\Types\Object;
-use WSDL\Types\Simple;
+/**
+ * RpcLiteralTest
+ *
+ * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
+ */
+use Factory\ParameterFactory;
 use WSDL\XML\Styles\RpcLiteral;
 
 class RpcLiteralTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var RpcLiteral
+     */
+    private $_rpcLiteral;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->_rpcLiteral = new RpcLiteral();
+    }
+
     /**
      * @test
      */
     public function shouldParseArrayWithSimpleType()
     {
         //given
-        $parameter = array(new Arrays('string', 'names', null));
-        $rpcLiteral = new RpcLiteral();
+        $parameter = ParameterFactory::createParameterForSimpleArray();
 
         //when
-        $types = $rpcLiteral->typeParameters($parameter);
+        $types = $this->_rpcLiteral->typeParameters($parameter);
 
         //then
         $type = $types[0];
@@ -32,12 +44,10 @@ class RpcLiteralTest extends PHPUnit_Framework_TestCase
     public function shouldParseSimpleObject()
     {
         //given
-        $complex = array(new Simple('string', 'name'), new Simple('int', 'age'));
-        $parameter = array(new Object('object', 'info', $complex));
-        $rpcLiteral = new RpcLiteral();
+        $parameter = ParameterFactory::createParameterForSimpleObject();
 
         //when
-        $types = $rpcLiteral->typeParameters($parameter);
+        $types = $this->_rpcLiteral->typeParameters($parameter);
 
         //then
         $type = $types[0];
@@ -55,16 +65,10 @@ class RpcLiteralTest extends PHPUnit_Framework_TestCase
     public function shouldParseObjectWithWrapper()
     {
         //given
-        $complexType = new Object('Agent', 'agent', array(
-            new ComplexTypeParser('string', 'name'),
-            new ComplexTypeParser('int', 'number')
-        ));
-        $complex = array(new Object('Agent', 'agent', $complexType));
-        $parameter = array(new Object('object', 'agentNameWithId', $complex));
-        $rpcLiteral = new RpcLiteral();
+        $parameter = ParameterFactory::createParameterForObjectWithWrapper();
 
         //when
-        $types = $rpcLiteral->typeParameters($parameter);
+        $types = $this->_rpcLiteral->typeParameters($parameter);
 
         //then
         $type = $types[0];
@@ -85,12 +89,10 @@ class RpcLiteralTest extends PHPUnit_Framework_TestCase
     public function shouldParseObjectWithArrayOfElement()
     {
         //given
-        $complex = array(new Arrays('string', 'names', null), new Simple('int', 'id'));
-        $parameter = array(new Object('object', 'namesInfo', $complex));
-        $rpcLiteral = new RpcLiteral();
+        $parameter = ParameterFactory::createParameterForObjectWithArrayOfSimpleType();
 
         //when
-        $types = $rpcLiteral->typeParameters($parameter);
+        $types = $this->_rpcLiteral->typeParameters($parameter);
 
         //then
         $type = $types[0];
@@ -109,13 +111,10 @@ class RpcLiteralTest extends PHPUnit_Framework_TestCase
     public function shouldParseArrayOfObjects()
     {
         //given
-        $complexType = array(new Simple('string', 'name'), new Simple('int', 'id'));
-        $complex = new Object('object', 'companies', $complexType);
-        $parameter = array(new Arrays('object', 'companies', $complex));
-        $rpcLiteral = new RpcLiteral();
+        $parameter = ParameterFactory::createParameterForArrayOfObjects();
 
         //when
-        $types = $rpcLiteral->typeParameters($parameter);
+        $types = $this->_rpcLiteral->typeParameters($parameter);
 
         //then
         $type = $types[0];
@@ -134,15 +133,10 @@ class RpcLiteralTest extends PHPUnit_Framework_TestCase
     public function shouldParseObjectWithArrayOfWrapper()
     {
         //given
-        $complexType = new Object('Agent', 'agents', array(
-            new ComplexTypeParser('string', 'name'), new ComplexTypeParser('int', 'number')
-        ));
-        $complex = array(new Arrays('Agent', 'agents', $complexType), new Simple('int', 'id'));
-        $parameter = array(new Object('object', 'listOfAgents', $complex));
-        $rpcLiteral = new RpcLiteral();
+        $parameter = ParameterFactory::createParameterObjectWithArrayOfWrapper();
 
         //when
-        $types = $rpcLiteral->typeParameters($parameter);
+        $types = $this->_rpcLiteral->typeParameters($parameter);
 
         //then
         $type = $types[0];
