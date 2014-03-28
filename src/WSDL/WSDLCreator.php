@@ -8,6 +8,7 @@ namespace WSDL;
 
 use WSDL\Parser\ClassParser;
 use WSDL\Service\Service;
+use WSDL\XML\Styles\RpcEncoded;
 use WSDL\XML\Styles\RpcLiteral;
 use WSDL\XML\Styles\Style;
 use WSDL\XML\XMLGenerator;
@@ -67,8 +68,11 @@ class WSDLCreator
     {
         $style = strtolower($style);
         switch ($style) {
-            case 'rpc/literal':
+            case Style::RPC_LITERAL:
                 $this->_bindingStyle = new RpcLiteral();
+                break;
+            case Style::RPC_ENCODED;
+                $this->_bindingStyle = new RpcEncoded();
                 break;
         };
         return $this;

@@ -8,6 +8,9 @@ namespace WSDL\XML\Styles;
 
 interface Style
 {
+    const RPC_LITERAL = 'rpc/literal';
+    const RPC_ENCODED = 'rpc/encoded';
+
     public function bindingStyle();
 
     public function bindingUse();
