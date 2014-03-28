@@ -53,12 +53,12 @@ class WSDLCreator
 
     public function setNamespace($namespace)
     {
-        $namespace = $this->_addShlashAtEndIfNotExists($namespace);
+        $namespace = $this->_addSlashAtEndIfNotExists($namespace);
         $this->_namespace = $namespace;
         return $this;
     }
 
-    private function _addShlashAtEndIfNotExists($namespace)
+    private function _addSlashAtEndIfNotExists($namespace)
     {
         return rtrim($namespace, '/') . '/';
     }

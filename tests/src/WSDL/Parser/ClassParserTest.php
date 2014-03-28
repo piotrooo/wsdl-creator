@@ -26,7 +26,7 @@ class ClassParserTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldNotParseMagicMehods()
+    public function shouldNotParseMagicMethods()
     {
         //given
         $classParser = new ClassParser('\Mocks\MockClass');

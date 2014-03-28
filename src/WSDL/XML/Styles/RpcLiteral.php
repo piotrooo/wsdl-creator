@@ -117,13 +117,18 @@ class RpcLiteral implements Style
 
             $typesElement->setElementAttributes($type, $value, $complexType->getName());
 
-            if (TypeHelper::isArray($complexType)) {
-                $typesElement->setComplex($this->_generateArray($complexType));
-            } else if ($complexType instanceof Type && !TypeHelper::isSimple($complexType) && $complexType->getComplexType()) {
-                $typesElement->setComplex($this->_generateComplexType($complexType->getComplexType()));
-            }
+            $this->_setComplexTypeIfNeeded($complexType, $typesElement);
         }
         return $typesElement;
+    }
+
+    private function _setComplexTypeIfNeeded($complexType, TypesElement $typesElement)
+    {
+        if (TypeHelper::isArray($complexType)) {
+            $typesElement->setComplex($this->_generateArray($complexType));
+        } else if ($complexType instanceof Type && !TypeHelper::isSimple($complexType) && $complexType->getComplexType()) {
+            $typesElement->setComplex($this->_generateComplexType($complexType->getComplexType()));
+        }
     }
 
     private function _createElement(Type $returning)

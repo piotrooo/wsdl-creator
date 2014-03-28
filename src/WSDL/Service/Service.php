@@ -6,6 +6,9 @@
  */
 namespace WSDL\Service;
 
+/**
+ * @property mixed template
+ */
 class Service
 {
     private $_name;
@@ -21,7 +24,7 @@ class Service
 
     public function render()
     {
-        $this->template = (object) null;
+        $this->template = (object)null;
         $this->template->serviceName = $this->_name;
         $this->template->serviceUrl = $this->_namespace . strtolower($this->_name);
         $this->template->methods = $this->_methods;

@@ -6,6 +6,8 @@
  */
 namespace Mocks\Test;
 
+use stdClass;
+
 class MockClassMultipleNamespace
 {
     /**

@@ -71,7 +71,9 @@
 </head>
 <body>
 <div id="root">
-    <div id="header"><?php echo $this->template->serviceName ?> Service (<?php echo $this->template->serviceUrl ?>)</div>
+    <div id="header">
+        <?php echo $this->template->serviceName ?> Service (<?php echo $this->template->serviceUrl ?>)
+    </div>
     <div id="content">
         <?php foreach ($this->template->methods as $method): ?>
             <div class="method">

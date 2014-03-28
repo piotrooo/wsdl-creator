@@ -37,26 +37,10 @@ class ParameterParser
         switch ($this->_strategy) {
             case 'object':
                 return new Object($this->getType(), $this->getName(), $this->complexTypes());
-                break;
             case 'wrapper':
-                $wrapper = $this->wrapper();
-                $object = null;
-                if ($wrapper->getComplexTypes()) {
-                    $object = new Object($this->getType(), $this->getName(), $wrapper->getComplexTypes());
-                }
-                return new Object($this->getType(), $this->getName(), $object);
-                break;
+                return $this->_createWrapperObject();
             case 'array':
-                $object = null;
-                if ($this->_type == 'wrapper') {
-                    $complex = $this->wrapper()->getComplexTypes();
-                    $object = new Object($this->getType(), $this->getName(), $complex);
-                } else if ($this->isComplex()) {
-                    $complex = $this->complexTypes();
-                    $object = new Object($this->getType(), $this->getName(), $complex);
-                }
-                return new Arrays($this->getType(), $this->getName(), $object);
-                break;
+                return $this->_createArrayObject();
             default:
                 return new Simple($this->getType(), $this->getName());
         }
@@ -78,6 +62,29 @@ class ParameterParser
     {
         preg_match('#\\$(\w+)#', $this->_parameter, $name);
         $this->_name = isset($name[1]) ? $name[1] : '';
+    }
+
+    private function _createWrapperObject()
+    {
+        $wrapper = $this->wrapper();
+        $object = null;
+        if ($wrapper->getComplexTypes()) {
+            $object = new Object($this->getType(), $this->getName(), $wrapper->getComplexTypes());
+        }
+        return new Object($this->getType(), $this->getName(), $object);
+    }
+
+    private function _createArrayObject()
+    {
+        $object = null;
+        if ($this->_type == 'wrapper') {
+            $complex = $this->wrapper()->getComplexTypes();
+            $object = new Object($this->getType(), $this->getName(), $complex);
+        } else if ($this->isComplex()) {
+            $complex = $this->complexTypes();
+            $object = new Object($this->getType(), $this->getName(), $complex);
+        }
+        return new Arrays($this->getType(), $this->getName(), $object);
     }
 
     public function getType()
