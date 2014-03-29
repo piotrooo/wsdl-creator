@@ -8,6 +8,7 @@ namespace WSDL;
 
 use WSDL\Parser\ClassParser;
 use WSDL\Service\Service;
+use WSDL\XML\Styles\DocumentLiteralWrapped;
 use WSDL\XML\Styles\RpcEncoded;
 use WSDL\XML\Styles\RpcLiteral;
 use WSDL\XML\Styles\Style;
@@ -73,6 +74,9 @@ class WSDLCreator
                 break;
             case Style::RPC_ENCODED;
                 $this->_bindingStyle = new RpcEncoded();
+                break;
+            case Style::DOCUMENT_LITERAL_WRAPPED;
+                $this->_bindingStyle = new DocumentLiteralWrapped();
                 break;
         };
         return $this;
