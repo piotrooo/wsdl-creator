@@ -6,7 +6,7 @@
  */
 namespace WSDL\XML\Styles;
 
-use WSDL\Types\Type;
+use WSDL\Parser\MethodParser;
 
 class RpcLiteral extends Rpc implements Style
 {
@@ -20,44 +20,32 @@ class RpcLiteral extends Rpc implements Style
         return 'literal';
     }
 
-    /**
-     * @param Type[] $parameters
-     * @return array
-     */
-    public function methodInput($parameters)
+    public function methodInput(MethodParser $method)
     {
         $partElements = array();
-        foreach ($parameters as $parameter) {
+        foreach ($method->parameters() as $parameter) {
             $partElements[] = $this->_createElement($parameter);
         }
         return $partElements;
     }
 
-    /**
-     * @param Type $returning
-     * @return array
-     */
-    public function methodOutput($returning)
+    public function methodOutput(MethodParser $method)
     {
-        $returnElement = $this->_createElement($returning);
+        $returnElement = $this->_createElement($method->returning());
         return $returnElement;
     }
 
-    /**
-     * @param Type[] $parameters
-     * @return array
-     */
-    public function typeParameters($parameters)
+    public function typeParameters(MethodParser $method)
     {
         $elements = array();
-        foreach ($parameters as $parameter) {
+        foreach ($method->parameters() as $parameter) {
             $elements[] = $this->_generateType($parameter);
         }
         return $elements;
     }
 
-    public function typeReturning($returning)
+    public function typeReturning(MethodParser $method)
     {
-        return $this->_generateType($returning);
+        return $this->_generateType($method->returning());
     }
 }

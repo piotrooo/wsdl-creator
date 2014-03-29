@@ -98,12 +98,14 @@ class RpcLiteralTest extends PHPUnit_Framework_TestCase
         $type = $types[0];
         $this->assertEquals('AgentNameWithId', $type->getName());
         $this->assertEquals(array(
-            array('type' => 'element', 'value' => 'ns:Agent', 'name' => 'agent')
+            array('type' => 'element', 'value' => 'ns:MocksMockUserWrapper', 'name' => 'agent'),
+            array('type' => 'type', 'value' => 'xsd:int', 'name' => 'id')
         ), $type->getElementAttributes());
-        $this->assertEquals('Agent', $type->getComplex()->getName());
+        $this->assertEquals('MocksMockUserWrapper', $type->getComplex()->getName());
         $this->assertEquals(array(
+            array('type' => 'type', 'value' => 'xsd:int', 'name' => 'id'),
             array('type' => 'type', 'value' => 'xsd:string', 'name' => 'name'),
-            array('type' => 'type', 'value' => 'xsd:int', 'name' => 'number')
+            array('type' => 'type', 'value' => 'xsd:int', 'name' => 'age')
         ), $type->getComplex()->getElementAttributes());
     }
 
@@ -170,11 +172,12 @@ class RpcLiteralTest extends PHPUnit_Framework_TestCase
             array('type' => 'type', 'value' => 'xsd:int', 'name' => 'id')
         ), $type->getElementAttributes());
         $this->assertEquals('ArrayOfAgents', $type->getComplex()->getName());
-        $this->assertEquals('ns:Agent[]', $type->getComplex()->getArrayType());
-        $this->assertEquals('Agent', $type->getComplex()->getComplex()->getName());
+        $this->assertEquals('ns:MocksMockUserWrapper[]', $type->getComplex()->getArrayType());
+        $this->assertEquals('MocksMockUserWrapper', $type->getComplex()->getComplex()->getName());
         $this->assertEquals(array(
+            array('type' => 'type', 'value' => 'xsd:int', 'name' => 'id'),
             array('type' => 'type', 'value' => 'xsd:string', 'name' => 'name'),
-            array('type' => 'type', 'value' => 'xsd:int', 'name' => 'number')
+            array('type' => 'type', 'value' => 'xsd:int', 'name' => 'age')
         ), $type->getComplex()->getComplex()->getElementAttributes());
     }
 }

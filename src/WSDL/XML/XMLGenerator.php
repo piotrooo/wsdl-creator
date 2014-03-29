@@ -120,12 +120,12 @@ class XMLGenerator
         ));
 
         foreach ($this->_WSDLMethods as $method) {
-            $typeParameters = $this->_bindingStyle->typeParameters($method->parameters());
+            $typeParameters = $this->_bindingStyle->typeParameters($method);
             if ($typeParameters) {
                 $this->_typesParameters($typeParameters, $schemaElement);
             }
 
-            $typeReturning = $this->_bindingStyle->typeReturning($method->returning());
+            $typeReturning = $this->_bindingStyle->typeReturning($method);
             $this->_generateComplexType($typeReturning, $schemaElement);
         }
 
@@ -240,7 +240,7 @@ class XMLGenerator
         $messageInputElement = $this->createElementWithAttributes('message', array(
             'name' => $method->getName() . 'Request'
         ));
-        $partsInput = $this->_bindingStyle->methodInput($method->parameters());
+        $partsInput = $this->_bindingStyle->methodInput($method);
         $obj = $this;
         $partsInput = array_map(function ($attributes) use ($obj) {
             return $obj->createElementWithAttributes('part', $attributes);
@@ -256,7 +256,7 @@ class XMLGenerator
         $messageOutputElement = $this->createElementWithAttributes('message', array(
             'name' => $method->getName() . 'Response'
         ));
-        $partsOutput = $this->_bindingStyle->methodOutput($method->returning());
+        $partsOutput = $this->_bindingStyle->methodOutput($method);
         $partsOutput = $this->createElementWithAttributes('part', $partsOutput);
         $messageOutputElement->appendChild($partsOutput);
         return $messageOutputElement;

@@ -6,20 +6,23 @@
  */
 namespace WSDL\XML\Styles;
 
+use WSDL\Parser\MethodParser;
+
 interface Style
 {
     const RPC_LITERAL = 'rpc/literal';
     const RPC_ENCODED = 'rpc/encoded';
+    const DOCUMENT_LITERAL_WRAPPED = 'document/literal wrapped';
 
     public function bindingStyle();
 
     public function bindingUse();
 
-    public function methodInput($parameters);
+    public function methodInput(MethodParser $method);
 
-    public function methodOutput($returning);
+    public function methodOutput(MethodParser $method);
 
-    public function typeParameters($parameters);
+    public function typeParameters(MethodParser $method);
 
-    public function typeReturning($returning);
+    public function typeReturning(MethodParser $method);
 }
