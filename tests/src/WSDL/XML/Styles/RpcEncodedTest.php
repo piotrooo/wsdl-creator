@@ -1,23 +1,23 @@
 <?php
 /**
- * RpcLiteralTest
+ * RpcEncodedTest
  *
  * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
  */
 use Factory\ParameterFactory;
-use WSDL\XML\Styles\RpcLiteral;
+use WSDL\XML\Styles\RpcEncoded;
 
-class RpcLiteralTest extends PHPUnit_Framework_TestCase
+class RpcEncodedTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var RpcLiteral
+     * @var RpcEncoded
      */
-    private $_rpcLiteral;
+    private $_rpcEncoded;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->_rpcLiteral = new RpcLiteral();
+        $this->_rpcEncoded = new RpcEncoded();
     }
 
     /**
@@ -26,7 +26,7 @@ class RpcLiteralTest extends PHPUnit_Framework_TestCase
     public function shouldReturnCorrectBindingStyle()
     {
         //when
-        $style = $this->_rpcLiteral->bindingStyle();
+        $style = $this->_rpcEncoded->bindingStyle();
 
         //then
         $this->assertEquals('rpc', $style);
@@ -38,10 +38,10 @@ class RpcLiteralTest extends PHPUnit_Framework_TestCase
     public function shouldReturnCorrectBindingUse()
     {
         //when
-        $style = $this->_rpcLiteral->bindingUse();
+        $style = $this->_rpcEncoded->bindingUse();
 
         //then
-        $this->assertEquals('literal', $style);
+        $this->assertEquals('encoded', $style);
     }
 
     /**
@@ -53,7 +53,7 @@ class RpcLiteralTest extends PHPUnit_Framework_TestCase
         $parameter = ParameterFactory::createParameterForSimpleArray();
 
         //when
-        $types = $this->_rpcLiteral->typeParameters($parameter);
+        $types = $this->_rpcEncoded->typeParameters($parameter);
 
         //then
         $type = $types[0];
@@ -71,7 +71,7 @@ class RpcLiteralTest extends PHPUnit_Framework_TestCase
         $parameter = ParameterFactory::createParameterForSimpleObject();
 
         //when
-        $types = $this->_rpcLiteral->typeParameters($parameter);
+        $types = $this->_rpcEncoded->typeParameters($parameter);
 
         //then
         $type = $types[0];
@@ -92,7 +92,7 @@ class RpcLiteralTest extends PHPUnit_Framework_TestCase
         $parameter = ParameterFactory::createParameterForObjectWithWrapper();
 
         //when
-        $types = $this->_rpcLiteral->typeParameters($parameter);
+        $types = $this->_rpcEncoded->typeParameters($parameter);
 
         //then
         $type = $types[0];
@@ -116,7 +116,7 @@ class RpcLiteralTest extends PHPUnit_Framework_TestCase
         $parameter = ParameterFactory::createParameterForObjectWithArrayOfSimpleType();
 
         //when
-        $types = $this->_rpcLiteral->typeParameters($parameter);
+        $types = $this->_rpcEncoded->typeParameters($parameter);
 
         //then
         $type = $types[0];
@@ -138,7 +138,7 @@ class RpcLiteralTest extends PHPUnit_Framework_TestCase
         $parameter = ParameterFactory::createParameterForArrayOfObjects();
 
         //when
-        $types = $this->_rpcLiteral->typeParameters($parameter);
+        $types = $this->_rpcEncoded->typeParameters($parameter);
 
         //then
         $type = $types[0];
@@ -160,7 +160,7 @@ class RpcLiteralTest extends PHPUnit_Framework_TestCase
         $parameter = ParameterFactory::createParameterObjectWithArrayOfWrapper();
 
         //when
-        $types = $this->_rpcLiteral->typeParameters($parameter);
+        $types = $this->_rpcEncoded->typeParameters($parameter);
 
         //then
         $type = $types[0];

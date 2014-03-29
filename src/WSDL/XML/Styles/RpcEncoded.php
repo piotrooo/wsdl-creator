@@ -6,7 +6,9 @@
  */
 namespace WSDL\XML\Styles;
 
-class RpcEncoded implements Style
+use WSDL\Types\Type;
+
+class RpcEncoded extends Rpc implements Style
 {
     public function bindingStyle()
     {
@@ -18,19 +20,44 @@ class RpcEncoded implements Style
         return 'encoded';
     }
 
+    /**
+     * @param Type[] $parameters
+     * @return array
+     */
     public function methodInput($parameters)
     {
+        $partElements = array();
+        foreach ($parameters as $parameter) {
+            $partElements[] = $this->_createElement($parameter);
+        }
+        return $partElements;
     }
 
+    /**
+     * @param Type $returning
+     * @return array
+     */
     public function methodOutput($returning)
     {
+        $returnElement = $this->_createElement($returning);
+        return $returnElement;
     }
 
+    /**
+     * @param Type[] $parameters
+     * @return array
+     */
     public function typeParameters($parameters)
     {
+        $elements = array();
+        foreach ($parameters as $parameter) {
+            $elements[] = $this->_generateType($parameter);
+        }
+        return $elements;
     }
 
     public function typeReturning($returning)
     {
+        return $this->_generateType($returning);
     }
 }
