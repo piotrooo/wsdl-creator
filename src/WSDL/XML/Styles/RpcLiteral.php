@@ -8,7 +8,7 @@ namespace WSDL\XML\Styles;
 
 use WSDL\Parser\MethodParser;
 
-class RpcLiteral extends Rpc implements Style
+class RpcLiteral extends Style
 {
     public function bindingStyle()
     {

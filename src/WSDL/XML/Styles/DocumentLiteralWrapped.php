@@ -7,8 +7,10 @@
 namespace WSDL\XML\Styles;
 
 use WSDL\Parser\MethodParser;
+use WSDL\Types\Type;
+use WSDL\Utilities\TypeHelper;
 
-class DocumentLiteralWrapped implements Style
+class DocumentLiteralWrapped extends Style
 {
     public function bindingStyle()
     {
@@ -43,7 +45,44 @@ class DocumentLiteralWrapped implements Style
 
     public function typeParameters(MethodParser $method)
     {
+        $elements = array();
+        foreach ($method->parameters() as $parameter) {
+            $elements[] = $this->_generateType($parameter, $method);
+        }
+        return $elements;
+    }
 
+    public function _generateType($parameter, MethodParser $method)
+    {
+        if (TypeHelper::isSimple($parameter)) {
+            $generateComplexType = $this->_generateSimpleType($method, 'Request');
+            if ($generateComplexType) {
+                return $generateComplexType;
+            }
+        } else {
+            $generateComplexType = $this->_generateComplexType($parameter);
+            if ($generateComplexType) {
+                return $generateComplexType;
+            }
+        }
+        return null;
+    }
+
+    protected function _prepareTypeAndValue(Type $parameter)
+    {
+        $type = '';
+        $value = '';
+        if (TypeHelper::isSimple($parameter)) {
+            $type = 'type';
+            $value = TypeHelper::getXsdType($parameter->getType());
+        } else if (TypeHelper::isArray($parameter)) {
+            $type = 'type';
+            $value = 'ns:' . 'ArrayOf' . ucfirst($parameter->getName());
+        } else if (TypeHelper::isObject($parameter)) {
+            $type = 'element';
+            $value = 'ns:' . $this->_getObjectName($parameter);
+        }
+        return array($type, $value);
     }
 
     public function typeReturning(MethodParser $method)
