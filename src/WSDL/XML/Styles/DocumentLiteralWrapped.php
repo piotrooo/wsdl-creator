@@ -47,20 +47,25 @@ class DocumentLiteralWrapped extends Style
     {
         $elements = array();
         foreach ($method->parameters() as $parameter) {
-            $elements[] = $this->_generateType($parameter, $method);
+            $elements[] = $this->_generateTypeToDocumentWrapper($parameter, $method, 'Request');
         }
         return $elements;
     }
 
-    public function _generateType($parameter, MethodParser $method)
+    public function typeReturning(MethodParser $method)
+    {
+        return $this->_generateTypeToDocumentWrapper($method->returning(), $method, 'Response');
+    }
+
+    public function _generateTypeToDocumentWrapper($parameter, MethodParser $method, $type)
     {
         if (TypeHelper::isSimple($parameter)) {
-            $generateComplexType = $this->_generateSimpleType($method, 'Request');
+            $generateComplexType = $this->_generateDocumentSimpleType($method, $type);
             if ($generateComplexType) {
                 return $generateComplexType;
             }
         } else {
-            $generateComplexType = $this->_generateComplexType($parameter);
+            $generateComplexType = $this->_generateDocumentComplexType($parameter, $methodName, $type);
             if ($generateComplexType) {
                 return $generateComplexType;
             }
@@ -68,25 +73,52 @@ class DocumentLiteralWrapped extends Style
         return null;
     }
 
-    protected function _prepareTypeAndValue(Type $parameter)
+    private function _generateDocumentSimpleType(MethodParser $method, $type)
     {
-        $type = '';
-        $value = '';
-        if (TypeHelper::isSimple($parameter)) {
-            $type = 'type';
-            $value = TypeHelper::getXsdType($parameter->getType());
-        } else if (TypeHelper::isArray($parameter)) {
-            $type = 'type';
-            $value = 'ns:' . 'ArrayOf' . ucfirst($parameter->getName());
-        } else if (TypeHelper::isObject($parameter)) {
-            $type = 'element';
-            $value = 'ns:' . $this->_getObjectName($parameter);
+        $typeElement = new TypesElement();
+        $typeElement->setName($method->getName() . $type . 'Parameters');
+
+        if ($type == 'Request') {
+            foreach ($method->parameters() as $parameter) {
+                $parameterType = TypeHelper::getXsdType($parameter->getType());
+                $typeElement->setElementAttributes('type', $parameterType, $parameter->getName());
+            }
+        } else {
+            $returning = $method->returning();
+            $returningType = TypeHelper::getXsdType($returning->getType());
+            $typeElement->setElementAttributes('type', $returningType, $returning->getName());
         }
-        return array($type, $value);
+        return $typeElement;
     }
 
-    public function typeReturning(MethodParser $method)
+    private function _generateDocumentComplexType(Type $parameter, $methodName, $type)
     {
+        if (TypeHelper::isArray($parameter)) {
+            return $this->_generateDocumentArray($parameter, $methodName, $type);
+        }
+        if (TypeHelper::isObject($parameter)) {
+            return $this->_generateObject($parameter, $methodName, $type);
+        }
+        return null;
+    }
 
+    private function _generateDocumentArray(Type $parameter, $methodName, $typeName)
+    {
+        $typesElement = new TypesElement();
+        $typesElement->setName($methodName . $typeName . 'Parameters');
+
+        $type = $parameter->getComplexType() ? 'ns:' : 'xsd:';
+
+        $typesComplex = new TypesComplex();
+        $typesComplex
+            ->setName('ArrayOf' . ucfirst($parameter->getName()))
+            ->setArrayType($type . $this->_getObjectName($parameter) . '[]');
+
+        if ($parameter->getComplexType()) {
+            $typesComplex->setComplex($this->_generateObject($parameter->getComplexType()));
+        }
+
+        $typesElement->setComplex($typesComplex);
+        return $typesElement;
     }
 }

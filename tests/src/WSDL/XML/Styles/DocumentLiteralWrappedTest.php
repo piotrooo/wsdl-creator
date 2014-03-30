@@ -17,6 +17,7 @@ class DocumentLiteralWrappedTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
+        $this->markTestSkipped('work in progress');
         $this->_documentLiteralWrapped = new DocumentLiteralWrapped();
     }
 
@@ -179,5 +180,22 @@ class DocumentLiteralWrappedTest extends PHPUnit_Framework_TestCase
             array('type' => 'type', 'value' => 'xsd:string', 'name' => 'name'),
             array('type' => 'type', 'value' => 'xsd:int', 'name' => 'age')
         ), $type->getComplex()->getComplex()->getElementAttributes());
+    }
+
+    /**
+     * @test
+     */
+    public function should()
+    {
+        //given
+        $doc = '/** @param string[] $names */';
+
+        $m = new \WSDL\Parser\MethodParser('', $doc);
+
+        $types = $this->_documentLiteralWrapped->typeParameters($m);
+        print_r($types);
+
+        //when
+        //then
     }
 }
