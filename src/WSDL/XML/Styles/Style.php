@@ -12,10 +12,6 @@ use WSDL\Utilities\TypeHelper;
 
 abstract class Style
 {
-    const RPC_LITERAL = 'rpc/literal';
-    const RPC_ENCODED = 'rpc/encoded';
-    const DOCUMENT_LITERAL_WRAPPED = 'document/literal wrapped';
-
     abstract public function bindingStyle();
 
     abstract public function bindingUse();

@@ -10,39 +10,39 @@ use WSDL\Parser\MethodParser;
 
 class ParameterFactory
 {
-    public static function createParameterForSimpleArray()
+    public static function createParameterForSimpleArray($methodName = '')
     {
         $doc = '/**@param string[] $names*/';
-        return new MethodParser('', $doc);
+        return new MethodParser($methodName, $doc);
     }
 
-    public static function createParameterForSimpleObject()
+    public static function createParameterForSimpleObject($methodName = '')
     {
         $doc = '/**@param object $info @string=$name @int=$age*/';
-        return new MethodParser('', $doc);
+        return new MethodParser($methodName, $doc);
     }
 
-    public static function createParameterForObjectWithWrapper()
+    public static function createParameterForObjectWithWrapper($methodName = '')
     {
         $doc = '/**@param object $agentNameWithId @(wrapper $agent @className=\Mocks\MockUserWrapper) @int=$id*/';
-        return new MethodParser('', $doc);
+        return new MethodParser($methodName, $doc);
     }
 
-    public static function createParameterForObjectWithArrayOfSimpleType()
+    public static function createParameterForObjectWithArrayOfSimpleType($methodName = '')
     {
         $doc = '/**@param object $namesInfo @string[]=$names @int=$id*/';
-        return new MethodParser('', $doc);
+        return new MethodParser($methodName, $doc);
     }
 
-    public static function createParameterForArrayOfObjects()
+    public static function createParameterForArrayOfObjects($methodName = '')
     {
         $doc = '/**@param object[] $companies @string=$name @int=$id*/';
-        return new MethodParser('', $doc);
+        return new MethodParser($methodName, $doc);
     }
 
-    public static function createParameterObjectWithArrayOfWrapper()
+    public static function createParameterObjectWithArrayOfWrapper($methodName = '')
     {
         $doc = '/**@param object $listOfAgents @(wrapper[] $agents @className=\Mocks\MockUserWrapper) @int=$id*/';
-        return new MethodParser('', $doc);
+        return new MethodParser($methodName, $doc);
     }
 }

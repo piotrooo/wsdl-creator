@@ -6,10 +6,9 @@
  */
 namespace WSDL;
 
+use Exception;
 use WSDL\Parser\ClassParser;
 use WSDL\Service\Service;
-use WSDL\XML\Styles\DocumentLiteralWrapped;
-use WSDL\XML\Styles\RpcEncoded;
 use WSDL\XML\Styles\RpcLiteral;
 use WSDL\XML\Styles\Style;
 use WSDL\XML\XMLGenerator;
@@ -65,20 +64,12 @@ class WSDLCreator
         return rtrim($namespace, '/') . '/';
     }
 
-    public function setBindingStyle($style)
+    public function setBindingStyle(Style $style = null)
     {
-        $style = strtolower($style);
-        switch ($style) {
-            case Style::RPC_LITERAL:
-                $this->_bindingStyle = new RpcLiteral();
-                break;
-            case Style::RPC_ENCODED;
-                $this->_bindingStyle = new RpcEncoded();
-                break;
-            case Style::DOCUMENT_LITERAL_WRAPPED;
-                $this->_bindingStyle = new DocumentLiteralWrapped();
-                break;
-        };
+        if (!$style) {
+            throw new Exception('Incorrect binding style.');
+        }
+        $this->_bindingStyle = $style;
         return $this;
     }
 
