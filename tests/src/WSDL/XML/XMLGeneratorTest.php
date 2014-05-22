@@ -121,6 +121,29 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
         $this->assertSelectCount('binding operation', 6, $this->_XML);
     }
 
+    public function shouldPutNamespaceOnSoapBindBody()
+    {
+        //given
+        $matcher = array(
+            'tag' => 'binding',
+            'ancestor' => array('tag' => 'definitions'),
+            'attributes' => array(
+                'name' => 'MockClassBinding',
+                'type' => "tns:MockClassPortType"
+            ),
+            'descendant' => array(
+                'tag' => 'body',
+                'attributes' => array(
+                    'use' => 'literal',
+                    'namespace' => $this->_targetNamespace
+                )
+            )
+        );
+
+        $this->assertTag($matcher, $this->_XML, '', false);
+        $this->assertSelectCount('binding body@namepsace', 12, $this->_XML);
+    }
+
     /**
      * @test
      */
