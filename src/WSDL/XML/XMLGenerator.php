@@ -310,7 +310,8 @@ class XMLGenerator
 
         foreach ($this->_WSDLMethods as $method) {
             $soapBodyElement = $this->createElementWithAttributes('soap:body', array(
-                'use' => $this->_bindingStyle->bindingUse()
+                'use' => $this->_bindingStyle->bindingUse(),
+                'namespace' => $this->_targetNamespace
             ));
 
             $operationElement = $this->createElementWithAttributes('operation', array(
