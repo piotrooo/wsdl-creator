@@ -63,4 +63,25 @@ class MockClass
     {
         return $wrap ? true : false;
     }
+
+    /**
+     * @return wrapper[] $mockUsers @className=\Mocks\MockUserWrapper
+     */
+    public function arrayOfMockUser() {
+        $mockUsers = array();
+
+        $o = new MockUserWrapper();
+        $o->id = 1;
+        $o->name = 'Fred';
+        $o->age = 20;
+        $mockUsers[] = $o;
+
+        $o = new MockUserWrapper();
+        $o->id = 2;
+        $o->name = 'Murray';
+        $o->age = 25;
+        $mockUsers[] = $o;
+
+        return $mockUsers;
+    }
 }

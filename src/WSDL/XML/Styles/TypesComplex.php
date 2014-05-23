@@ -10,6 +10,7 @@ class TypesComplex
 {
     private $_name;
     private $_arrayType;
+    private $_arrayTypeName;
     private $_complex;
 
     public function setName($name)
@@ -43,5 +44,16 @@ class TypesComplex
     public function getComplex()
     {
         return $this->_complex;
+    }
+
+    public function setArrayTypeName($arrayTypeName)
+    {
+        $this->_arrayTypeName = $arrayTypeName;
+        return $this;
+    }
+
+    public function getArrayTypeName()
+    {
+        return $this->_arrayTypeName;
     }
 }

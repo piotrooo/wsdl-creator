@@ -98,6 +98,23 @@ class ParameterParserTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldParseObjectWrapperArray()
+    {
+        //given
+        $parameter = 'wrapper[] $users @className=\Mocks\MockUserWrapper';
+        $parser = new ParameterParser($parameter);
+
+        //when
+        $parser->parse();
+
+        //then
+        $this->assertEquals('users', $parser->getName());
+        $this->assertEquals('MocksMockUserWrapper', $parser->getType());
+    }
+
+    /**
+     * @test
+     */
     public function shouldParseParams()
     {
         $array = array(
