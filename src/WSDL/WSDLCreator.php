@@ -9,6 +9,7 @@ namespace WSDL;
 use Exception;
 use WSDL\Parser\ClassParser;
 use WSDL\Service\Service;
+use WSDL\Utilities\Strings;
 use WSDL\XML\Styles\RpcLiteral;
 use WSDL\XML\Styles\Style;
 use WSDL\XML\XMLGenerator;
@@ -57,6 +58,11 @@ class WSDLCreator
         $namespace = $this->_addSlashAtEndIfNotExists($namespace);
         $this->_namespace = $namespace;
         return $this;
+    }
+
+    public function getNamespaceWithSanitizedClass()
+    {
+        return Strings::sanitizedNamespaceWithClass($this->_namespace, $this->_class);
     }
 
     private function _addSlashAtEndIfNotExists($namespace)

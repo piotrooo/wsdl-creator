@@ -31,4 +31,9 @@ class Strings
         }
         return $word;
     }
+
+    public static function sanitizedNamespaceWithClass($namespace, $class)
+    {
+        return $namespace . strtolower(ltrim(str_replace('\\', '/', $class), '/'));
+    }
 }

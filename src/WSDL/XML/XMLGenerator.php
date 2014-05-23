@@ -10,6 +10,7 @@ namespace WSDL\XML;
 use DOMDocument;
 use ReflectionClass;
 use WSDL\Parser\MethodParser;
+use WSDL\Utilities\Strings;
 use WSDL\XML\Styles\Style;
 use WSDL\XML\Styles\TypesComplex;
 use WSDL\XML\Styles\TypesElement;
@@ -45,20 +46,19 @@ class XMLGenerator
 
     public function __construct($name, $namespace, $location)
     {
-        $sanitizedName = $this->sanitizeClassName($name);
         $this->_name = $this->extractClassName($name);
         $this->_location = $location;
 
-        $this->_targetNamespace = $namespace . strtolower($sanitizedName);
+        $this->_targetNamespace = $this->sanitizeClassName($namespace, $name);
         $this->_targetNamespaceTypes = $this->_targetNamespace . '/types';
 
         $this->_DOMDocument = new DOMDocument("1.0", "UTF-8");
         $this->_saveXML();
     }
 
-    public function sanitizeClassName($name)
+    public function sanitizeClassName($namespace, $class)
     {
-        return ltrim(str_replace('\\', '/', $name), '/');
+        return Strings::sanitizedNamespaceWithClass($namespace, $class);
     }
 
     public function extractClassName($name)

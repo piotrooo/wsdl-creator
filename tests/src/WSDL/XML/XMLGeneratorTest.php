@@ -194,10 +194,10 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
         $xml = new XMLGenerator('\Mocks\Test\MockClassMultipleNamespace', '', '');
 
         //when
-        $sanitized = $xml->sanitizeClassName('\Mocks\Test\MockClassMultipleNamespace');
+        $sanitized = $xml->sanitizeClassName('http://foo.bar/', '\Mocks\Test\MockClassMultipleNamespace');
 
         //then
-        $this->assertEquals('Mocks/Test/MockClassMultipleNamespace', $sanitized);
+        $this->assertEquals('http://foo.bar/mocks/test/mockclassmultiplenamespace', $sanitized);
     }
 
     /**
