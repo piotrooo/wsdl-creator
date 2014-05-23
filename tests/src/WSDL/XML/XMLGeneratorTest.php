@@ -292,8 +292,7 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
 
         //then
         $this->assertTag($matcher, $wsdl, '', false);
-        $this->assertSelectCount('body[use=encoded]', 8, $wsdl);
-        $this->assertSelectCount('body[encodingStyle]', 8, $wsdl);
-        $this->assertSelectCount('body[encodingStyle=http:\/\/schemas.xmlsoap.org/soap/encoding\/]', 8, $wsdl);
+        $this->assertSelectCount('binding body[use=encoded]', 8, $wsdl);
+        $this->assertSelectCount('binding body[encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"]', 8, $wsdl);
     }
 }
