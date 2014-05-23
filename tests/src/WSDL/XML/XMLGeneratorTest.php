@@ -5,6 +5,7 @@
  * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
  */
 use WSDL\Parser\ClassParser;
+use WSDL\XML\Styles\RpcEncoded;
 use WSDL\XML\Styles\RpcLiteral;
 use WSDL\XML\XMLGenerator;
 
@@ -267,5 +268,39 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
         $this->assertSelectCount('types complexType[name=MocksMockUserWrapper]', 1, $this->_XML);
         $this->assertSelectCount('types element[name=MocksMockUserWrapper][type=ns:MocksMockUserWrapper]', 1, $this->_XML);
         $this->assertSelectCount('types complexType[name=ArrayOfMockUsers] element[name=mockUser]', 1, $this->_XML);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldAddEncodingUriForRpcEncoded()
+    {
+        //given
+        XMLGenerator::$alreadyGeneratedComplexTypes = array();
+        $classParser = new ClassParser('\Mocks\MockClass');
+        $classParser->parse();
+        $xml = new XMLGenerator('\Mocks\MockClass', $this->_namespace, $this->_location);
+        $xml->setWSDLMethods($classParser->getMethods())->setBindingStyle(new RpcEncoded())->generate();
+
+        $matcher = array(
+            'tag' => 'binding',
+            'ancestor' => array('tag' => 'definitions'),
+            'descendant' => array(
+                'tag' => 'body',
+                'attributes' => array(
+                    'use' => 'encoded',
+                    'encodingStyle' => 'http://schemas.xmlsoap.org/soap/encoding/'
+                )
+            )
+        );
+
+        //when
+        $wsdl = $xml->getGeneratedXML();
+
+        //then
+        $this->assertTag($matcher, $wsdl, '', false);
+        $this->assertSelectCount('binding body[use=encoded]', 8, $wsdl);
+        // this should work, but fails
+        //$this->assertSelectCount('binding body[encodingStyle=http://schemas.xmlsoap.org/soap/encoding/]', 8, $wsdl);
     }
 }

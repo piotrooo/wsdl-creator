@@ -236,17 +236,6 @@ class XMLGenerator
         ));
         $sequence->appendChild($element);
         $complexTypeElement->appendChild($sequence);
-        /*
-        $complexContentElement = $this->_createElement('xsd:complexContent');
-        $restrictionElement = $this->createElementWithAttributes('xsd:restriction', array('base' => 'soapenc:Array'));
-        $attributeElement = $this->createElementWithAttributes('xsd:attribute', array(
-                'ref' => 'soapenc:arrayType',
-                'arrayType' => $type
-        ));
-        $restrictionElement->appendChild($attributeElement);
-        $complexContentElement->appendChild($restrictionElement);
-        $complexTypeElement->appendChild($complexContentElement);
-        */
         $schemaElement->appendChild($complexTypeElement);
 
         if ($parameter->getComplex()) {
@@ -357,6 +346,12 @@ class XMLGenerator
                 'use' => $this->_bindingStyle->bindingUse(),
                 'namespace' => $this->_targetNamespace
             ));
+
+            if ($this->_bindingStyle instanceof \WSDL\XML\Styles\RpcEncoded)
+            {
+                $encodingUri = $this->_createAttributeWithValue('encodingStyle', 'http://schemas.xmlsoap.org/soap/encoding/');
+                $soapBodyElement->appendChild($encodingUri);
+            }
 
             $operationElement = $this->createElementWithAttributes('operation', array(
                 'name' => $method->getName()
