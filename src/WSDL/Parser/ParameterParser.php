@@ -111,7 +111,7 @@ class ParameterParser
         if (!$this->isComplex()) {
             throw new ParameterParserException("This parameter is not complex type.");
         }
-        preg_match('#@className=(.+)#', $this->_parameter, $matches);
+        preg_match('#@className=(.*?)(?:\s|$)#', $this->_parameter, $matches);
         $className = $matches[1];
         $this->_type = str_replace('\\', '', $className);
         $wrapperParser = new WrapperParser($className);

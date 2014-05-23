@@ -70,8 +70,9 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
 
         //then
         $this->assertTag($matcher, $this->_XML, '', false);
-        $this->assertSelectCount('message', 6, $this->_XML);
-        $this->assertSelectCount('message part', 7, $this->_XML);
+        $this->assertSelectCount('message', 8, $this->_XML);
+        $this->assertSelectCount('message part', 8, $this->_XML);
+        $this->assertSelectCount('message[name=arrayOfMockUserResponse] part[name=mockUsers]', 1, $this->_XML);
     }
 
     /**
@@ -88,9 +89,9 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
 
         //then
         $this->assertTag($matcher, $this->_XML, '', false);
-        $this->assertSelectCount('portType operation', 3, $this->_XML);
-        $this->assertSelectCount('portType operation input', 3, $this->_XML);
-        $this->assertSelectCount('portType operation output', 3, $this->_XML);
+        $this->assertSelectCount('portType operation', 4, $this->_XML);
+        $this->assertSelectCount('portType operation input', 4, $this->_XML);
+        $this->assertSelectCount('portType operation output', 4, $this->_XML);
         $this->assertSelectCount('portType operation documentation', 1, $this->_XML);
     }
 
@@ -118,7 +119,7 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
 
         //then
         $this->assertTag($matcher, $this->_XML, '', false);
-        $this->assertSelectCount('binding operation', 6, $this->_XML);
+        $this->assertSelectCount('binding operation', 8, $this->_XML);
     }
 
     public function shouldPutNamespaceOnSoapBindBody()
@@ -248,5 +249,23 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
 
         //then
         $this->assertRegExp('/MocksMockUserWrapper.*name="id" type="xsd:int".*name="name" type="xsd:string".*name="age" type="xsd:int"/', $wsdl);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldGenerateTypes()
+    {
+        //given
+        $matcher = array(
+            'tag' => 'types',
+            'ancestor' => array('tag' => 'definitions'),
+        );
+
+        //then
+        $this->assertTag($matcher, $this->_XML, '', false);
+        $this->assertSelectCount('types complexType[name=MocksMockUserWrapper]', 1, $this->_XML);
+        $this->assertSelectCount('types element[name=MocksMockUserWrapper][type=ns:MocksMockUserWrapper]', 1, $this->_XML);
+        $this->assertSelectCount('types complexType[name=ArrayOfMockUsers] element[name=mockUser]', 1, $this->_XML);
     }
 }

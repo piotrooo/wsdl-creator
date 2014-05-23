@@ -145,7 +145,7 @@ class XMLGenerator
     private function _generateComplexType($parameter, $schemaElement)
     {
         if ($parameter instanceof TypesComplex) {
-            $this->_generateArray($parameter, $schemaElement);
+            $this->_generateTypedArray($parameter, $schemaElement);
         }
         if ($parameter instanceof TypesElement) {
             $this->_generateObject($parameter, $schemaElement);
@@ -187,9 +187,13 @@ class XMLGenerator
         }
 
         $element = $this->createElementWithAttributes('xsd:element', array(
+            'name' => $name,
+            'nillable' => 'true',
+            'type' => 'ns:' . $name
+        ));
+        $complexTypeElement = $this->createElementWithAttributes('xsd:complexType', array(
             'name' => $name
         ));
-        $complexTypeElement = $this->_createElement('xsd:complexType');
         $sequenceElement = $this->_createElement('xsd:sequence');
 
         $types = $parameter->getElementAttributes();
@@ -206,8 +210,48 @@ class XMLGenerator
         }
 
         $complexTypeElement->appendChild($sequenceElement);
-        $element->appendChild($complexTypeElement);
+
+        $schemaElement->appendChild($complexTypeElement);
         $schemaElement->appendChild($element);
+    }
+
+    private function _generateTypedArray(TypesComplex $parameter, $schemaElement)
+    {
+        $name = $parameter->getName();
+        $type = $parameter->getArrayType();
+        $typeName = $parameter->getArrayTypeName();
+
+        if (self::isAlreadyGenerated($name)) {
+            return;
+        }
+
+        $complexTypeElement = $this->createElementWithAttributes('xsd:complexType', array('name' => $name));
+        $sequence = $this->_createElement('xsd:sequence');
+        $element = $this->createElementWithAttributes('xsd:element', array(
+            'minOccurs' => 0,
+            'maxOccurs' => 'unbounded',
+            'name' => $typeName,
+            'nillable' => 'true',
+            'type' => str_replace('[]', '', $type)
+        ));
+        $sequence->appendChild($element);
+        $complexTypeElement->appendChild($sequence);
+        /*
+        $complexContentElement = $this->_createElement('xsd:complexContent');
+        $restrictionElement = $this->createElementWithAttributes('xsd:restriction', array('base' => 'soapenc:Array'));
+        $attributeElement = $this->createElementWithAttributes('xsd:attribute', array(
+                'ref' => 'soapenc:arrayType',
+                'arrayType' => $type
+        ));
+        $restrictionElement->appendChild($attributeElement);
+        $complexContentElement->appendChild($restrictionElement);
+        $complexTypeElement->appendChild($complexContentElement);
+        */
+        $schemaElement->appendChild($complexTypeElement);
+
+        if ($parameter->getComplex()) {
+            $this->_generateComplexType($parameter->getComplex(), $schemaElement);
+        }
     }
 
     public static function isAlreadyGenerated($name)

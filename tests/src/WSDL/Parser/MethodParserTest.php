@@ -20,6 +20,7 @@ class MethodParserTest extends PHPUnit_Framework_TestCase
  * @desc Method to adding user
  * @param string $name
  * @param object $address @string=ip @string=mac
+ * @param wrapper[] $relatives @className=\Mocks\MockClass
  * @return bool $return
  */
 DOC;
@@ -35,7 +36,7 @@ DOC;
 
         //then
         $this->assertEquals('Method to adding user', $parser->description());
-        $this->assertCount(2, $parser->parameters());
+        $this->assertCount(3, $parser->parameters());
         $this->assertInstanceOf('WSDL\Types\Simple', $parser->returning());
         $this->assertEquals($this->_methodDoc, $parser->getDoc());
         $this->assertEquals($this->_methodName, $parser->getName());
@@ -50,7 +51,11 @@ DOC;
         $parser = new MethodParser($this->_methodName, $this->_methodDoc);
 
         //then
-        $this->assertEquals(array('string $name', 'object $address @string=ip @string=mac'), $parser->getRawParameters());
+        $this->assertEquals(array(
+            'string $name',
+            'object $address @string=ip @string=mac',
+            'wrapper[] $relatives @className=\Mocks\MockClass'
+        ), $parser->getRawParameters());
     }
 
     /**
