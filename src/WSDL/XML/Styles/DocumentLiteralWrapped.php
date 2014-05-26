@@ -24,7 +24,7 @@ class DocumentLiteralWrapped extends Style
 
     public function methodInput(MethodParser $method)
     {
-        return array($this->_createPart($method, 'Request'));
+        return array($this->_createPart($method));
     }
 
     public function methodOutput(MethodParser $method)
@@ -35,7 +35,7 @@ class DocumentLiteralWrapped extends Style
     private function _createPart(MethodParser $method, $type = '')
     {
         $name = 'parameters';
-        $elementName = 'ns:' . $method->getName() . $type . 'Parameters';
+        $elementName = 'ns:' . $method->getName() . $type;
         $element = array(
             'name' => $name,
             'element' => $elementName
@@ -46,7 +46,7 @@ class DocumentLiteralWrapped extends Style
     public function typeParameters(MethodParser $method)
     {
         $element = new TypesElement();
-        $element->setName($method->getName() . 'RequestParameters');
+        $element->setName($method->getName());
         foreach ($method->parameters() as $parameter) {
             $this->_generateElements($parameter, $element);
         }
@@ -56,7 +56,7 @@ class DocumentLiteralWrapped extends Style
     public function typeReturning(MethodParser $method)
     {
         $element = new TypesElement();
-        $element->setName($method->getName() . 'ResponseParameters');
+        $element->setName($method->getName() . 'Response');
         $returning = $method->returning();
         $this->_generateElements($returning, $element);
         return $element;

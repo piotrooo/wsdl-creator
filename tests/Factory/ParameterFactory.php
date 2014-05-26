@@ -45,4 +45,40 @@ class ParameterFactory
         $doc = '/**@param object $listOfAgents @(wrapper[] $agents @className=\Mocks\MockUserWrapper) @int=$id*/';
         return new MethodParser($methodName, $doc);
     }
+
+    public static function createReturnForSimpleArray($methodName = '')
+    {
+        $doc = '/**@return string[] $names*/';
+        return new MethodParser($methodName, $doc);
+    }
+
+    public static function createReturnForSimpleObject($methodName = '')
+    {
+        $doc = '/**@return object $info @string=$name @int=$age*/';
+        return new MethodParser($methodName, $doc);
+    }
+
+    public static function createReturnForObjectWithWrapper($methodName = '')
+    {
+        $doc = '/**@return object $agentNameWithId @(wrapper $agent @className=\Mocks\MockUserWrapper) @int=$id*/';
+        return new MethodParser($methodName, $doc);
+    }
+
+    public static function createReturnForObjectWithArrayOfSimpleType($methodName = '')
+    {
+        $doc = '/**@return object $namesInfo @string[]=$names @int=$id*/';
+        return new MethodParser($methodName, $doc);
+    }
+
+    public static function createReturnForArrayOfObjects($methodName = '')
+    {
+        $doc = '/**@return object[] $companies @string=$name @int=$id*/';
+        return new MethodParser($methodName, $doc);
+    }
+
+    public static function createReturnObjectWithArrayOfWrapper($methodName = '')
+    {
+        $doc = '/**@return object $listOfAgents @(wrapper[] $agents @className=\Mocks\MockUserWrapper) @int=$id*/';
+        return new MethodParser($methodName, $doc);
+    }
 }
