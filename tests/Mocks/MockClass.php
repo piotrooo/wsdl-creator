@@ -84,4 +84,25 @@ class MockClass
 
         return $mockUsers;
     }
+
+    /**
+     * noReturnFunction
+     *
+     * @param int $a
+     */
+    public function noReturnFunction($a)
+    {
+        $a = $a + 1;
+    }
+
+    /**
+     * voidReturnFunction
+     *
+     * @param int $a
+     * @return void
+     */
+    public function voidReturnFunction($a)
+    {
+        $a = $a + 1;
+    }
 }
