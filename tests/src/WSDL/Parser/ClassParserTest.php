@@ -20,7 +20,7 @@ class ClassParserTest extends PHPUnit_Framework_TestCase
         $classParser->parse();
 
         //then
-        $this->assertCount(4, $classParser->getMethods());
+        $this->assertCount(6, $classParser->getMethods());
     }
 
     /**
@@ -35,6 +35,6 @@ class ClassParserTest extends PHPUnit_Framework_TestCase
         $classParser->parse();
 
         //then
-        $this->assertCount(4, $classParser->getMethods());
+        $this->assertCount(6, $classParser->getMethods());
     }
 }

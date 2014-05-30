@@ -71,8 +71,8 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
 
         //then
         $this->assertTag($matcher, $this->_XML, '', false);
-        $this->assertSelectCount('message', 8, $this->_XML);
-        $this->assertSelectCount('message part', 8, $this->_XML);
+        $this->assertSelectCount('message', 12, $this->_XML);
+        $this->assertSelectCount('message part', 12, $this->_XML);
         $this->assertSelectCount('message[name=arrayOfMockUserResponse] part[name=mockUsers]', 1, $this->_XML);
     }
 
@@ -90,9 +90,9 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
 
         //then
         $this->assertTag($matcher, $this->_XML, '', false);
-        $this->assertSelectCount('portType operation', 4, $this->_XML);
-        $this->assertSelectCount('portType operation input', 4, $this->_XML);
-        $this->assertSelectCount('portType operation output', 4, $this->_XML);
+        $this->assertSelectCount('portType operation', 6, $this->_XML);
+        $this->assertSelectCount('portType operation input', 6, $this->_XML);
+        $this->assertSelectCount('portType operation output', 6, $this->_XML);
         $this->assertSelectCount('portType operation documentation', 1, $this->_XML);
     }
 
@@ -120,7 +120,7 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
 
         //then
         $this->assertTag($matcher, $this->_XML, '', false);
-        $this->assertSelectCount('binding operation', 8, $this->_XML);
+        $this->assertSelectCount('binding operation', 12, $this->_XML);
     }
 
     public function shouldPutNamespaceOnSoapBindBody()
@@ -299,8 +299,8 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
 
         //then
         $this->assertTag($matcher, $wsdl, '', false);
-        $this->assertSelectCount('binding body[use=encoded]', 8, $wsdl);
+        $this->assertSelectCount('binding body[use=encoded]', 12, $wsdl);
         // this should work, but fails
-        //$this->assertSelectCount('binding body[encodingStyle=http://schemas.xmlsoap.org/soap/encoding/]', 8, $wsdl);
+        //$this->assertSelectCount('binding body[encodingStyle=http://schemas.xmlsoap.org/soap/encoding/]', 12, $wsdl);
     }
 }

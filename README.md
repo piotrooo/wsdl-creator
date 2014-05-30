@@ -1,7 +1,7 @@
 PHP WSDL Creator
 ================
 
-[![Build Status](https://travis-ci.org/piotrooo/wsdl-creator.png?branch=master)](https://travis-ci.org/piotrooo/wsdl-creator) 
+[![Build Status](https://travis-ci.org/piotrooo/wsdl-creator.png?branch=master)](https://travis-ci.org/piotrooo/wsdl-creator)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/piotrooo/wsdl-creator/badges/quality-score.png?s=8ad279ee5bb6a67b820b36e03263ab2ae62b1f7d)](https://scrutinizer-ci.com/g/piotrooo/wsdl-creator/)
 [![Coverage Status](https://coveralls.io/repos/piotrooo/wsdl-creator/badge.png)](https://coveralls.io/r/piotrooo/wsdl-creator)
 [![Dependency Status](https://www.versioneye.com/user/projects/531c2f2dec13752d49000040/badge.png)](https://www.versioneye.com/user/projects/531c2f2dec13752d49000040)
@@ -26,7 +26,7 @@ To install wsdl-creator at your project use [composer](http://getcomposer.org).
 
 ```
 require: {
-	"piotrooo/wsdl-creator": "1.0.0"
+	"piotrooo/wsdl-creator": "1.*"
 }
 ```
 
@@ -37,7 +37,7 @@ Configuration
 To start working with creator you must create new `WSDLCreator` object and define for him:
 * class to generate `WSDL`
 * `SOAP` server location
-* documnet namespace. 
+* documnet namespace.
 
 ```php
 $wsdl = new WSDL\WSDLCreator('ClassName', 'http://localhost/wsdl-creator/ClassName.php');
@@ -253,3 +253,41 @@ You can generate service overview through `renderWSDLService` method. This show 
 ###Example
 
 ![Wrapper image](examples/wrapper.png)
+
+Styles
+------
+By default, the `WSDLCreator` will generate WSDLs using the rpc/literal binding style.
+
+To specify rpc/encoded or a wrapped document/literal binding style, set the binding style on the `WSDLCreator` object.
+
+```php
+$wsdl = new WSDL\WSDLCreator('ClassName', 'http://localhost/wsdl-creator/ClassName.php');
+@wsdl->setBindingStyle(new WSDL\XML\Styles\RpcEncoded());
+$wsdl->setNamespace("http://foo.bar/");
+```
+
+When specifying the wrapped document/literal binding style, you can use `WSDL\DocumentLiteralWrapper` to automatically wrap the returning value in an appropriate wrapped object.
+
+```php
+require_once 'vendor/autoload.php';
+
+use WSDL\DocumentLiteralWrapper;
+use WSDL\WSDLCreator;
+use WSDL\XML\Styles\DocumentLiteralWrapped;
+
+if (isset($_GET['wsdl'])) {
+    $wsdl = new WSDLCreator('ClassName', 'http://localhost/wsdl-creator/ClassName.php');
+    @wsdl->setBindingStyle(new DocumentLiteralWrapped());
+    $wsdl->setNamespace("http://foo.bar/");
+    $wsdl->renderWSDL();
+    exit;
+}
+
+ini_set('soap.wsdl_cache_enabled', '0');
+$server = new SoapServer('http://localhost/wsdl-creator/ClassName.php?wsdl', array(
+	'style' => SOAP_DOCUMENT,
+	'use' => SOAP_LITERAL,
+));
+$server->setObject(new DocumentLiteralWrapped(new ClassName()));
+$server->handle();
+```
