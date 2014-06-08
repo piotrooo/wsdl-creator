@@ -3,6 +3,7 @@ namespace WSDL;
 
 use BadMethodCallException;
 use ReflectionMethod;
+use stdClass;
 use WSDL\Parser\MethodParser;
 
 /**
@@ -11,11 +12,12 @@ use WSDL\Parser\MethodParser;
  * extend to automatically wrap the response in an appropriate wrapper
  *
  */
-class DocumentLiteralWrapper {
-
+class DocumentLiteralWrapper
+{
     private $_obj = null;
 
-    public function __construct($obj) {
+    public function __construct($obj)
+    {
         $this->_obj = $obj;
     }
 
@@ -35,7 +37,7 @@ class DocumentLiteralWrapper {
         if (empty($returnVariable)) {
             return $return;
         } else {
-            $obj = new \stdClass();
+            $obj = new stdClass();
             $obj->{$returnVariable} = $return;
             return $obj;
         }

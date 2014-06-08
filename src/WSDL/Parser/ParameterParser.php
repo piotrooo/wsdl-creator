@@ -53,13 +53,10 @@ class ParameterParser
             $this->_strategy = 'array';
         } else {
             preg_match('#(\w+)#', $this->_parameter, $type);
-            if (isset($type[1]))
-            {
+            if (isset($type[1])) {
                 $this->_type = $type[1];
                 $this->_strategy = $type[1];
-            }
-            else
-            {
+            } else {
                 $this->_type = 'void';
                 $this->_strategy = 'void';
             }

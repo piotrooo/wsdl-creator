@@ -152,32 +152,6 @@ class XMLGenerator
         }
     }
 
-    private function _generateArray(TypesComplex $parameter, $schemaElement)
-    {
-        $name = $parameter->getName();
-        $type = $parameter->getArrayType();
-
-        if (self::isAlreadyGenerated($name)) {
-            return;
-        }
-
-        $complexTypeElement = $this->createElementWithAttributes('xsd:complexType', array('name' => $name));
-        $complexContentElement = $this->_createElement('xsd:complexContent');
-        $restrictionElement = $this->createElementWithAttributes('xsd:restriction', array('base' => 'soapenc:Array'));
-        $attributeElement = $this->createElementWithAttributes('xsd:attribute', array(
-            'ref' => 'soapenc:arrayType',
-            'arrayType' => $type
-        ));
-        $restrictionElement->appendChild($attributeElement);
-        $complexContentElement->appendChild($restrictionElement);
-        $complexTypeElement->appendChild($complexContentElement);
-        $schemaElement->appendChild($complexTypeElement);
-
-        if ($parameter->getComplex()) {
-            $this->_generateComplexType($parameter->getComplex(), $schemaElement);
-        }
-    }
-
     private function _generateObject(TypesElement $parameter, $schemaElement)
     {
         $name = $parameter->getName();
@@ -347,8 +321,7 @@ class XMLGenerator
                 'namespace' => $this->_targetNamespace
             ));
 
-            if ($this->_bindingStyle instanceof \WSDL\XML\Styles\RpcEncoded)
-            {
+            if ($this->_bindingStyle instanceof \WSDL\XML\Styles\RpcEncoded) {
                 $encodingUri = $this->_createAttributeWithValue('encodingStyle', 'http://schemas.xmlsoap.org/soap/encoding/');
                 $soapBodyElement->appendChild($encodingUri);
             }
