@@ -1,7 +1,7 @@
 <?php
 use WSDL\WSDLCreator;
 
-require_once '../vendor/autoload.php';
+require_once '../../vendor/autoload.php';
 
 $wsdl = new WSDLCreator('ObjectSoapServer', 'http://localhost/wsdl-creator/examples/ObjectExampleSoapServer.php');
 $wsdl->setNamespace("http://foo.bar/");
@@ -13,8 +13,11 @@ if (isset($_GET['wsdl'])) {
 
 $wsdl->renderWSDLService();
 
-$server = new SoapServer(null, array(
-    'uri' => 'http://localhost/wsdl-creator/examples/ObjectExampleSoapServer.php'
+$server = new SoapServer('http://localhost/wsdl-creator/examples/rpc_literal/ObjectExampleSoapServer.php?wsdl', array(
+    'uri' => $wsdl->getNamespaceWithSanitizedClass(),
+    'location' => $wsdl->getLocation(),
+    'style' => SOAP_RPC,
+    'use' => SOAP_LITERAL
 ));
 $server->setClass('ObjectSoapServer');
 $server->handle();
@@ -39,7 +42,7 @@ class ObjectSoapServer
      */
     public function userInfo($info)
     {
-        return 'Your name is: ' . $info->name . ' and you have ' . $info->age . ' years old';
+        return 'Your name is: ' . $info->name . ' and you have ' . $info->age . ' years old, it\'s ok?';
     }
 
     /**
