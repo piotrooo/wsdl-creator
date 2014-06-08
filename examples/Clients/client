@@ -1,0 +1,12 @@
+#!/usr/bin/env php
+<?php
+use Clients\RpcLiteral\SimpleCommand;
+use Symfony\Component\Console\Application;
+
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+ini_set("soap.wsdl_cache_enabled", "0");
+
+$application = new Application();
+$application->addCommands(array(new SimpleCommand()));
+$application->run();

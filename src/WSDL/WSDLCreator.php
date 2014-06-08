@@ -87,4 +87,9 @@ class WSDLCreator
             $service->render();
         }
     }
+
+    public function getLocation()
+    {
+        return $this->_location;
+    }
 }

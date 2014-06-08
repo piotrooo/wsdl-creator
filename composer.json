@@ -18,7 +18,8 @@
         "psr-0": {
             "WSDL\\": "src/",
             "Mocks\\": "tests/",
-            "Factory\\": "tests/"
+            "Factory\\": "tests/",
+            "Clients\\": "examples/"
         }
     }
 }
