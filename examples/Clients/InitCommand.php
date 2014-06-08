@@ -17,21 +17,6 @@ class InitCommand extends Command
      */
     protected $soapClient;
 
-    protected function _tableOfMethods()
-    {
-        $table = $this->getHelper('table');
-        $table->setHeaders(array('Methods'));
-        $table->setRows($this->_getMethods());
-        $table->render($this->output);
-    }
-
-    protected function _getMethods()
-    {
-        return array_map(function ($function) {
-            return array($function);
-        }, $this->soapClient->__getFunctions());
-    }
-
     protected function _method($method, $call, $response)
     {
         $this->_separator();

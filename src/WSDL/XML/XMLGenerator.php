@@ -11,6 +11,7 @@ use DOMDocument;
 use ReflectionClass;
 use WSDL\Parser\MethodParser;
 use WSDL\Utilities\Strings;
+use WSDL\XML\Styles\DocumentLiteralWrapped;
 use WSDL\XML\Styles\Style;
 use WSDL\XML\Styles\TypesComplex;
 use WSDL\XML\Styles\TypesElement;
@@ -145,7 +146,11 @@ class XMLGenerator
     private function _generateComplexType($parameter, $schemaElement)
     {
         if ($parameter instanceof TypesComplex) {
-            $this->_generateTypedArray($parameter, $schemaElement);
+            if ($this->_bindingStyle instanceof DocumentLiteralWrapped) {
+                $this->_generateTypedArray($parameter, $schemaElement);
+            } else {
+                $this->_generateArray($parameter, $schemaElement);
+            }
         }
         if ($parameter instanceof TypesElement) {
             $this->_generateObject($parameter, $schemaElement);
@@ -187,6 +192,32 @@ class XMLGenerator
 
         $schemaElement->appendChild($complexTypeElement);
         $schemaElement->appendChild($element);
+    }
+
+    private function _generateArray(TypesComplex $parameter, $schemaElement)
+    {
+        $name = $parameter->getName();
+        $type = $parameter->getArrayType();
+
+        if (self::isAlreadyGenerated($name)) {
+            return;
+        }
+
+        $complexTypeElement = $this->createElementWithAttributes('xsd:complexType', array('name' => $name));
+        $complexContentElement = $this->_createElement('xsd:complexContent');
+        $restrictionElement = $this->createElementWithAttributes('xsd:restriction', array('base' => 'soapenc:Array'));
+        $attributeElement = $this->createElementWithAttributes('xsd:attribute', array(
+            'ref' => 'soapenc:arrayType',
+            'arrayType' => $type
+        ));
+        $restrictionElement->appendChild($attributeElement);
+        $complexContentElement->appendChild($restrictionElement);
+        $complexTypeElement->appendChild($complexContentElement);
+        $schemaElement->appendChild($complexTypeElement);
+
+        if ($parameter->getComplex()) {
+            $this->_generateComplexType($parameter->getComplex(), $schemaElement);
+        }
     }
 
     private function _generateTypedArray(TypesComplex $parameter, $schemaElement)

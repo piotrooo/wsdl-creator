@@ -8,6 +8,7 @@ namespace WSDL\XML\Styles;
 
 use WSDL\Parser\MethodParser;
 use WSDL\Types\Type;
+use WSDL\Utilities\Strings;
 use WSDL\Utilities\TypeHelper;
 
 abstract class Style
@@ -86,7 +87,7 @@ abstract class Style
         $typesComplex
             ->setName('ArrayOf' . ucfirst($parameter->getName()))
             ->setArrayType($type . $this->_getObjectName($parameter) . '[]')
-            ->setArrayTypeName(\WSDL\Utilities\Strings::depluralize($parameter->getName()));
+            ->setArrayTypeName(Strings::depluralize($parameter->getName()));
 
         if ($parameter->getComplexType()) {
             $typesComplex->setComplex($this->_generateObject($parameter->getComplexType()));
