@@ -25,7 +25,7 @@ class SimpleCommand extends InitCommand
 //        $this->_method('getNameWithAge', '$soapClient->getNameWithAge(\'john\', 5)', $response);
 
         $response = $this->soapClient->getNameForUsers(array('john', 'billy', 'peter'));
-        $this->_method('getNameForUser', '$soapClient->getNameForUsers(array(\'john\', \'billy\', \'peter\'))', $response);
+        $this->_method('getNameForUser', $response);
 
 //        $response = $this->soapClient->countTo(5);
 //        $this->_method('countTo', '$soapClient->countTo(5)', $response);

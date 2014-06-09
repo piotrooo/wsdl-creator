@@ -145,7 +145,6 @@ class ObjectSoapServer
         $obj[0]->agent[1]->name = 'agent2';
         $obj[1] = new stdClass();
         $obj[1]->agent[0] = new Agent();
-        $obj[1]->agent[0] = new Agent();
         $obj[1]->agent[0]->name = 'agent3';
         $obj[1]->agent[1] = new Agent();
         $obj[1]->agent[1]->name = 'agent4';

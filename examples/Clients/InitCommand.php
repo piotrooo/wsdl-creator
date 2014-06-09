@@ -17,15 +17,11 @@ class InitCommand extends Command
      */
     protected $soapClient;
 
-    protected function _method($method, $call, $response)
+    protected function _method($method, $response)
     {
         $this->_separator();
 
         $this->output->writeln('Method <info>' . $method . '</info>:');
-        $this->output->writeln('');
-
-        $this->output->writeln('<comment>Call:</comment>');
-        $this->output->writeln($call);
         $this->output->writeln('');
 
         $this->output->writeln('<comment>Response:</comment>');
