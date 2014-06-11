@@ -13,8 +13,11 @@ if (isset($_GET['wsdl'])) {
 
 $wsdl->renderWSDLService();
 
-$server = new SoapServer(null, array(
-    'uri' => 'http://localhost/wsdl-creator/examples/WrapperExampleSoapServer.php'
+$server = new SoapServer('http://localhost/wsdl-creator/examples/rpc_literal/WrapperExampleSoapServer.php?wsdl', array(
+    'uri' => $wsdl->getNamespaceWithSanitizedClass(),
+    'location' => $wsdl->getLocation(),
+    'style' => SOAP_RPC,
+    'use' => SOAP_LITERAL
 ));
 $server->setClass('WrapperSoapServer');
 $server->handle();
