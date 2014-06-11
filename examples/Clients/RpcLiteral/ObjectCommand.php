@@ -23,7 +23,9 @@ class ObjectCommand extends InitCommand
             'trace' => true, 'cache_wsdl' => WSDL_CACHE_NONE
         ));
 
-        print_r($this->soapClient->__getFunctions());
+        $this->serviceInfo('Client Object - rpc/literal');
+
+        $this->renderMethodsTable();
 
         $user = new stdClass();
         $user->name = 'john';
