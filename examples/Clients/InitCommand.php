@@ -4,6 +4,7 @@ namespace Clients;
 use DOMDocument;
 use SoapClient;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class InitCommand extends Command
@@ -17,9 +18,9 @@ class InitCommand extends Command
      */
     protected $soapClient;
 
-    protected function _method($method, $response)
+    protected function method($method, $response)
     {
-        $this->_separator();
+        $this->separator();
 
         $this->output->writeln('Method <info>' . $method . '</info>:');
         $this->output->writeln('');
@@ -41,8 +42,30 @@ class InitCommand extends Command
         $this->output->writeln($DOMDocument->saveXML());
     }
 
-    protected function _separator()
+    protected function separator()
     {
         return $this->output->writeln("\n---------\n");
+    }
+
+    protected function renderMethodsTable()
+    {
+        $table = $this->getHelper('table');
+        $table->setHeaders(array('Method name'));
+        $table->setRows($this->_getRows());
+        $table->render($this->output);
+    }
+
+    private function _getRows()
+    {
+        return array_map(function ($function) {
+            return array($function);
+        }, $this->soapClient->__getFunctions());
+    }
+
+    protected function serviceInfo($name)
+    {
+        $style = new OutputFormatterStyle('red', 'green', array('bold'));
+        $this->output->getFormatter()->setStyle('header', $style);
+        $this->output->writeln("<header>\n\t$name\n</header>");
     }
 }

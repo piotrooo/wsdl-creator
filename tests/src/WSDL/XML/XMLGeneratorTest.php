@@ -267,7 +267,6 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
         $this->assertTag($matcher, $this->_XML, '', false);
         $this->assertSelectCount('types complexType[name=MocksMockUserWrapper]', 1, $this->_XML);
         $this->assertSelectCount('types element[name=MocksMockUserWrapper][type=ns:MocksMockUserWrapper]', 1, $this->_XML);
-        $this->assertSelectCount('types complexType[name=ArrayOfMockUsers] element[name=mockUser]', 1, $this->_XML);
     }
 
     /**

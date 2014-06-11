@@ -40,7 +40,6 @@ class SimpleSoapServer
      */
     public function getNameForUsers($names)
     {
-        file_put_contents('/tmp/aaa', print_r($names, true));
         return 'User names: ' . implode(', ', $names);
     }
 

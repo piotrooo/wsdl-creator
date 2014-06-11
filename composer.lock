@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9fe195f4c60ab7c4a792d638809c9a6e",
+    "hash": "b5b8a7a278b69908efaa662070f58185",
     "packages": [
 
     ],
@@ -88,7 +88,7 @@
                     "homepage": "https://github.com/guzzle/guzzle/contributors"
                 }
             ],
-            "description": "Guzzle is a PHP HTTP client library and framework for building RESTful web service clients",
+            "description": "Guzzle is a PHP HTTP client library and framework for building RESTful web service Clients",
             "homepage": "http://guzzlephp.org/",
             "keywords": [
                 "client",
@@ -913,17 +913,17 @@
         },
         {
             "name": "symfony/console",
-            "version": "dev-master",
+            "version": "v2.5.0",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "402f7d86b1073498812cfa5466132aa190183575"
+                "reference": "ef4ca73b0b3a10cbac653d3ca482d0cdd4502b2c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/402f7d86b1073498812cfa5466132aa190183575",
-                "reference": "402f7d86b1073498812cfa5466132aa190183575",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/ef4ca73b0b3a10cbac653d3ca482d0cdd4502b2c",
+                "reference": "ef4ca73b0b3a10cbac653d3ca482d0cdd4502b2c",
                 "shasum": ""
             },
             "require": {
@@ -940,7 +940,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.5-dev"
                 }
             },
             "autoload": {
@@ -966,7 +966,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2014-05-23 14:36:49"
+            "time": "2014-05-22 08:54:24"
         },
         {
             "name": "symfony/event-dispatcher",

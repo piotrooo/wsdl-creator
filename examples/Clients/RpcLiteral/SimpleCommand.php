@@ -22,13 +22,17 @@ class SimpleCommand extends InitCommand
             'trace' => true, 'cache_wsdl' => WSDL_CACHE_NONE
         ));
 
+        $this->serviceInfo('Client Simple - rpc/literal');
+
+        $this->renderMethodsTable();
+
         $response = $this->soapClient->getNameWithAge('john', 5);
-        $this->_method('getNameWithAge', $response);
+        $this->method('getNameWithAge', $response);
 
         $response = $this->soapClient->getNameForUsers(array('john', 'billy', 'peter'));
-        $this->_method('getNameForUser', $response);
+        $this->method('getNameForUser', $response);
 
         $response = $this->soapClient->countTo(5);
-        $this->_method('countTo', $response);
+        $this->method('countTo', $response);
     }
 }
