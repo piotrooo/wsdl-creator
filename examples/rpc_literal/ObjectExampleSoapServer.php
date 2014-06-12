@@ -68,6 +68,7 @@ class ObjectSoapServer
      */
     public function namesForId($namesInfo)
     {
+        file_put_contents('/tmp/aaa', print_r($namesInfo, true));
         return '[#' . $namesInfo->id . '] Names: ' . implode(', ', $namesInfo->names);
     }
 
@@ -92,10 +93,10 @@ class ObjectSoapServer
     public function getListOfAgentsWithId()
     {
         $obj = new stdClass();
-        $obj->agent[0] = new Agent();
-        $obj->agent[0]->name = 'agent1';
-        $obj->agent[1] = new Agent();
-        $obj->agent[1]->name = 'agent2';
+        $obj->agents[0] = new Agent();
+        $obj->agents[0]->name = 'agent1';
+        $obj->agents[1] = new Agent();
+        $obj->agents[1]->name = 'agent2';
         $obj->id = '555';
         return $obj;
     }

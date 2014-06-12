@@ -3,6 +3,8 @@ use WSDL\WSDLCreator;
 
 require_once '../../vendor/autoload.php';
 
+ini_set("soap.wsdl_cache_enabled", 0);
+
 $wsdl = new WSDLCreator('SimpleSoapServer', 'http://localhost/wsdl-creator/examples/rpc_literal/SimpleExampleSoapServer.php');
 $wsdl->setNamespace("http://foo.bar/");
 

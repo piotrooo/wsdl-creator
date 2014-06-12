@@ -27,12 +27,12 @@ class SimpleCommand extends InitCommand
         $this->renderMethodsTable();
 
         $response = $this->soapClient->getNameWithAge('john', 5);
-        $this->method('getNameWithAge', $response);
+        $this->method('getNameWithAge', array('john', 5), $response);
 
         $response = $this->soapClient->getNameForUsers(array('john', 'billy', 'peter'));
-        $this->method('getNameForUser', $response);
+        $this->method('getNameForUser', array(array('john', 'billy', 'peter')), $response);
 
         $response = $this->soapClient->countTo(5);
-        $this->method('countTo', $response);
+        $this->method('countTo', array(5), $response);
     }
 }

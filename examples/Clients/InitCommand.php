@@ -18,12 +18,26 @@ class InitCommand extends Command
      */
     protected $soapClient;
 
-    protected function method($method, $response)
+    public function __construct()
+    {
+        parent::__construct();
+        ini_set("soap.wsdl_cache_enabled", 0);
+    }
+
+    protected function method($method, $requestParams, $response)
     {
         $this->separator();
 
         $this->output->writeln('Method <info>' . $method . '</info>:');
         $this->output->writeln('');
+
+        $this->output->writeln('<comment>Request params:</comment>');
+        $output = $this->output;
+        array_walk($requestParams, function ($param, $key) use ($output) {
+            $output->writeln('Param ' . ($key + 1) . ':');
+            var_dump($param);
+            $output->writeln('');
+        });
 
         $this->output->writeln('<comment>Response:</comment>');
         print_r($response);

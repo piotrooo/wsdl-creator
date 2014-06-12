@@ -31,22 +31,22 @@ class ObjectCommand extends InitCommand
         $user->name = 'john';
         $user->age = 32;
         $response = $this->soapClient->userInfo($user);
-        $this->method('userInfo', $response);
+        $this->method('userInfo', array($user), $response);
 
         $response = $this->soapClient->getAgentWithId('peter', 999444);
-        $this->method('getAgentWithId', $response);
+        $this->method('getAgentWithId', array('peter', 999444), $response);
 
         $namesInfo = new stdClass();
         $namesInfo->names = array('billy', 'clark');
         $namesInfo->id = 333;
         $response = $this->soapClient->namesForId($namesInfo);
-        $this->method('namesForId', $response);
+        $this->method('namesForId', array($namesInfo), $response);
 
         $response = $this->soapClient->getCompanies();
-        $this->method('getCompanies', $response);
+        $this->method('getCompanies', array(), $response);
 
-//        $response = $this->soapClient->getListOfAgentsWithId();
-//        $this->_method('getListOfAgentsWithId', '$this->soapClient->getListOfAgentsWithId()', $response);
+        $response = $this->soapClient->getListOfAgentsWithId();
+        $this->method('getListOfAgentsWithId', array(), $response);
 
         $payments[0] = new stdClass();
         $payments[0]->payment = array(1.21, 3.21, 100.60);
@@ -55,12 +55,12 @@ class ObjectCommand extends InitCommand
         $payments[1]->payment = array(120.60);
         $payments[1]->user = 'peter';
         $response = $this->soapClient->setPayment($payments);
-        $this->method('setPayment', $response);
+        $this->method('setPayment', array($payments), $response);
 
         $response = $this->soapClient->getAgentsWithPayment();
-        $this->method('getAgentsWithPayment', $response);
+        $this->method('getAgentsWithPayment', array(), $response);
 
         $response = $this->soapClient->getEmployeesWithAgents();
-        $this->method('getEmployeesWithAgents', $response);
+        $this->method('getEmployeesWithAgents', array(), $response);
     }
 }
