@@ -1,7 +1,7 @@
 <?php
 use WSDL\WSDLCreator;
 
-require_once '../vendor/autoload.php';
+require_once '../../vendor/autoload.php';
 
 $wsdl = new WSDLCreator('WrapperSoapServer', 'http://localhost/wsdl-creator/examples/WrapperExampleSoapServer.php');
 $wsdl->setNamespace("http://foo.bar/");
