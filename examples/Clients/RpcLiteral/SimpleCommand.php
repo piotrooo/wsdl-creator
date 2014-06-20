@@ -10,7 +10,7 @@ class SimpleCommand extends InitCommand
 {
     protected function configure()
     {
-        $this->setName('clients:rpc_literal_simple');
+        $this->setName('rpc_literal:simple');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

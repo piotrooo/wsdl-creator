@@ -1,5 +1,5 @@
 <?php
-namespace Clients\RpcLiteral;
+namespace Clients\RpcEncoded;
 
 use Clients\InitCommand;
 use SoapClient;
@@ -11,19 +11,19 @@ class ObjectCommand extends InitCommand
 {
     protected function configure()
     {
-        $this->setName('rpc_literal:object');
+        $this->setName('rpc_encoded:object');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->output = $output;
 
-        $this->soapClient = new SoapClient('http://localhost/wsdl-creator/examples/rpc_literal/ObjectExampleSoapServer.php?wsdl', array(
-            'uri' => "http://foo.bar/", 'location' => 'http://localhost/wsdl-creator/examples/rpc_literal/ObjectExampleSoapServer.php',
+        $this->soapClient = new SoapClient('http://localhost/wsdl-creator/examples/rpc_encoded/ObjectExampleSoapServer.php?wsdl', array(
+            'uri' => "http://foo.bar/", 'location' => 'http://localhost/wsdl-creator/examples/rpc_encoded/ObjectExampleSoapServer.php',
             'trace' => true, 'cache_wsdl' => WSDL_CACHE_NONE
         ));
 
-        $this->serviceInfo('Client Object - rpc/literal');
+        $this->serviceInfo('Client Object - rpc/encoded');
 
         $this->renderMethodsTable();
 

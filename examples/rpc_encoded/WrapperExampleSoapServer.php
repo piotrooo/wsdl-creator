@@ -1,10 +1,11 @@
 <?php
 use WSDL\WSDLCreator;
+use WSDL\XML\Styles\RpcEncoded;
 
 require_once '../../vendor/autoload.php';
 
-$wsdl = new WSDLCreator('WrapperSoapServer', 'http://localhost/wsdl-creator/examples/rpc_literal/WrapperExampleSoapServer.php');
-$wsdl->setNamespace("http://foo.bar/");
+$wsdl = new WSDLCreator('WrapperSoapServer', 'http://localhost/wsdl-creator/examples/rpc_encoded/WrapperExampleSoapServer.php');
+$wsdl->setNamespace("http://foo.bar/")->setBindingStyle(new RpcEncoded());
 
 if (isset($_GET['wsdl'])) {
     $wsdl->renderWSDL();
@@ -13,11 +14,11 @@ if (isset($_GET['wsdl'])) {
 
 $wsdl->renderWSDLService();
 
-$server = new SoapServer('http://localhost/wsdl-creator/examples/rpc_literal/WrapperExampleSoapServer.php?wsdl', array(
+$server = new SoapServer('http://localhost/wsdl-creator/examples/rpc_encoded/WrapperExampleSoapServer.php?wsdl', array(
     'uri' => $wsdl->getNamespaceWithSanitizedClass(),
     'location' => $wsdl->getLocation(),
     'style' => SOAP_RPC,
-    'use' => SOAP_LITERAL
+    'use' => SOAP_ENCODED
 ));
 $server->setClass('WrapperSoapServer');
 $server->handle();

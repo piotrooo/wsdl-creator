@@ -1,5 +1,5 @@
 <?php
-namespace Clients\RpcLiteral;
+namespace Clients\RpcEncoded;
 
 use Clients\InitCommand;
 use SoapClient;
@@ -11,15 +11,15 @@ class WrapperCommand extends InitCommand
 {
     protected function configure()
     {
-        $this->setName('rpc_literal:wrapper');
+        $this->setName('rpc_encoded:wrapper');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->output = $output;
 
-        $this->soapClient = new SoapClient('http://localhost/wsdl-creator/examples/rpc_literal/WrapperExampleSoapServer.php?wsdl', array(
-            'uri' => "http://foo.bar/", 'location' => 'http://localhost/wsdl-creator/examples/rpc_literal/WrapperExampleSoapServer.php',
+        $this->soapClient = new SoapClient('http://localhost/wsdl-creator/examples/rpc_encoded/WrapperExampleSoapServer.php?wsdl', array(
+            'uri' => "http://foo.bar/", 'location' => 'http://localhost/wsdl-creator/examples/rpc_encoded/WrapperExampleSoapServer.php',
             'trace' => true, 'cache_wsdl' => WSDL_CACHE_NONE
         ));
 
