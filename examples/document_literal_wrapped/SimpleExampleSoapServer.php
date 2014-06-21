@@ -1,0 +1,63 @@
+<?php
+use WSDL\DocumentLiteralWrapper;
+use WSDL\WSDLCreator;
+use WSDL\XML\Styles\DocumentLiteralWrapped;
+
+require_once '../../vendor/autoload.php';
+
+ini_set("soap.wsdl_cache_enabled", 0);
+
+$wsdl = new WSDLCreator('SimpleSoapServer', 'http://localhost/wsdl-creator/examples/document_literal_wrapped/SimpleExampleSoapServer.php');
+$wsdl->setNamespace("http://foo.bar/")->setBindingStyle(new DocumentLiteralWrapped());
+
+if (isset($_GET['wsdl'])) {
+    $wsdl->renderWSDL();
+    exit;
+}
+
+$wsdl->renderWSDLService();
+
+$server = new SoapServer('http://localhost/wsdl-creator/examples/document_literal_wrapped/SimpleExampleSoapServer.php?wsdl', array(
+    'uri' => $wsdl->getNamespaceWithSanitizedClass(),
+    'location' => $wsdl->getLocation(),
+    'style' => SOAP_DOCUMENT,
+    'use' => SOAP_LITERAL, 'features' => SOAP_SINGLE_ELEMENT_ARRAYS
+));
+$server->setObject(new DocumentLiteralWrapper(new SimpleSoapServer()));
+$server->handle();
+
+class SimpleSoapServer
+{
+    /**
+     * @param string $name
+     * @param int $age
+     * @return string $nameWithAge
+     */
+    public function getNameWithAge($params)
+    {
+        return 'Your name is: ' . $params->name . ' and you have ' . $params->age . ' years old';
+    }
+
+    /**
+     * @param string[] $names
+     * @return string $userNames
+     */
+    public function getNameForUsers($params)
+    {
+        file_put_contents('/tmp/aaa', print_r($params, true));
+        return 'User names: ' . implode(', ', $params->names->name);
+    }
+
+    /**
+     * @param int $max
+     * @return string[] $count
+     */
+    public function countTo($max)
+    {
+        $array = array();
+        for ($i = 0; $i < $max; $i++) {
+            $array[] = 'Number: ' . ($i + 1);
+        }
+        return $array;
+    }
+}

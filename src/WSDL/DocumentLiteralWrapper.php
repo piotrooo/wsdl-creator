@@ -10,7 +10,6 @@ use WSDL\Parser\MethodParser;
  * Provide a wrapper for
  * Provider helper class handlers serving wrapped document/literal method can
  * extend to automatically wrap the response in an appropriate wrapper
- *
  */
 class DocumentLiteralWrapper
 {
@@ -24,7 +23,7 @@ class DocumentLiteralWrapper
     public function __call($method, $args)
     {
         if (!method_exists($this->_obj, $method)) {
-            throw new BadMethodCallException('unknown method [' . $method . ']');
+            throw new BadMethodCallException('Unknown method [' . $method . ']');
         }
 
         $return = call_user_func_array(array($this->_obj, $method), $args);
