@@ -70,7 +70,7 @@ class ObjectSoapServer
      */
     public function namesForId($namesInfo)
     {
-        file_put_contents('/tmp/aaa', print_r($namesInfo, true));
+        //FIXME incorrect $names array
         return '[#' . $namesInfo->id . '] Names: ' . implode(', ', $namesInfo->names);
     }
 
@@ -79,6 +79,7 @@ class ObjectSoapServer
      */
     public function getCompanies()
     {
+        //FIXME incorrect response structure
         $companies = array();
         $companies[0] = new stdClass();
         $companies[0]->name = 'Example1';
@@ -94,6 +95,7 @@ class ObjectSoapServer
      */
     public function getListOfAgentsWithId()
     {
+        //FIXME incorrect response structure
         $obj = new stdClass();
         $obj->agents[0] = new Agent();
         $obj->agents[0]->name = 'agent1';
@@ -109,6 +111,7 @@ class ObjectSoapServer
      */
     public function setPayment($payments)
     {
+        //FIXME incorrect response structure
         $paymentsUsers = array();
         foreach ($payments as $i => $payment) {
             $paymentsUsers[$i] = new stdClass();
@@ -123,6 +126,7 @@ class ObjectSoapServer
      */
     public function getAgentsWithPayment()
     {
+        //FIXME incorrect response structure
         $obj = array();
         $obj[0] = new stdClass();
         $obj[0]->agent = new Agent();
@@ -140,17 +144,18 @@ class ObjectSoapServer
      */
     public function getEmployeesWithAgents()
     {
+        //FIXME incorrect response structure
         $obj = array();
         $obj[0] = new stdClass();
-        $obj[0]->agent[0] = new Agent();
-        $obj[0]->agent[0]->name = 'agent1';
-        $obj[0]->agent[1] = new Agent();
-        $obj[0]->agent[1]->name = 'agent2';
+        $obj[0]->agents[0] = new Agent();
+        $obj[0]->agents[0]->name = 'agent1';
+        $obj[0]->agents[1] = new Agent();
+        $obj[0]->agents[1]->name = 'agent2';
         $obj[1] = new stdClass();
-        $obj[1]->agent[0] = new Agent();
-        $obj[1]->agent[0]->name = 'agent3';
-        $obj[1]->agent[1] = new Agent();
-        $obj[1]->agent[1]->name = 'agent4';
+        $obj[1]->agents[0] = new Agent();
+        $obj[1]->agents[0]->name = 'agent3';
+        $obj[1]->agents[1] = new Agent();
+        $obj[1]->agents[1]->name = 'agent4';
         return $obj;
     }
 }

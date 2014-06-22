@@ -44,6 +44,7 @@ class SimpleSoapServer
      */
     public function getNameForUsers($names)
     {
+        //FIXME correct array of $names
         return 'User names: ' . implode(', ', $names);
     }
 
@@ -53,6 +54,7 @@ class SimpleSoapServer
      */
     public function countTo($max)
     {
+        //FIXME incorrect structure of response
         $array = array();
         for ($i = 0; $i < $max; $i++) {
             $array[] = 'Number: ' . ($i + 1);

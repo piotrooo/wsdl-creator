@@ -69,7 +69,6 @@ class ObjectSoapServer
      */
     public function namesForId($namesInfo)
     {
-        file_put_contents('/tmp/aaa', print_r($namesInfo, true));
         return '[#' . $namesInfo->id . '] Names: ' . implode(', ', $namesInfo->names);
     }
 
@@ -139,6 +138,7 @@ class ObjectSoapServer
      */
     public function getEmployeesWithAgents()
     {
+        //FIXME getting correct $employeesList
         $obj = array();
         $obj[0] = new stdClass();
         $obj[0]->agent[0] = new Agent();

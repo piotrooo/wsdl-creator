@@ -127,7 +127,7 @@ class XMLGenerator
             }
 
             $typeReturning = $this->_bindingStyle->typeReturning($method);
-            $this->_generateComplexType($typeReturning, $schemaElement, true);
+            $this->_generateComplexType($typeReturning, $schemaElement);
         }
 
         $typesElement->appendChild($schemaElement);
@@ -143,10 +143,10 @@ class XMLGenerator
         }
     }
 
-    private function _generateComplexType($parameter, $schemaElement, $forReturning = false)
+    private function _generateComplexType($parameter, $schemaElement)
     {
         if ($parameter instanceof TypesComplex) {
-            if ($forReturning && !$parameter instanceof DocumentLiteralWrapped) {
+            if (!$this->_bindingStyle instanceof DocumentLiteralWrapped) {
                 $this->_generateArray($parameter, $schemaElement);
             } else {
                 $this->_generateTypedArray($parameter, $schemaElement);

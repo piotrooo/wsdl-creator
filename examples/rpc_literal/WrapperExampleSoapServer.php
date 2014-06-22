@@ -99,6 +99,7 @@ class WrapperSoapServer
      */
     public function getEmployeesDepartments($employeesList)
     {
+        //FIXME getting correct $employeesList
         $names = array();
         foreach ($employeesList as $employee) {
             $names[] = $employee->department;
