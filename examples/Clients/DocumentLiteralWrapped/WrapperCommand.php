@@ -31,11 +31,15 @@ class WrapperCommand extends InitCommand
         $user->name = 'john';
         $user->age = 31;
         $user->payment = 123.40;
-        $response = $this->soapClient->getUserString($user, 333);
-        $this->method('getUserString', array($user, 333), $response);
+        $response = $this->soapClient->getUserString(array('user' => $user, 'id' => 333));
+        $this->method('getUserString', array(array('user' => $user, 'id' => 333)), $response);
 
-        $response = $this->soapClient->getUser('peter', 22, 32.02);
-        $this->method('getUser', array('peter', 22, 32.02), $response);
+        $params = new stdClass();
+        $params->name = 'peter';
+        $params->age = 22;
+        $params->payment = 32.02;
+        $response = $this->soapClient->getUser($params);
+        $this->method('getUser', array($params), $response);
 
         $response = $this->soapClient->getEmployees();
         $this->method('getEmployees', array(), $response);
@@ -46,7 +50,7 @@ class WrapperCommand extends InitCommand
         $employees[1] = new stdClass();
         $employees[1]->id = 2;
         $employees[1]->department = 'Logistic';
-        $response = $this->soapClient->getEmployeesDepartments($employees);
-        $this->method('getEmployeesDepartments', array($employees), $response);
+        $response = $this->soapClient->getEmployeesDepartments(array('employeesList' => $employees));
+        $this->method('getEmployeesDepartments', array(array('employeesList' => $employees)), $response);
     }
 }

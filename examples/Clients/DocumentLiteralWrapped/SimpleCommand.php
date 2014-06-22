@@ -36,7 +36,9 @@ class SimpleCommand extends InitCommand
         $response = $this->soapClient->getNameForUsers($params);
         $this->method('getNameForUser', array($params), $response);
 
-        $response = $this->soapClient->countTo(5);
-        $this->method('countTo', array(5), $response);
+        $params = new stdClass();
+        $params->max = 5;
+        $response = $this->soapClient->countTo($params);
+        $this->method('countTo', array($params), $response);
     }
 }

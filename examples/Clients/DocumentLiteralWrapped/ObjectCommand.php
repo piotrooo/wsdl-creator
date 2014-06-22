@@ -30,17 +30,20 @@ class ObjectCommand extends InitCommand
         $user = new stdClass();
         $user->name = 'john';
         $user->age = 32;
-        $response = $this->soapClient->userInfo($user);
-        $this->method('userInfo', array($user), $response);
+        $response = $this->soapClient->userInfo(array('info' => $user));
+        $this->method('userInfo', array(array('info' => $user)), $response);
 
-        $response = $this->soapClient->getAgentWithId('peter', 999444);
-        $this->method('getAgentWithId', array('peter', 999444), $response);
+        $params = new stdClass();
+        $params->name = 'peter';
+        $params->number = 999444;
+        $response = $this->soapClient->getAgentWithId($params);
+        $this->method('getAgentWithId', array($params), $response);
 
         $namesInfo = new stdClass();
         $namesInfo->names = array('billy', 'clark');
         $namesInfo->id = 333;
-        $response = $this->soapClient->namesForId($namesInfo);
-        $this->method('namesForId', array($namesInfo), $response);
+        $response = $this->soapClient->namesForId(array('namesInfo' => $namesInfo));
+        $this->method('namesForId', array(array('namesInfo' => $namesInfo)), $response);
 
         $response = $this->soapClient->getCompanies();
         $this->method('getCompanies', array(), $response);
@@ -54,8 +57,8 @@ class ObjectCommand extends InitCommand
         $payments[1] = new stdClass();
         $payments[1]->payment = array(120.60);
         $payments[1]->user = 'peter';
-        $response = $this->soapClient->setPayment($payments);
-        $this->method('setPayment', array($payments), $response);
+        $response = $this->soapClient->setPayment(array('payments' => $payments));
+        $this->method('setPayment', array(array('payments' => $payments)), $response);
 
         $response = $this->soapClient->getAgentsWithPayment();
         $this->method('getAgentsWithPayment', array(), $response);
