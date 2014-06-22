@@ -32,7 +32,6 @@ class DocumentLiteralWrapper
         $parameters = $parsedMethod->parameters();
         $returning = $parsedMethod->returning();
 
-        file_put_contents('/tmp/aaa', print_r($args, true));
         $args = $this->_parseArgs($args, $parameters);
         $return = call_user_func_array(array($this->_obj, $method), $args);
 

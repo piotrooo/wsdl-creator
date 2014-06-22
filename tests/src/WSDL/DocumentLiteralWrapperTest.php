@@ -4,11 +4,14 @@ use WSDL\DocumentLiteralWrapper;
 
 class DocumentLiteralWrapperTest extends PHPUnit_Framework_TestCase
 {
+    private $_handler;
+    private $_unwrapped;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
-        $this->handler = new DocumentLiteralWrapper(new MockClass());
-        $this->unwrapped = new MockClass();
+        $this->_handler = new DocumentLiteralWrapper(new MockClass());
+        $this->_unwrapped = new MockClass();
     }
 
     /**
@@ -16,10 +19,12 @@ class DocumentLiteralWrapperTest extends PHPUnit_Framework_TestCase
      */
     public function shouldWrapReturn()
     {
-        $result = $this->handler->arrayOfMockUser();
+        //when
+        $result = $this->_handler->arrayOfMockUser();
 
+        //then
         $this->assertTrue(isset($result->mockUsers));
-        $this->assertEquals($result->mockUsers, $this->unwrapped->arrayOfMockUser());
+        $this->assertEquals($result->mockUsers, $this->_unwrapped->arrayOfMockUser());
     }
 
     /**
@@ -27,17 +32,30 @@ class DocumentLiteralWrapperTest extends PHPUnit_Framework_TestCase
      */
     public function shouldNotWrapReturn()
     {
-        $result = $this->handler->sum(1, 1);
+        //when 1
+        $params = new stdClass();
+        $params->a = 1;
+        $params->b = 1;
+        $result = $this->_handler->sum($params);
 
+        //then 1
         $this->assertFalse(is_object($result));
         $this->assertEquals(2, $result);
 
-        $result = $this->handler->noReturnFunction(1);
+        //when 2
+        $params = new stdClass();
+        $params->a = 1;
+        $result = $this->_handler->noReturnFunction($params);
 
+        //then 2
         $this->assertNull($result);
 
-        $result = $this->handler->voidReturnFunction(1);
+        //when 3
+        $params = new stdClass();
+        $params->a = 1;
+        $result = $this->_handler->voidReturnFunction($params);
 
+        //then 3
         $this->assertNull($result);
     }
 }
