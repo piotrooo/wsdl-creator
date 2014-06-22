@@ -33,19 +33,18 @@ class SimpleSoapServer
      * @param int $age
      * @return string $nameWithAge
      */
-    public function getNameWithAge($params)
+    public function getNameWithAge($name, $age)
     {
-        return 'Your name is: ' . $params->name . ' and you have ' . $params->age . ' years old';
+        return 'Your name is: ' . $name . ' and you have ' . $age . ' years old';
     }
 
     /**
      * @param string[] $names
      * @return string $userNames
      */
-    public function getNameForUsers($params)
+    public function getNameForUsers($names)
     {
-        file_put_contents('/tmp/aaa', print_r($params, true));
-        return 'User names: ' . implode(', ', $params->names->name);
+        return 'User names: ' . implode(', ', $names);
     }
 
     /**
