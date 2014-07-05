@@ -8,7 +8,7 @@ namespace WSDL;
 
 use Exception;
 use WSDL\Parser\ClassParser;
-use WSDL\Service\NewService;
+use WSDL\Service\Service;
 use WSDL\Utilities\Strings;
 use WSDL\XML\Styles\RpcLiteral;
 use WSDL\XML\Styles\Style;
@@ -88,7 +88,7 @@ class WSDLCreator
     {
         $headers = apache_request_headers();
         if (empty($headers['Content-Type']) || !preg_match('#xml#i', $headers['Content-Type'])) {
-            $newService = new NewService($this->_location, $this->getWsdlLocation(), $this->_classParser->getMethods());
+            $newService = new Service($this->_location, $this->getWsdlLocation(), $this->_classParser->getMethods());
             $newService->render($this->_class, $this->getNamespaceWithSanitizedClass());
         }
     }

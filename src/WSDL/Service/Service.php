@@ -1,4 +1,9 @@
 <?php
+/**
+ * Service
+ *
+ * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
+ */
 namespace WSDL\Service;
 
 use SoapClient;
@@ -7,7 +12,7 @@ use WSDL\Parser\MethodParser;
 use WSDL\Types\Arrays;
 use WSDL\Types\Simple;
 
-class NewService
+class Service
 {
     public $template;
 

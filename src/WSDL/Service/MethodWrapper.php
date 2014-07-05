@@ -1,5 +1,12 @@
 <?php
+/**
+ * MethodWrapper
+ *
+ * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
+ */
 namespace WSDL\Service;
+
+use DOMDocument;
 
 class MethodWrapper
 {
@@ -18,7 +25,7 @@ class MethodWrapper
 
     public function getSampleRequest()
     {
-        $DOMDocument = new \DOMDocument();
+        $DOMDocument = new DOMDocument();
         $DOMDocument->loadXML($this->sampleRequest);
         $DOMDocument->formatOutput = true;
         return $DOMDocument->saveXML();
