@@ -7,7 +7,6 @@
 namespace WSDL\Parser;
 
 use WSDL\Types\Type;
-use WSDL\XML\SOAPGenerator;
 
 class MethodParser
 {
@@ -70,10 +69,5 @@ class MethodParser
     {
         $this->returning();
         return $this->_rawReturn;
-    }
-
-    public function getMethodSampleRequest($url)
-    {
-        return new SOAPGenerator($this->parameters(), $this->getName(), $url);
     }
 }
