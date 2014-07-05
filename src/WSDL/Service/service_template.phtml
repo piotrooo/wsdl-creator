@@ -72,37 +72,39 @@
 <body>
 <div id="root">
     <div id="header">
-        <?php echo $this->template->serviceName ?> Service (<?php echo $this->template->serviceUrl ?>)
+        <?php echo $this->template->serviceName ?> Service (<?php echo $this->template->serviceNamespace ?>)
     </div>
     <div id="content">
         <?php foreach ($this->template->methods as $method): ?>
             <div class="method">
-                <p class="name"><?php echo $method->getName() ?></p>
+                <p class="name"><?php echo $method->name ?></p>
 
                 <div class="method-content">
                     <div class="parameters">
-                        <p>Parameters:</p>
+                        <?php if ($method->parameters): ?>
+                            <p>Parameters:</p>
 
-                        <div class="border">
-                            <ul>
-                                <?php foreach ($method->getRawParameters() as $parameter): ?>
-                                    <li><?php echo $parameter ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
+                            <div class="border">
+                                <ul>
+                                    <?php foreach ($method->parameters as $parameter): ?>
+                                        <li><?php echo $parameter ?></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
                     </div>
                     <div class="return">
                         <p>Return:</p>
 
                         <div class="border">
-                            <p><?php echo $method->getRawReturn() ?></p>
+                            <p><?php echo $method->return ?></p>
                         </div>
                     </div>
                     <div class="request">
                         <p>Request:</p>
 
                         <div class="border">
-                            <pre><?php echo htmlspecialchars($method->getMethodSampleRequest($this->template->serviceUrl)->getXML()) ?></pre>
+                            <pre><?php echo htmlspecialchars($method->getSampleRequest()) ?></pre>
                         </div>
                     </div>
                 </div>

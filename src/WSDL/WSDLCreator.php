@@ -8,7 +8,7 @@ namespace WSDL;
 
 use Exception;
 use WSDL\Parser\ClassParser;
-use WSDL\Service\Service;
+use WSDL\Service\NewService;
 use WSDL\Utilities\Strings;
 use WSDL\XML\Styles\RpcLiteral;
 use WSDL\XML\Styles\Style;
@@ -27,11 +27,16 @@ class WSDLCreator
      * @var Style
      */
     private $_bindingStyle;
+    /**
+     * @var string
+     */
+    private $_locationSuffix;
 
-    public function __construct($class, $location)
+    public function __construct($class, $location, $locationSuffix = 'wsdl')
     {
         $this->_class = $class;
         $this->_location = $location;
+        $this->_locationSuffix = $locationSuffix;
         $this->_bindingStyle = new RpcLiteral();
         $this->_parseClass();
     }
@@ -83,13 +88,18 @@ class WSDLCreator
     {
         $headers = apache_request_headers();
         if (empty($headers['Content-Type']) || !preg_match('#xml#i', $headers['Content-Type'])) {
-            $service = new Service($this->_class, $this->_classParser->getMethods(), $this->_namespace);
-            $service->render();
+            $newService = new NewService($this->_location, $this->getWsdlLocation(), $this->_classParser->getMethods());
+            $newService->render($this->_class, $this->getNamespaceWithSanitizedClass());
         }
     }
 
     public function getLocation()
     {
         return $this->_location;
+    }
+
+    public function getWsdlLocation()
+    {
+        return $this->_location . '?' . $this->_locationSuffix;
     }
 }

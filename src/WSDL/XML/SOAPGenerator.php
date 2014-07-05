@@ -27,6 +27,7 @@ class SOAPGenerator
 
     public function getXML()
     {
+
         $DOMDocument = new DOMDocument();
         $DOMDocument->formatOutput = true;
         $DOMDocument->preserveWhiteSpace = false;
