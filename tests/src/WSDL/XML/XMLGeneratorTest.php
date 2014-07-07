@@ -183,7 +183,7 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
     public function shouldRenderXML()
     {
         //when
-        $this->expectOutputRegex('/definitions.*message.*portType.*binding.*service/');
+        $this->expectOutputRegex('/definitions.*message.*portType.*binding.*service/is');
         $this->_XMLGenerator->render();
     }
 
@@ -249,7 +249,7 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
         $wsdl = $xml->getGeneratedXML();
 
         //then
-        $this->assertRegExp('/MocksMockUserWrapper.*name="id" type="xsd:int".*name="name" type="xsd:string".*name="age" type="xsd:int"/', $wsdl);
+        $this->assertRegExp('/MocksMockUserWrapper.*name="id" type="xsd:int".*name="name" type="xsd:string".*name="age" type="xsd:int"/is', $wsdl);
     }
 
     /**
