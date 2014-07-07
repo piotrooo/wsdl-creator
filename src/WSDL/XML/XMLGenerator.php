@@ -54,6 +54,7 @@ class XMLGenerator
         $this->_targetNamespaceTypes = $this->_targetNamespace . '/types';
 
         $this->_DOMDocument = new DOMDocument("1.0", "UTF-8");
+        $this->_DOMDocument->formatOutput = true;
         $this->_saveXML();
     }
 
