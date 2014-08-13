@@ -209,7 +209,7 @@ class XMLGenerator
         $restrictionElement = $this->createElementWithAttributes('xsd:restriction', array('base' => 'soapenc:Array'));
         $attributeElement = $this->createElementWithAttributes('xsd:attribute', array(
             'ref' => 'soapenc:arrayType',
-            'arrayType' => $type
+            'soap:arrayType' => $type
         ));
         $restrictionElement->appendChild($attributeElement);
         $complexContentElement->appendChild($restrictionElement);
