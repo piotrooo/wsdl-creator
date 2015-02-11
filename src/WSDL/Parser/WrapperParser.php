@@ -50,7 +50,7 @@ class WrapperParser
 
         switch ($strategy) {
             case 'object':
-                $this->_complexTypes[] = Object($type, $name, $this->getComplexTypes());
+                $this->_complexTypes[] = new Object($type, $name, $this->getComplexTypes());
                 break;
             case 'wrapper':
                 $this->_complexTypes[] = $this->_createWrapperObject($type, $name, $docComment);
@@ -80,7 +80,7 @@ class WrapperParser
         if ($type == 'wrapper') {
             $complex = $this->wrapper($type, $docComment)->getComplexTypes();
             $object = new Object($type, $name, $complex);
-        } else if ($this->isComplex($type)) {
+        } elseif ($this->isComplex($type)) {
             $complex = $this->getComplexTypes();
             $object = new Object($type, $name, $complex);
         }

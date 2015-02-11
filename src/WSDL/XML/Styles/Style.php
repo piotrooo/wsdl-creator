@@ -42,10 +42,10 @@ abstract class Style
         if (TypeHelper::isSimple($parameter)) {
             $type = 'type';
             $value = TypeHelper::getXsdType($parameter->getType());
-        } else if (TypeHelper::isArray($parameter)) {
+        } elseif (TypeHelper::isArray($parameter)) {
             $type = 'type';
             $value = 'ns:' . 'ArrayOf' . ucfirst($parameter->getName());
-        } else if (TypeHelper::isObject($parameter)) {
+        } elseif (TypeHelper::isObject($parameter)) {
             $type = 'element';
             $value = 'ns:' . $this->_getObjectName($parameter);
         }
@@ -122,7 +122,7 @@ abstract class Style
     {
         if (TypeHelper::isArray($complexType)) {
             $typesElement->setComplex($this->_generateArray($complexType));
-        } else if ($complexType instanceof Type && !TypeHelper::isSimple($complexType) && $complexType->getComplexType()) {
+        } elseif ($complexType instanceof Type && !TypeHelper::isSimple($complexType) && $complexType->getComplexType()) {
             $typesElement->setComplex($this->_generateComplexType($complexType->getComplexType()));
         }
     }
