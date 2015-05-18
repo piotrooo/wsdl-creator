@@ -8,18 +8,25 @@ namespace WSDL\Parser;
 
 use ReflectionClass;
 use ReflectionMethod;
+use WSDL\Config;
 
 class ClassParser
 {
+    /**
+     * @var Config
+     */
+    private $config;
+
     private $_reflectedClass;
     /**
      * @var MethodParser[]
      */
     private $_methodDocComments = array();
 
-    public function __construct($className)
+    public function __construct(Config $config)
     {
-        $this->_reflectedClass = new ReflectionClass($className);
+        $this->config = $config;
+        $this->_reflectedClass = new ReflectionClass($this->config->getClass());
     }
 
     public function parse()
@@ -46,7 +53,8 @@ class ClassParser
             $method->isPublic() &&
             !$method->isConstructor() &&
             !$method->isDestructor() &&
-            strpos($method->getName(), '__') === false;
+            strpos($method->getName(), '__') === false &&
+            !in_array($method->getName(), $this->config->getIgnoreMethods());
     }
 
     public function getMethods()
