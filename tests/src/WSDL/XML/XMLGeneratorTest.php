@@ -8,9 +8,15 @@ use WSDL\Parser\ClassParser;
 use WSDL\XML\Styles\RpcEncoded;
 use WSDL\XML\Styles\RpcLiteral;
 use WSDL\XML\XMLGenerator;
+use WSDL\Config;
 
 class XMLGeneratorTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Config
+     */
+    private $config;
+
     /**
      * @var XMLGenerator
      */
@@ -25,7 +31,10 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-        $classParser = new ClassParser('\Mocks\MockClass');
+        $this->config = new Config();
+
+        $this->config->setClass('\Mocks\MockClass');
+        $classParser = new ClassParser($this->config);
         $classParser->parse();
 
         XMLGenerator::$alreadyGeneratedComplexTypes = array();
@@ -220,7 +229,8 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
                 'xmlns:ns' => 'http://example.com/mocks/test/mockclassmultiplenamespace/types'
             )
         );
-        $classParser = new ClassParser('\Mocks\Test\MockClassMultipleNamespace');
+        $this->config->setClass('\Mocks\Test\MockClassMultipleNamespace');
+        $classParser = new ClassParser($this->config);
         $classParser->parse();
         XMLGenerator::$alreadyGeneratedComplexTypes = array();
         $xml = new XMLGenerator('\Mocks\Test\MockClassMultipleNamespace', $this->_namespace, $this->_location);
@@ -240,7 +250,8 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
     {
         //given
         XMLGenerator::$alreadyGeneratedComplexTypes = array();
-        $classParser = new ClassParser('\Mocks\MockClass');
+        $this->config->setClass('\Mocks\MockClass');
+        $classParser = new ClassParser($this->config);
         $classParser->parse();
         $xml = new XMLGenerator('\Mocks\MockClass', $this->_namespace, $this->_location);
         $xml->setWSDLMethods($classParser->getMethods())->setBindingStyle(new RpcLiteral())->generate();
@@ -276,7 +287,8 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
     {
         //given
         XMLGenerator::$alreadyGeneratedComplexTypes = array();
-        $classParser = new ClassParser('\Mocks\MockClass');
+        $this->config->setClass('\Mocks\MockClass');
+        $classParser = new ClassParser($this->config);
         $classParser->parse();
         $xml = new XMLGenerator('\Mocks\MockClass', $this->_namespace, $this->_location);
         $xml->setWSDLMethods($classParser->getMethods())->setBindingStyle(new RpcEncoded())->generate();
