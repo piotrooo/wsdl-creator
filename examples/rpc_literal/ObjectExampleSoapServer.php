@@ -37,6 +37,7 @@ class Agent
 class ObjectSoapServer
 {
     /**
+     * @WebMethod
      * @param object $info @string=$name @int=$age
      * @return string $returnInfo
      */
@@ -46,6 +47,7 @@ class ObjectSoapServer
     }
 
     /**
+     * @WebMethod
      * @param string $name
      * @param string $number
      * @return object $agentNameWithId @(wrapper $agent @className=Agent) @int=$id
@@ -63,6 +65,7 @@ class ObjectSoapServer
     }
 
     /**
+     * @WebMethod
      * @param object $namesInfo @string[]=$names @int=$id
      * @return string $namesForId
      */
@@ -72,6 +75,7 @@ class ObjectSoapServer
     }
 
     /**
+     * @WebMethod
      * @return object[] $companies @string=$name @int=$id
      */
     public function getCompanies()
@@ -87,6 +91,7 @@ class ObjectSoapServer
     }
 
     /**
+     * @WebMethod
      * @return object $listOfAgents @(wrapper[] $agents @className=Agent) @int=$id
      */
     public function getListOfAgentsWithId()
@@ -103,6 +108,7 @@ class ObjectSoapServer
     }
 
     /**
+     * @WebMethod
      * @param object[] $payments @float[]=$payment @string=$user
      * @return object[] $paymentsUsers @string=$user @int=$countPayment
      */
@@ -119,6 +125,7 @@ class ObjectSoapServer
     }
 
     /**
+     * @WebMethod
      * @return object[] $agentsWithPayment @(wrapper $agent @className=Agent) @float=$payment
      */
     public function getAgentsWithPayment()
@@ -137,6 +144,7 @@ class ObjectSoapServer
     }
 
     /**
+     * @WebMethod
      * @return object[] $employeesList @(wrapper[] $agents @className=Agent)
      */
     public function getEmployeesWithAgents()

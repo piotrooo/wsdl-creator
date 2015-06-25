@@ -79,6 +79,12 @@ $server->handle();
 
 Now if we try call address `http://localhost/wsdl-creator/ClassName.php?wsdl` you recive `WSDL` document.
 
+Define web service method
+-------------------------
+
+To define is a web service method you must use `@WebMethod` annotation.
+
+
 Simple type
 -----------
 

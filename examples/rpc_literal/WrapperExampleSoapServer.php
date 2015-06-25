@@ -53,6 +53,7 @@ class Employee
 class WrapperSoapServer
 {
     /**
+     * @WebMethod
      * @param wrapper $user @className=User
      * @param int $id
      * @return string $nameWithAge
@@ -63,6 +64,7 @@ class WrapperSoapServer
     }
 
     /**
+     * @WebMethod
      * @param string $name
      * @param string $age
      * @param string $payment
@@ -78,6 +80,7 @@ class WrapperSoapServer
     }
 
     /**
+     * @WebMethod
      * @return wrapper[] $employees @className=Employee
      */
     public function getEmployees()
@@ -94,6 +97,7 @@ class WrapperSoapServer
     }
 
     /**
+     * @WebMethod
      * @param wrapper[] $employeesList @className=Employee
      * @return string $str
      */

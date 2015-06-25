@@ -43,6 +43,7 @@ class ClassParser
     private function _checkCanParseMethod(ReflectionMethod $method)
     {
         return
+            strpos($method->getDocComment(), '@WebMethod') !== false &&
             $method->isPublic() &&
             !$method->isConstructor() &&
             !$method->isDestructor() &&

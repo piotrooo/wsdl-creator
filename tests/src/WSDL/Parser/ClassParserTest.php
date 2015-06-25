@@ -11,7 +11,7 @@ class ClassParserTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldParseOnlyPublicMethods()
+    public function shouldParsePublicMethodsWithWebMethodAnnotation()
     {
         //given
         $classParser = new ClassParser('\Mocks\MockClass');

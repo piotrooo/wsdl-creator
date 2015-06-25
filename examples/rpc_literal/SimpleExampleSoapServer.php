@@ -27,6 +27,7 @@ $server->handle();
 class SimpleSoapServer
 {
     /**
+     * @WebMethod
      * @param string $name
      * @param int $age
      * @return string $nameWithAge
@@ -37,6 +38,7 @@ class SimpleSoapServer
     }
 
     /**
+     * @WebMethod
      * @param string[] $names
      * @return string $userNames
      */
@@ -46,6 +48,7 @@ class SimpleSoapServer
     }
 
     /**
+     * @WebMethod
      * @param int $max
      * @return string[] $count
      */

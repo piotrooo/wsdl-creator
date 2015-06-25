@@ -31,8 +31,13 @@ class MockClass
         file_put_contents('/tmp/logs_soap.log', $message);
     }
 
+    public function getConstValue()
+    {
+        return 2;
+    }
 
     /**
+     * @WebMethod
      * @desc to sum two integers
      * @param int $a
      * @param int $b
@@ -44,6 +49,7 @@ class MockClass
     }
 
     /**
+     * @WebMethod
      * @param object $object1 @string=$name @int=$id
      * @return object $return @string=$new_name @int=$new_id
      */
@@ -56,6 +62,7 @@ class MockClass
     }
 
     /**
+     * @WebMethod
      * @param wrapper $wrap @className=\Mocks\MockUserWrapper
      * @return bool
      */
@@ -65,6 +72,7 @@ class MockClass
     }
 
     /**
+     * @WebMethod
      * @return wrapper[] $mockUsers @className=\Mocks\MockUserWrapper
      */
     public function arrayOfMockUser() {
@@ -86,6 +94,7 @@ class MockClass
     }
 
     /**
+     * @WebMethod
      * noReturnFunction
      *
      * @param int $a
@@ -96,6 +105,7 @@ class MockClass
     }
 
     /**
+     * @WebMethod
      * voidReturnFunction
      *
      * @param int $a
