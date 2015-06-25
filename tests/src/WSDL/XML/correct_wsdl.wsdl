@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="MockClass" targetNamespace="http://example.com/mocks/mockclass"
+             xmlns:tns="http://example.com/mocks/mockclass" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:ns="http://example.com/mocks/mockclass/types">
+    <types>
+        <xsd:schema targetNamespace="http://example.com/mocks/mockclass/types"
+                    xmlns="http://example.com/mocks/mockclass/types">
+            <xsd:complexType name="Object1">
+                <xsd:sequence>
+                    <xsd:element name="name" type="xsd:string"/>
+                    <xsd:element name="id" type="xsd:int"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="Object1" nillable="true" type="ns:Object1"/>
+            <xsd:complexType name="Return">
+                <xsd:sequence>
+                    <xsd:element name="new_name" type="xsd:string"/>
+                    <xsd:element name="new_id" type="xsd:int"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="Return" nillable="true" type="ns:Return"/>
+            <xsd:complexType name="MocksMockUserWrapper">
+                <xsd:sequence>
+                    <xsd:element name="id" type="xsd:int"/>
+                    <xsd:element name="name" type="xsd:string"/>
+                    <xsd:element name="age" type="xsd:int"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="MocksMockUserWrapper" nillable="true" type="ns:MocksMockUserWrapper"/>
+            <xsd:complexType name="ArrayOfMockUsers">
+                <xsd:complexContent>
+                    <xsd:restriction base="soapenc:Array">
+                        <xsd:attribute ref="soapenc:arrayType" soap:arrayType="ns:MocksMockUserWrapper[]"/>
+                    </xsd:restriction>
+                </xsd:complexContent>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+    <message name="sumRequest">
+        <part name="a" type="xsd:int"/>
+        <part name="b" type="xsd:int"/>
+    </message>
+    <message name="sumResponse">
+        <part name="" type="xsd:int"/>
+    </message>
+    <message name="arrayTestRequest">
+        <part name="object1" element="ns:Object1"/>
+    </message>
+    <message name="arrayTestResponse">
+        <part name="return" element="ns:Return"/>
+    </message>
+    <message name="methodWithWrapperRequest">
+        <part name="wrap" element="ns:MocksMockUserWrapper"/>
+    </message>
+    <message name="methodWithWrapperResponse">
+        <part name="" type="xsd:bool"/>
+    </message>
+    <message name="arrayOfMockUserRequest"/>
+    <message name="arrayOfMockUserResponse">
+        <part name="mockUsers" type="ns:ArrayOfMockUsers"/>
+    </message>
+    <message name="noReturnFunctionRequest">
+        <part name="a" type="xsd:int"/>
+    </message>
+    <message name="noReturnFunctionResponse">
+        <part name="" type="xsd:void"/>
+    </message>
+    <message name="voidReturnFunctionRequest">
+        <part name="a" type="xsd:int"/>
+    </message>
+    <message name="voidReturnFunctionResponse">
+        <part name="" type="xsd:void"/>
+    </message>
+    <portType name="MockClassPortType">
+        <operation name="sum">
+            <documentation>to sum two integers</documentation>
+            <input message="tns:sumRequest"/>
+            <output message="tns:sumResponse"/>
+        </operation>
+        <operation name="arrayTest">
+            <input message="tns:arrayTestRequest"/>
+            <output message="tns:arrayTestResponse"/>
+        </operation>
+        <operation name="methodWithWrapper">
+            <input message="tns:methodWithWrapperRequest"/>
+            <output message="tns:methodWithWrapperResponse"/>
+        </operation>
+        <operation name="arrayOfMockUser">
+            <input message="tns:arrayOfMockUserRequest"/>
+            <output message="tns:arrayOfMockUserResponse"/>
+        </operation>
+        <operation name="noReturnFunction">
+            <input message="tns:noReturnFunctionRequest"/>
+            <output message="tns:noReturnFunctionResponse"/>
+        </operation>
+        <operation name="voidReturnFunction">
+            <input message="tns:voidReturnFunctionRequest"/>
+            <output message="tns:voidReturnFunctionResponse"/>
+        </operation>
+    </portType>
+    <binding name="MockClassBinding" type="tns:MockClassPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="sum">
+            <soap:operation soapAction="http://example.com/mocks/mockclass/#sum"/>
+            <input>
+                <soap:body use="literal" namespace="http://example.com/mocks/mockclass"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://example.com/mocks/mockclass"/>
+            </output>
+        </operation>
+        <operation name="arrayTest">
+            <soap:operation soapAction="http://example.com/mocks/mockclass/#arrayTest"/>
+            <input>
+                <soap:body use="literal" namespace="http://example.com/mocks/mockclass"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://example.com/mocks/mockclass"/>
+            </output>
+        </operation>
+        <operation name="methodWithWrapper">
+            <soap:operation soapAction="http://example.com/mocks/mockclass/#methodWithWrapper"/>
+            <input>
+                <soap:body use="literal" namespace="http://example.com/mocks/mockclass"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://example.com/mocks/mockclass"/>
+            </output>
+        </operation>
+        <operation name="arrayOfMockUser">
+            <soap:operation soapAction="http://example.com/mocks/mockclass/#arrayOfMockUser"/>
+            <input>
+                <soap:body use="literal" namespace="http://example.com/mocks/mockclass"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://example.com/mocks/mockclass"/>
+            </output>
+        </operation>
+        <operation name="noReturnFunction">
+            <soap:operation soapAction="http://example.com/mocks/mockclass/#noReturnFunction"/>
+            <input>
+                <soap:body use="literal" namespace="http://example.com/mocks/mockclass"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://example.com/mocks/mockclass"/>
+            </output>
+        </operation>
+        <operation name="voidReturnFunction">
+            <soap:operation soapAction="http://example.com/mocks/mockclass/#voidReturnFunction"/>
+            <input>
+                <soap:body use="literal" namespace="http://example.com/mocks/mockclass"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://example.com/mocks/mockclass"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="MockClassService">
+        <port name="MockClassPort" binding="tns:MockClassBinding">
+            <soap:address location="http://localhost/wsdl-creator/ExampleSoapServer.php"/>
+        </port>
+    </service>
+</definitions>
