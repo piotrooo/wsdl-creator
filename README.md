@@ -34,21 +34,29 @@ require: {
 Configuration
 -------------
 
-To start working with creator you must create new `WSDLCreator` object and define for him:
+To start working with creator you must create new `Config` and do some settings:
 * class to generate `WSDL`
 * `SOAP` server location
 * documnet namespace.
 
 ```php
-$wsdl = new WSDL\WSDLCreator('ClassName', 'http://localhost/wsdl-creator/ClassName.php');
-$wsdl->setNamespace("http://foo.bar/");
+$config = new Config();
+$config->setClass('\Path\To\Soap\Class\Handler')
+    ->setLocation('http://example.com/ClassName.php')
+    ->setNamespace('http://example.com/');
+```
+
+Then:
+
+```php
+$wsdl = new WSDL\WSDLCreator($config);
 ```
 
 `SOAP` server must be created in location specified in `WSDLCreator`.
 
 ```php
 $server = new SoapServer(null, array(
-    'uri' => 'http://localhost/wsdl-creator/ClassName.php'
+    'uri' => 'http://example.com/ClassName.php'
 ));
 $server->setClass('ClassName');
 $server->handle();
@@ -61,23 +69,27 @@ Full configutaion listing:
 ```php
 require_once 'vendor/autoload.php';
 
+use WSDL\Config;
 use WSDL\WSDLCreator;
 
 if (isset($_GET['wsdl'])) {
-    $wsdl = new WSDL\WSDLCreator('ClassName', 'http://localhost/wsdl-creator/ClassName.php');
-    $wsdl->setNamespace("http://foo.bar/");
+    $config = new Config();
+    $config->setClass('\Path\To\Soap\Class\Handler')
+        ->setLocation('http://example.com/ClassName.php')
+        ->setNamespace('http://example.com/');
+    $wsdl = new WSDL\WSDLCreator($config);
     $wsdl->renderWSDL();
     exit;
 }
 
 $server = new SoapServer(null, array(
-    'uri' => 'http://localhost/wsdl-creator/ClassName.php'
+    'uri' => 'http://examplke.com/ClassName.php'
 ));
 $server->setClass('ClassName');
 $server->handle();
 ```
 
-Now if we try call address `http://localhost/wsdl-creator/ClassName.php?wsdl` you recive `WSDL` document.
+Now if we try call address `http://example.com/ClassName.php?wsdl` you recive `WSDL` document.
 
 Define web service method
 -------------------------
@@ -267,9 +279,12 @@ By default, the `WSDLCreator` will generate WSDLs using the rpc/literal binding 
 To specify rpc/encoded or a wrapped document/literal binding style, set the binding style on the `WSDLCreator` object.
 
 ```php
-$wsdl = new WSDL\WSDLCreator('ClassName', 'http://localhost/wsdl-creator/ClassName.php');
-@wsdl->setBindingStyle(new WSDL\XML\Styles\RpcEncoded());
-$wsdl->setNamespace("http://foo.bar/");
+$config = new Config();
+$config->setClass('\Path\To\Soap\Class\Handler')
+    ->setLocation('http://example.com/ClassName.php')
+    ->setNamespace('http://example.com/')
+    ->setBindingStyle(new WSDL\XML\Styles\RpcEncoded());
+$wsdl = new WSDL\WSDLCreator($config);
 ```
 
 When specifying the wrapped document/literal binding style, you can use `WSDL\DocumentLiteralWrapper` to automatically wrap the returning value in an appropriate wrapped object.
@@ -278,19 +293,23 @@ When specifying the wrapped document/literal binding style, you can use `WSDL\Do
 require_once 'vendor/autoload.php';
 
 use WSDL\DocumentLiteralWrapper;
+use WSDL\Config;
 use WSDL\WSDLCreator;
 use WSDL\XML\Styles\DocumentLiteralWrapped;
 
 if (isset($_GET['wsdl'])) {
-    $wsdl = new WSDLCreator('ClassName', 'http://localhost/wsdl-creator/ClassName.php');
-    @wsdl->setBindingStyle(new DocumentLiteralWrapped());
-    $wsdl->setNamespace("http://foo.bar/");
+    $config = new Config();
+    $config->setClass('\Path\To\Soap\Class\Handler')
+        ->setLocation('http://example.com/ClassName.php')
+        ->setNamespace('http://example.com/')
+        ->setBindingStyle(new DocumentLiteralWrapped());
+    $wsdl = new WSDLCreator($config);
     $wsdl->renderWSDL();
     exit;
 }
 
 ini_set('soap.wsdl_cache_enabled', '0');
-$server = new SoapServer('http://localhost/wsdl-creator/ClassName.php?wsdl', array(
+$server = new SoapServer('http://example.com/ClassName.php?wsdl', array(
 	'style' => SOAP_DOCUMENT,
 	'use' => SOAP_LITERAL,
 ));

@@ -4,23 +4,36 @@
  *
  * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
  */
+use WSDL\Config;
 use WSDL\Parser\ClassParser;
 
 class ClassParserTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Config
+     */
+    private $config;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->config = new Config();
+    }
+
     /**
      * @test
      */
     public function shouldParsePublicMethodsWithWebMethodAnnotation()
     {
         //given
-        $classParser = new ClassParser('\Mocks\MockClass');
+        $this->config->setClass('\Mocks\MockClass');
+        $classParser = new ClassParser($this->config);
 
         //when
         $classParser->parse();
 
         //then
-        $this->assertCount(6, $classParser->getMethods());
+        $this->assertCount(7, $classParser->getMethods());
     }
 
     /**
@@ -29,7 +42,25 @@ class ClassParserTest extends PHPUnit_Framework_TestCase
     public function shouldNotParseMagicMethods()
     {
         //given
-        $classParser = new ClassParser('\Mocks\MockClass');
+        $this->config->setClass('\Mocks\MockClass');
+        $classParser = new ClassParser($this->config);
+
+        //when
+        $classParser->parse();
+
+        //then
+        $this->assertCount(7, $classParser->getMethods());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotParseExcludedMethods()
+    {
+        //given
+        $this->config->setClass('\Mocks\MockClass')
+            ->setIgnoreMethods(['setContainer']);
+        $classParser = new ClassParser($this->config);
 
         //when
         $classParser->parse();

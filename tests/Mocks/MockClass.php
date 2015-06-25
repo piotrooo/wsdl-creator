@@ -115,4 +115,12 @@ class MockClass
     {
         $a = $a + 1;
     }
+
+    /**
+     * noReturnFunction
+     *
+     * @param $container
+     */
+    public function setContainer($container)
+    {}
 }
