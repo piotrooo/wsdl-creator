@@ -2,7 +2,7 @@
 /**
  * WrapperParserTest
  *
- * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
+ * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
 use WSDL\Parser\WrapperParser;
 

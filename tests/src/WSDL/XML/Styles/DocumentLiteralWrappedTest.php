@@ -2,7 +2,7 @@
 /**
  * DocumentLiteralWrappedTest
  *
- * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
+ * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
 use Factory\ParameterFactory;
 use WSDL\XML\Styles\DocumentLiteralWrapped;
