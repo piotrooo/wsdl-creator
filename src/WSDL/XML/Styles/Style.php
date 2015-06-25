@@ -23,6 +23,7 @@
  */
 namespace WSDL\XML\Styles;
 
+use Ouzo\Utilities\Inflector;
 use WSDL\Parser\MethodParser;
 use WSDL\Types\Type;
 use WSDL\Utilities\Strings;
@@ -109,7 +110,7 @@ abstract class Style
         $typesComplex
             ->setName('ArrayOf' . ucfirst($parameter->getName()))
             ->setArrayType($type . $this->_getObjectName($parameter) . '[]')
-            ->setArrayTypeName(Strings::depluralize($parameter->getName()));
+            ->setArrayTypeName(Inflector::singularize($parameter->getName()));
 
         if ($parameter->getComplexType()) {
             $typesComplex->setComplex($this->_generateObject($parameter->getComplexType()));

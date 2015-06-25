@@ -4,8 +4,52 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "432da7a997085a3264cb648f25938b8d",
-    "packages": [],
+    "hash": "d49bad07be3a5d72220db850f387d50e",
+    "packages": [
+        {
+            "name": "letsdrink/ouzo-goodies",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/letsdrink/ouzo-goodies.git",
+                "reference": "685f3bbd9066ccf732db70290d3b96b2bedffc69"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/letsdrink/ouzo-goodies/zipball/685f3bbd9066ccf732db70290d3b96b2bedffc69",
+                "reference": "685f3bbd9066ccf732db70290d3b96b2bedffc69",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ouzo\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ouzo developers",
+                    "email": "ouzo-framework@googlegroups.com"
+                }
+            ],
+            "description": "Utility classes, test assertions and mocking framework extracted from Ouzo framework.",
+            "homepage": "http://ouzoframework.org/",
+            "keywords": [
+                "TDD",
+                "asserts",
+                "mock",
+                "php",
+                "test",
+                "utilities",
+                "utils"
+            ],
+            "time": "2015-06-12 08:50:47"
+        }
+    ],
     "packages-dev": [
         {
             "name": "doctrine/instantiator",

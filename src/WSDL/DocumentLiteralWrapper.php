@@ -24,10 +24,11 @@
 namespace WSDL;
 
 use BadMethodCallException;
+use Ouzo\Utilities\Arrays;
+use Ouzo\Utilities\Functions;
 use ReflectionMethod;
 use stdClass;
 use WSDL\Parser\MethodParser;
-use WSDL\Types\Type;
 
 /**
  * Provide a wrapper for
@@ -69,11 +70,9 @@ class DocumentLiteralWrapper
 
     private function _parseArgs($args, $parameters)
     {
-        $args = isset($args[0]) ? $args[0] : new stdClass();
+        $args = Arrays::getValue($args, 0, new stdClass());
         $newArgs = array();
-        $parameterNames = array_map(function (Type $parameter) {
-            return $parameter->getName();
-        }, $parameters);
+        $parameterNames = Arrays::map($parameters, Functions::extract()->getName());
         foreach ($parameterNames as $name) {
             if (isset($args->$name)) {
                 $newArgs[] = $args->$name;

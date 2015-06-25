@@ -23,6 +23,7 @@
  */
 namespace WSDL\Parser;
 
+use Ouzo\Utilities\Arrays as OuzoArrays;
 use WSDL\Types\Arrays;
 use WSDL\Types\Object;
 use WSDL\Types\Simple;
@@ -88,7 +89,7 @@ class ParameterParser
     private function _parseAndSetName()
     {
         preg_match('#\\$(\w+)#', $this->_parameter, $name);
-        $this->_name = isset($name[1]) ? $name[1] : '';
+        $this->_name = OuzoArrays::getValue($name, 1, '');
     }
 
     private function _createWrapperObject()

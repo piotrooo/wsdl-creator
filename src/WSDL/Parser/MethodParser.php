@@ -23,6 +23,7 @@
  */
 namespace WSDL\Parser;
 
+use Ouzo\Utilities\Arrays;
 use WSDL\Types\Type;
 
 /**
@@ -47,7 +48,7 @@ class MethodParser
     {
         preg_match('#@desc (.+)#', $this->_doc, $groupMatches);
         $trimGroupMatches = array_map('trim', $groupMatches);
-        return !empty($trimGroupMatches[1]) ? $trimGroupMatches[1] : '';
+        return Arrays::getValue($trimGroupMatches, 1, '');
     }
 
     /**

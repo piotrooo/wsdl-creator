@@ -23,6 +23,7 @@
  */
 namespace WSDL\Parser;
 
+use Ouzo\Utilities\Strings;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -65,11 +66,11 @@ class ClassParser
     private function _checkCanParseMethod(ReflectionMethod $method)
     {
         return
-            strpos($method->getDocComment(), '@WebMethod') !== false &&
+            Strings::contains($method->getDocComment(), '@WebMethod') &&
             $method->isPublic() &&
             !$method->isConstructor() &&
             !$method->isDestructor() &&
-            strpos($method->getName(), '__') === false;
+            !Strings::contains($method->getName(), '__');
     }
 
     public function getMethods()
