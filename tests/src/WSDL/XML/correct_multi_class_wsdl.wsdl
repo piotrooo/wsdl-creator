@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="MockClassMultipleNamespace" targetNamespace="http://example.com/mocks/test/mockclassmultiplenamespace" xmlns:tns="http://example.com/mocks/test/mockclassmultiplenamespace" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://example.com/mocks/test/mockclassmultiplenamespace/types">
+    <types>
+        <xsd:schema targetNamespace="http://example.com/mocks/test/mockclassmultiplenamespace/types" xmlns="http://example.com/mocks/test/mockclassmultiplenamespace/types"/>
+    </types>
+    <portType name="MockClassMultipleNamespacePortType"/>
+    <binding name="MockClassMultipleNamespaceBinding" type="tns:MockClassMultipleNamespacePortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    </binding>
+    <service name="MockClassMultipleNamespaceService">
+        <port name="MockClassMultipleNamespacePort" binding="tns:MockClassMultipleNamespaceBinding">
+            <soap:address location="http://localhost/wsdl-creator/ExampleSoapServer.php"/>
+        </port>
+    </service>
+</definitions>

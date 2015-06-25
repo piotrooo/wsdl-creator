@@ -2,7 +2,7 @@
 /**
  * MockClassMultipleNamespace
  *
- * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
+ * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
 namespace Mocks\Test;
 

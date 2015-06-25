@@ -2,7 +2,7 @@
 /**
  * ClassParserTest
  *
- * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
+ * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
 use WSDL\Parser\ClassParser;
 
@@ -11,7 +11,7 @@ class ClassParserTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldParseOnlyPublicMethods()
+    public function shouldParsePublicMethodsWithWebMethodAnnotation()
     {
         //given
         $classParser = new ClassParser('\Mocks\MockClass');

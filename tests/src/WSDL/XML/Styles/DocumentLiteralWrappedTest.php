@@ -2,7 +2,7 @@
 /**
  * DocumentLiteralWrappedTest
  *
- * @author Piotr Olaszewski <piotroo89 [%] gmail dot com>
+ * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
 use Factory\ParameterFactory;
 use WSDL\XML\Styles\DocumentLiteralWrapped;
@@ -343,5 +343,4 @@ class DocumentLiteralWrappedTest extends PHPUnit_Framework_TestCase
                 array('type' => 'type', 'value' => 'xsd:int', 'name' => 'age')
         ), $element->getComplex()->getComplex()->getComplex()->getElementAttributes());
     }
-
 }
