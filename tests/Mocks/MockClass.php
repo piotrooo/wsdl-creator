@@ -10,15 +10,15 @@ use stdClass;
 
 class MockClass
 {
-    function __construct()
+    public function __construct()
     {
     }
 
-    function __destruct()
+    public function __destruct()
     {
     }
 
-    function __get($name)
+    public function __get($name)
     {
     }
 
@@ -75,7 +75,8 @@ class MockClass
      * @WebMethod
      * @return wrapper[] $mockUsers @className=\Mocks\MockUserWrapper
      */
-    public function arrayOfMockUser() {
+    public function arrayOfMockUser()
+    {
         $mockUsers = array();
 
         $o = new MockUserWrapper();

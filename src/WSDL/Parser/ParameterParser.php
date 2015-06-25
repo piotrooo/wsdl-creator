@@ -107,7 +107,7 @@ class ParameterParser
         if ($this->_type == 'wrapper') {
             $complex = $this->wrapper()->getComplexTypes();
             $object = new Object($this->getType(), $this->getName(), $complex);
-        } else if ($this->isComplex()) {
+        } elseif ($this->isComplex()) {
             $complex = $this->complexTypes();
             $object = new Object($this->getType(), $this->getName(), $complex);
         }

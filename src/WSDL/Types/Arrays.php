@@ -36,7 +36,7 @@ class Arrays implements Type
     private $_name;
     private $_complexType;
 
-    function __construct($type, $name, $complexType)
+    public function __construct($type, $name, $complexType)
     {
         $this->_type = $type;
         $this->_name = $name;

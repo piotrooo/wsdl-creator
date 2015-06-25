@@ -102,7 +102,7 @@ class WrapperParser
         if ($type == 'wrapper') {
             $complex = $this->wrapper($type, $docComment)->getComplexTypes();
             $object = new Object($type, $name, $complex);
-        } else if ($this->isComplex($type)) {
+        } elseif ($this->isComplex($type)) {
             $complex = $this->getComplexTypes();
             $object = new Object($type, $name, $complex);
         }

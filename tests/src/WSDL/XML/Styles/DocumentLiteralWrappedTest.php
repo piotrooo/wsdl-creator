@@ -343,5 +343,4 @@ class DocumentLiteralWrappedTest extends PHPUnit_Framework_TestCase
                 array('type' => 'type', 'value' => 'xsd:int', 'name' => 'age')
         ), $element->getComplex()->getComplex()->getComplex()->getElementAttributes());
     }
-
 }
