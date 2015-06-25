@@ -86,7 +86,7 @@ class WSDLCreator
 
     public function renderWSDLService()
     {
-        $headers = apache_request_headers();
+        $headers = getallheaders();
         if (empty($headers['Content-Type']) || !preg_match('#xml#i', $headers['Content-Type'])) {
             $newService = new Service($this->_location, $this->getWsdlLocation(), $this->_classParser->getMethods());
             $newService->render($this->_class, $this->getNamespaceWithSanitizedClass());
