@@ -21,49 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-namespace WSDL\XML\Styles;
+namespace Mocks\WrapperClass;
 
-/**
- * TypesElement
- *
- * @author Piotr Olaszewski <piotroo89@gmail.com>
- */
-class TypesElement
+class Purchase
 {
-    private $_name;
-    private $_elementAttributes = array();
-    private $_complex = array();
-
-    public function setName($name)
-    {
-        $this->_name = $name;
-        return $this;
-    }
-
-    public function getName()
-    {
-        return $this->_name;
-    }
-
-    public function setElementAttributes($type, $value, $name)
-    {
-        $this->_elementAttributes[] = array('type' => $type, 'value' => $value, 'name' => $name);
-        return $this;
-    }
-
-    public function getElementAttributes()
-    {
-        return $this->_elementAttributes;
-    }
-
-    public function getComplex()
-    {
-        return $this->_complex;
-    }
-
-    public function setComplex($complex)
-    {
-        $this->_complex[] = $complex;
-        return $this;
-    }
+    /**
+     * @type string
+     */
+    public $bookingReference;
+    /**
+     * @type string
+     */
+    public $orderNumber;
+    /**
+     * @type int
+     */
+    public $quantity;
 }

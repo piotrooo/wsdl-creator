@@ -1,14 +1,38 @@
 <?php
 /**
- * XMLGeneratorTest
+ * Copyright (C) 2013-2015
+ * Piotr Olaszewski <piotroo89@gmail.com>
  *
- * @author Piotr Olaszewski <piotroo89@gmail.com>
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+use Ouzo\Utilities\Path;
 use WSDL\Parser\ClassParser;
+use WSDL\XML\Styles\DocumentLiteralWrapped;
 use WSDL\XML\Styles\RpcEncoded;
 use WSDL\XML\Styles\RpcLiteral;
 use WSDL\XML\XMLGenerator;
 
+/**
+ * XMLGeneratorTest
+ *
+ * @author Piotr Olaszewski <piotroo89@gmail.com>
+ */
 class XMLGeneratorTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -39,7 +63,7 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
     public function shouldGenerateWsdl()
     {
         //then
-        $file = __DIR__ . '/correct_wsdl.wsdl';
+        $file = Path::join(__DIR__, 'xml_file_asserts', 'correct_wsdl.wsdl');
         $this->assertXmlStringEqualsXmlFile($file, $this->_XML);
     }
 
@@ -84,7 +108,7 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
         $wsdl = $xml->getGeneratedXML();
 
         //then
-        $file = __DIR__ . '/correct_multi_class_wsdl.wsdl';
+        $file = Path::join(__DIR__, 'xml_file_asserts', 'correct_multi_class_wsdl.wsdl');
         $this->assertXmlStringEqualsXmlFile($file, $wsdl);
     }
 
@@ -123,7 +147,27 @@ class XMLGeneratorTest extends PHPUnit_Framework_TestCase
         $wsdl = $xml->getGeneratedXML();
 
         //then
-        $file = __DIR__ . '/correct_rpc_encoded_wsdl.wsdl';
+        $file = Path::join(__DIR__, 'xml_file_asserts', 'correct_rpc_encoded_wsdl.wsdl');
+        $this->assertXmlStringEqualsXmlFile($file, $wsdl);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCorrectCreateWsdlWithMultipleWrappersForDocumentLiteralWrapped()
+    {
+        //given
+        XMLGenerator::$alreadyGeneratedComplexTypes = array();
+        $classParser = new ClassParser('\Mocks\MockMultipleWrappers');
+        $classParser->parse();
+        $xml = new XMLGenerator('\Mocks\MockMultipleWrappers', $this->_namespace, $this->_location);
+        $xml->setWSDLMethods($classParser->getMethods())->setBindingStyle(new DocumentLiteralWrapped())->generate();
+
+        //when
+        $wsdl = $xml->getGeneratedXML();
+
+        //then
+        $file = Path::join(__DIR__, 'xml_file_asserts', 'multiple_wrappers.wsdl');
         $this->assertXmlStringEqualsXmlFile($file, $wsdl);
     }
 }

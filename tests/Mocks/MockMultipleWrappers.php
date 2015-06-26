@@ -21,49 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-namespace WSDL\XML\Styles;
+namespace Mocks;
 
-/**
- * TypesElement
- *
- * @author Piotr Olaszewski <piotroo89@gmail.com>
- */
-class TypesElement
+class MockMultipleWrappers
 {
-    private $_name;
-    private $_elementAttributes = array();
-    private $_complex = array();
-
-    public function setName($name)
+    /**
+     * @WebMethod
+     * @param string $name
+     * @param wrapper $customer @className=\Mocks\WrapperClass\Customer
+     * @param wrapper $purchase @className=\Mocks\WrapperClass\Purchase
+     * @return wrapper $purchaseResult @className=\Mocks\WrapperClass\PurchaseResult
+     */
+    public function multipleWrappers($name, $customer, $purchase)
     {
-        $this->_name = $name;
-        return $this;
-    }
-
-    public function getName()
-    {
-        return $this->_name;
-    }
-
-    public function setElementAttributes($type, $value, $name)
-    {
-        $this->_elementAttributes[] = array('type' => $type, 'value' => $value, 'name' => $name);
-        return $this;
-    }
-
-    public function getElementAttributes()
-    {
-        return $this->_elementAttributes;
-    }
-
-    public function getComplex()
-    {
-        return $this->_complex;
-    }
-
-    public function setComplex($complex)
-    {
-        $this->_complex[] = $complex;
-        return $this;
+        return 1;
     }
 }

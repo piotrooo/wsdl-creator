@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="MockMultipleWrappers" targetNamespace="http://example.com/mocks/mockmultiplewrappers" xmlns:tns="http://example.com/mocks/mockmultiplewrappers" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://example.com/mocks/mockmultiplewrappers/types">
+    <types>
+        <xsd:schema targetNamespace="http://example.com/mocks/mockmultiplewrappers/types" xmlns="http://example.com/mocks/mockmultiplewrappers/types">
+            <xsd:complexType name="MocksWrapperClassCustomer">
+                <xsd:sequence>
+                    <xsd:element name="firstName" type="xsd:string"/>
+                    <xsd:element name="lastName" type="xsd:string"/>
+                    <xsd:element name="email" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="MocksWrapperClassCustomer" nillable="true" type="ns:MocksWrapperClassCustomer"/>
+            <xsd:complexType name="MocksWrapperClassPurchase">
+                <xsd:sequence>
+                    <xsd:element name="bookingReference" type="xsd:string"/>
+                    <xsd:element name="orderNumber" type="xsd:string"/>
+                    <xsd:element name="quantity" type="xsd:int"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="MocksWrapperClassPurchase" nillable="true" type="ns:MocksWrapperClassPurchase"/>
+            <xsd:complexType name="multipleWrappers">
+                <xsd:sequence>
+                    <xsd:element name="name" type="xsd:string"/>
+                    <xsd:element name="customer" element="ns:MocksWrapperClassCustomer"/>
+                    <xsd:element name="purchase" element="ns:MocksWrapperClassPurchase"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="multipleWrappers" nillable="true" type="ns:multipleWrappers"/>
+            <xsd:complexType name="MocksWrapperClassPurchaseResult">
+                <xsd:sequence>
+                    <xsd:element name="couponsMissing" type="xsd:string"/>
+                    <xsd:element name="couponsAvailable" type="xsd:string"/>
+                    <xsd:element name="bookingsPerformed" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="MocksWrapperClassPurchaseResult" nillable="true" type="ns:MocksWrapperClassPurchaseResult"/>
+            <xsd:complexType name="multipleWrappersResponse">
+                <xsd:sequence>
+                    <xsd:element name="purchaseResult" element="ns:MocksWrapperClassPurchaseResult"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="multipleWrappersResponse" nillable="true" type="ns:multipleWrappersResponse"/>
+        </xsd:schema>
+    </types>
+    <message name="multipleWrappersRequest">
+        <part name="parameters" element="ns:multipleWrappers"/>
+    </message>
+    <message name="multipleWrappersResponse">
+        <part name="parameters" element="ns:multipleWrappersResponse"/>
+    </message>
+    <portType name="MockMultipleWrappersPortType">
+        <operation name="multipleWrappers">
+            <input message="tns:multipleWrappersRequest"/>
+            <output message="tns:multipleWrappersResponse"/>
+        </operation>
+    </portType>
+    <binding name="MockMultipleWrappersBinding" type="tns:MockMultipleWrappersPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="multipleWrappers">
+            <soap:operation soapAction="http://example.com/mocks/mockmultiplewrappers/#multipleWrappers"/>
+            <input>
+                <soap:body use="literal" namespace="http://example.com/mocks/mockmultiplewrappers"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://example.com/mocks/mockmultiplewrappers"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="MockMultipleWrappersService">
+        <port name="MockMultipleWrappersPort" binding="tns:MockMultipleWrappersBinding">
+            <soap:address location="http://localhost/wsdl-creator/ExampleSoapServer.php"/>
+        </port>
+    </service>
+</definitions>
