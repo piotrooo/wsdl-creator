@@ -207,8 +207,11 @@ class XMLGenerator
             $sequenceElement->appendChild($elementPartElement);
         }
 
-        if ($parameter->getComplex()) {
-            $this->_generateComplexType($parameter->getComplex(), $schemaElement);
+        $complex = $parameter->getComplex();
+        if ($complex) {
+            foreach ($complex as $complexElement) {
+                $this->_generateComplexType($complexElement, $schemaElement);
+            }
         }
 
         $complexTypeElement->appendChild($sequenceElement);
