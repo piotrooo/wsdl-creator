@@ -34,36 +34,42 @@ use ReflectionMethod;
  */
 class ClassParser
 {
-    private $_reflectedClass;
+    /**
+     * @var ReflectionClass
+     */
+    private $reflectedClass;
     /**
      * @var MethodParser[]
      */
-    private $_methodDocComments = array();
+    private $methodDocComments = array();
 
     public function __construct($className)
     {
-        $this->_reflectedClass = new ReflectionClass($className);
+        $this->reflectedClass = new ReflectionClass($className);
     }
 
     public function parse()
     {
-        $this->_getAllPublicMethodDocComment();
+        $this->allPublicMethodDocComment();
     }
 
-    private function _getAllPublicMethodDocComment()
+    private function allPublicMethodDocComment()
     {
-        $reflectionClassMethods = $this->_reflectedClass->getMethods();
-        foreach ($reflectionClassMethods as $method) {
-            if ($this->_checkCanParseMethod($method)) {
-                $methodName = $method->getName();
-                $methodDocComment = $method->getDocComment();
-                $this->_methodDocComments[] = new MethodParser($methodName, $methodDocComment);
+        $reflectionClassMethods = $this->reflectedClass->getMethods();
+        foreach ($reflectionClassMethods as $reflectionMethod) {
+            if ($this->canParseMethod($reflectionMethod)) {
+                $methodName = $reflectionMethod->getName();
+                $methodDocComment = $reflectionMethod->getDocComment();
+                $this->methodDocComments[] = new MethodParser($methodName, $methodDocComment);
             }
         }
-        return $this;
     }
 
-    private function _checkCanParseMethod(ReflectionMethod $method)
+    /**
+     * @param ReflectionMethod $method
+     * @return bool
+     */
+    private function canParseMethod(ReflectionMethod $method)
     {
         return
             Strings::contains($method->getDocComment(), '@WebMethod') &&
@@ -73,8 +79,11 @@ class ClassParser
             !Strings::contains($method->getName(), '__');
     }
 
+    /**
+     * @return MethodParser[]
+     */
     public function getMethods()
     {
-        return $this->_methodDocComments;
+        return $this->methodDocComments;
     }
 }

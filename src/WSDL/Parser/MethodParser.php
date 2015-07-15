@@ -24,6 +24,7 @@
 namespace WSDL\Parser;
 
 use Ouzo\Utilities\Arrays;
+use Ouzo\Utilities\Functions;
 use WSDL\Types\Type;
 
 /**
@@ -33,21 +34,36 @@ use WSDL\Types\Type;
  */
 class MethodParser
 {
-    private $_name;
-    private $_doc;
-    private $_rawParameters;
-    private $_rawReturn;
+    /**
+     * @var string
+     */
+    private $name;
+    /**
+     * @var string
+     */
+    private $doc;
+    /**
+     * @var array
+     */
+    private $rawParameters;
+    /**
+     * @var string
+     */
+    private $rawReturn;
 
     public function __construct($name, $doc)
     {
-        $this->_name = $name;
-        $this->_doc = $doc;
+        $this->name = $name;
+        $this->doc = $doc;
     }
 
+    /**
+     * @return string
+     */
     public function description()
     {
-        preg_match('#@desc (.+)#', $this->_doc, $groupMatches);
-        $trimGroupMatches = array_map('trim', $groupMatches);
+        preg_match('#@desc (.+)#', $this->doc, $groupMatches);
+        $trimGroupMatches = Arrays::map($groupMatches, Functions::trim());
         return Arrays::getValue($trimGroupMatches, 1, '');
     }
 
@@ -56,41 +72,56 @@ class MethodParser
      */
     public function parameters()
     {
-        preg_match_all('#@param (.+)#', $this->_doc, $groupMatches);
-        $this->_rawParameters = $groupMatches[1];
+        preg_match_all('#@param (.+)#', $this->doc, $groupMatches);
+        $this->rawParameters = $groupMatches[1];
         return ParameterParser::create($groupMatches[1], $this->getName());
     }
 
+    /**
+     * @return Type
+     */
     public function returning()
     {
-        preg_match('#@return (.+)#', $this->_doc, $groupMatches);
+        preg_match('#@return (.+)#', $this->doc, $groupMatches);
         $trimGroupMatches = array_map('trim', $groupMatches);
         if (isset($trimGroupMatches[1])) {
-            $this->_rawReturn = $trimGroupMatches[1];
+            $this->rawReturn = $trimGroupMatches[1];
         }
-        $parameterParser = new ParameterParser($this->_rawReturn, $this->getName());
+        $parameterParser = new ParameterParser($this->rawReturn, $this->getName());
         return $parameterParser->parse();
     }
 
+    /**
+     * @return string
+     */
     public function getDoc()
     {
-        return $this->_doc;
+        return $this->doc;
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
-        return $this->_name;
+        return $this->name;
     }
 
+    /**
+     * @return array
+     */
     public function getRawParameters()
     {
         $this->parameters();
-        return $this->_rawParameters;
+        return $this->rawParameters;
     }
 
+    /**
+     * @return string
+     */
     public function getRawReturn()
     {
         $this->returning();
-        return $this->_rawReturn;
+        return $this->rawReturn;
     }
 }
