@@ -108,7 +108,18 @@ class WSDLCreator
 
     public function renderWSDLService()
     {
-        $headers = apache_request_headers();
+        if (function_exists('apache_request_headers')) {
+            $headers = apache_request_headers();
+        } else {
+            $headers = [];
+
+            foreach ($_SERVER as $name => $value) {
+                if (substr($name, 0, 5) == 'HTTP_') {
+                    $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+                }
+            }
+        }
+
         if (empty($headers['Content-Type']) || !preg_match('#xml#i', $headers['Content-Type'])) {
             $newService = new Service($this->_location, $this->getWsdlLocation(), $this->_classParser->getMethods());
             $newService->render($this->_class, $this->getNamespaceWithSanitizedClass());
