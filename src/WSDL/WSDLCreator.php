@@ -111,7 +111,7 @@ class WSDLCreator
         if (function_exists('apache_request_headers')) {
             $headers = apache_request_headers();
         } else {
-            $headers = [];
+            $headers = array();
 
             foreach ($_SERVER as $name => $value) {
                 if (substr($name, 0, 5) == 'HTTP_') {
