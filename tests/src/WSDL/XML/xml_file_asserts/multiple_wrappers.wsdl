@@ -21,8 +21,8 @@
             <xsd:complexType name="multipleWrappers">
                 <xsd:sequence>
                     <xsd:element name="name" type="xsd:string"/>
-                    <xsd:element name="customer" element="ns:MocksWrapperClassCustomer"/>
-                    <xsd:element name="purchase" element="ns:MocksWrapperClassPurchase"/>
+                    <xsd:element name="customer" type="ns:MocksWrapperClassCustomer"/>
+                    <xsd:element name="purchase" type="ns:MocksWrapperClassPurchase"/>
                 </xsd:sequence>
             </xsd:complexType>
             <xsd:element name="multipleWrappers" nillable="true" type="ns:multipleWrappers"/>
@@ -36,7 +36,7 @@
             <xsd:element name="MocksWrapperClassPurchaseResult" nillable="true" type="ns:MocksWrapperClassPurchaseResult"/>
             <xsd:complexType name="multipleWrappersResponse">
                 <xsd:sequence>
-                    <xsd:element name="purchaseResult" element="ns:MocksWrapperClassPurchaseResult"/>
+                    <xsd:element name="purchaseResult" type="ns:MocksWrapperClassPurchaseResult"/>
                 </xsd:sequence>
             </xsd:complexType>
             <xsd:element name="multipleWrappersResponse" nillable="true" type="ns:multipleWrappersResponse"/>
