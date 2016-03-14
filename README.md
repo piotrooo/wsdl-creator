@@ -20,13 +20,13 @@ To install wsdl-creator at your project use [composer](http://getcomposer.org).
 
 ###Create new project:
 
-`composer.phar create-project piotrooo/wsdl-creator myproject`
+`composer.phar create-project georgo/wsdl-creator myproject`
 
 ###or add to the composer.json file:
 
 ```
 require: {
-	"piotrooo/wsdl-creator": "1.*"
+	"georgo/wsdl-creator": "1.*"
 }
 ```
 
