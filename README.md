@@ -1,7 +1,7 @@
 PHP WSDL Creator
 ================
 
-[![Build Status](https://travis-ci.org/georgo/wsdl-creator.png?branch=master)](https://travis-ci.org/georgo/wsdl-creator)
+[![Build Status](https://travis-ci.org/Georgo/wsdl-creator.png?branch=master)](https://travis-ci.org/Georgo/wsdl-creator)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/georgo/wsdl-creator/badges/quality-score.png)](https://scrutinizer-ci.com/g/georgo/wsdl-creator/)
 [![Coverage Status](https://coveralls.io/repos/georgo/wsdl-creator/badge.png)](https://coveralls.io/r/georgo/wsdl-creator)
 [![Dependency Status](https://www.versioneye.com/user/projects/56e6bf4596f80c00362cd6ba/badge.png)](https://www.versioneye.com/user/projects/56e6bf4596f80c00362cd6ba)
