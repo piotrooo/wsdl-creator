@@ -69,7 +69,7 @@ abstract class Style
             $type = 'type';
             $value = 'ns:' . 'ArrayOf' . ucfirst($parameter->getName());
         } elseif (TypeHelper::isObject($parameter)) {
-            $type = 'type';
+            $type = 'element' . $parameter->getType();
             $value = 'ns:' . $this->_getObjectName($parameter);
         }
         return array($type, $value);
