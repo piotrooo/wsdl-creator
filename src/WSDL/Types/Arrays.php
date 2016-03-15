@@ -35,12 +35,14 @@ class Arrays implements Type
     private $_type;
     private $_name;
     private $_complexType;
+    private $_counter;
 
-    public function __construct($type, $name, $complexType)
+    public function __construct($type, $name, $complexType, $counter = 0)
     {
         $this->_type = $type;
         $this->_name = $name;
         $this->_complexType = $complexType;
+        $this->_counter = $counter;
     }
 
     public function getType()
@@ -59,5 +61,10 @@ class Arrays implements Type
     public function getComplexType()
     {
         return $this->_complexType;
+    }
+
+    public function getCounter()
+    {
+        return $this->_counter;
     }
 }

@@ -1,17 +1,17 @@
 PHP WSDL Creator
 ================
 
-[![Build Status](https://travis-ci.org/piotrooo/wsdl-creator.png?branch=master)](https://travis-ci.org/piotrooo/wsdl-creator)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/piotrooo/wsdl-creator/badges/quality-score.png?s=8ad279ee5bb6a67b820b36e03263ab2ae62b1f7d)](https://scrutinizer-ci.com/g/piotrooo/wsdl-creator/)
-[![Coverage Status](https://coveralls.io/repos/piotrooo/wsdl-creator/badge.png)](https://coveralls.io/r/piotrooo/wsdl-creator)
-[![Dependency Status](https://www.versioneye.com/user/projects/531c2f2dec13752d49000040/badge.png)](https://www.versioneye.com/user/projects/531c2f2dec13752d49000040)
+[![Build Status](https://travis-ci.org/Georgo/wsdl-creator.png?branch=master)](https://travis-ci.org/Georgo/wsdl-creator)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/georgo/wsdl-creator/badges/quality-score.png)](https://scrutinizer-ci.com/g/georgo/wsdl-creator/)
+[![Coverage Status](https://coveralls.io/repos/github/Georgo/wsdl-creator/badge.svg?branch=master)](https://coveralls.io/github/Georgo/wsdl-creator?branch=master)
+[![Dependency Status](https://www.versioneye.com/user/projects/56e6bf4596f80c00362cd6ba/badge.png)](https://www.versioneye.com/user/projects/56e6bf4596f80c00362cd6ba)
 
 Introduction
 ------------
 
 WSDL creator allows generating WSDL documents based on PHP classes using annotations and reflection mechanism. This generator also give possibilty to generating overview methods and parameters with SOAP examples used in WSDL.
 
-Support: >= PHP5.3.
+Support: >= PHP5.5.
 
 Installation
 ------------
@@ -20,13 +20,13 @@ To install wsdl-creator at your project use [composer](http://getcomposer.org).
 
 ###Create new project:
 
-`composer.phar create-project piotrooo/wsdl-creator myproject`
+`composer.phar create-project georgo/wsdl-creator myproject`
 
 ###or add to the composer.json file:
 
 ```
 require: {
-	"piotrooo/wsdl-creator": "1.*"
+	"georgo/wsdl-creator": "1.*"
 }
 ```
 

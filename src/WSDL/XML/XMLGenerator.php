@@ -202,7 +202,7 @@ class XMLGenerator
         foreach ($types as $complexType) {
             $elementPartElement = $this->createElementWithAttributes('xsd:element', array(
                 'name' => $complexType['name'],
-                $complexType['type'] => $complexType['value']
+                'type' => $complexType['value']
             ));
             $sequenceElement->appendChild($elementPartElement);
         }

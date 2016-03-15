@@ -1,5 +1,5 @@
 {
-  "name": "piotrooo/wsdl-creator",
+  "name": "georgo/wsdl-creator",
   "description": "PHP WSDL creator using PHPdoc (annotations, reflections).",
   "minimum-stability": "dev",
   "license": "MIT",
@@ -16,6 +16,10 @@
     {
       "name": "Piotr Olaszewski",
       "email": "piotroo89@gmail.com"
+    },
+    {
+      "name": "Tomas K.",
+      "email": "iam@tomask.info"
     }
   ],
   "require": {

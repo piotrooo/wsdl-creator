@@ -41,6 +41,12 @@ class WrapperParser
      */
     private $_complexTypes;
 
+    /**
+     * @desc Count of arrays in document
+     * @var array
+     */
+    static private $arrayCnt = [];
+
     public function __construct($wrapperClass)
     {
         $this->_wrapperClass = new ReflectionClass($wrapperClass);
@@ -85,7 +91,7 @@ class WrapperParser
                 break;
         }
     }
-    
+
     private function _createWrapperObject($type, $name, $docComment)
     {
         $wrapper = $this->wrapper($type, $docComment);
@@ -106,14 +112,17 @@ class WrapperParser
             $complex = $this->getComplexTypes();
             $object = new Object($type, $name, $complex);
         }
-        return new Arrays($type, $name, $object);
+        if (!isset(self::$arrayCnt[$name])) {
+            self::$arrayCnt[$name] = 0;
+        }
+        return new Arrays($type, $name, $object, self::$arrayCnt[$name]++);
     }
 
     public function getComplexTypes()
     {
         return $this->_complexTypes;
     }
-    
+
     public function wrapper(&$type, $docComment)
     {
         if (!$this->isComplex($type)) {
