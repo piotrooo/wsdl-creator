@@ -67,7 +67,7 @@ abstract class Style
             $value = TypeHelper::getXsdType($parameter->getType());
         } elseif (TypeHelper::isArray($parameter)) {
             $type = 'type';
-            $value = 'ns:' . 'ArrayOf' . ucfirst($parameter->getName());
+            $value = 'ns:' . 'ArrayOf' . ucfirst($parameter->getName()) . ($parameter->getCounter() ? $parameter->getCounter() : '');
         } elseif (TypeHelper::isObject($parameter)) {
             $type = 'element';
             $value = 'ns:' . $this->_getObjectName($parameter);
@@ -108,7 +108,7 @@ abstract class Style
 
         $typesComplex = new TypesComplex();
         $typesComplex
-            ->setName('ArrayOf' . ucfirst($parameter->getName()))
+            ->setName('ArrayOf' . ucfirst($parameter->getName()) . ($parameter->getCounter() ? $parameter->getCounter() : ''))
             ->setArrayType($type . $this->_getObjectName($parameter) . '[]')
             ->setArrayTypeName(Inflector::singularize($parameter->getName()));
 
