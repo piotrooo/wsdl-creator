@@ -56,7 +56,7 @@ $server->handle();
 
 To render `XML` use method `renderWSDL`. To properly load generator classes use composer loader which is in `vendor/autoload.php`.
 
-Full configutaion listing:
+Full configuration listing:
 
 ```php
 require_once 'vendor/autoload.php';
