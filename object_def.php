@@ -53,16 +53,18 @@ class Object
 {
     private $name;
     private $complexRepository;
+    private $type;
 
-    public function __construct($name, $complexRepository)
+    public function __construct($name, $complexRepository, $type = 'object')
     {
         $this->name = $name;
         $this->complexRepository = $complexRepository;
+        $this->type = $type;
     }
 
     public function getType()
     {
-        return 'object';
+        return $this->type;
     }
 
     public function getName()
@@ -90,6 +92,19 @@ class ComplexRepository
     {
         return $this->elements;
     }
+}
+
+class Person
+{
+    /**
+     * @type int
+     */
+    public $age;
+
+    /**
+     * @type object @string=$name @int=count
+     */
+    public $details;
 }
 
 $parameters = [];
@@ -170,5 +185,27 @@ $complexRepository
     ->add(new Arrays('array_of_obj81', new Object('obj81', $complexRepository81)))
     ->add(new Simple('int', 'count'));
 $parameters[] = new Object('obj8', $complexRepository);
+
+//@param wrapper $wr1 @className=Person
+$complexRepositoryWR1 = new ComplexRepository();
+$complexRepositoryWR1
+    ->add(new Simple('string', 'name'))
+    ->add(new Simple('int', 'count'));
+$complexRepository = new ComplexRepository();
+$complexRepository
+    ->add(new Simple('int', 'age'))
+    ->add(new Object('details', $complexRepositoryWR1));
+$parameters[] = new Object('wr1', $complexRepository, 'wrapper');
+
+//@param wrapper[] $wr2 @className=Person
+$complexRepositoryWR1 = new ComplexRepository();
+$complexRepositoryWR1
+    ->add(new Simple('string', 'name'))
+    ->add(new Simple('int', 'count'));
+$complexRepository = new ComplexRepository();
+$complexRepository
+    ->add(new Simple('int', 'age'))
+    ->add(new Object('details', $complexRepositoryWR1));
+$parameters[] = new Arrays('array_of_wr2', new Object('wr2', $complexRepository, 'wrapper'));
 
 print_r($parameters);
