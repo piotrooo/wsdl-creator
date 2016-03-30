@@ -5,8 +5,6 @@ interface Type
     public function getType();
 
     public function getName();
-
-    public function getComplexRepository();
 }
 
 class Simple implements Type
@@ -29,22 +27,17 @@ class Simple implements Type
     {
         return $this->name;
     }
-
-    public function getComplexRepository()
-    {
-        throw new Exception("This element doesn't need complex types");
-    }
 }
 
 class Arrays implements Type
 {
     private $name;
-    private $complexRepository;
+    private $element;
 
-    public function __construct($name, ComplexRepository $complexRepository)
+    public function __construct($name, Type $element)
     {
         $this->name = $name;
-        $this->complexRepository = $complexRepository;
+        $this->element = $element;
     }
 
     public function getType()
@@ -57,28 +50,25 @@ class Arrays implements Type
         return $this->name;
     }
 
-    public function getComplexRepository()
+    public function getElement()
     {
-        return $this->complexRepository;
+        return $this->element;
     }
 }
 
 class Object implements Type
 {
-    private $type;
     private $name;
-    private $complexRepository;
+    private $elements = [];
 
-    public function __construct($name, ComplexRepository $complexRepository, $type = 'object')
+    public function __construct($name)
     {
         $this->name = $name;
-        $this->complexRepository = $complexRepository;
-        $this->type = $type;
     }
 
     public function getType()
     {
-        return $this->type;
+        return 'object';
     }
 
     public function getName()
@@ -86,25 +76,10 @@ class Object implements Type
         return $this->name;
     }
 
-    public function getComplexRepository()
-    {
-        return $this->complexRepository;
-    }
-}
-
-class ComplexRepository
-{
-    private $elements;
-
-    public function add(Type $type)
+    public function addElement(Type $type)
     {
         $this->elements[] = $type;
         return $this;
-    }
-
-    public function getElements()
-    {
-        return $this->elements;
     }
 }
 
@@ -126,120 +101,90 @@ $parameters = [];
 $parameters[] = new Simple('int', 'param_simple_int');
 
 //@param int[] $param_simple_int
-$complexRepositoryArray = new ComplexRepository();
-$complexRepositoryArray->add(new Simple('int', 'param_simple_int'));
-$parameters[] = new Arrays('array_of_param_simple_int', $complexRepositoryArray);
+$parameters[] = new Arrays('array_of_param_simple_int', new Simple('int', 'param_simple_int'));
 
 //@param object $obj1 @string=$name @int=$count
-$complexRepository = new ComplexRepository();
-$complexRepository
-    ->add(new Simple('string', 'name'))
-    ->add(new Simple('int', 'count'));
-$parameters[] = new Object('obj1', $complexRepository);
+$obj = new Object('obj1');
+$obj->addElement(new Simple('string', 'name'))
+    ->addElement(new Simple('int', 'count'));
+$parameters[] = $obj;
 
 //@param object $obj2 @string[]=$name @int=$count
-$complexRepositoryArray = new ComplexRepository();
-$complexRepositoryArray->add(new Simple('string', 'name'));
-$complexRepository = new ComplexRepository();
-$complexRepository
-    ->add(new Arrays('array_of_name', $complexRepositoryArray))
-    ->add(new Simple('int', 'count'));
-$parameters[] = new Object('obj2', $complexRepository);
+$obj = new Object('obj2');
+$obj->addElement(new Arrays('array_of_name', new Simple('string', 'name')))
+    ->addElement(new Simple('int', 'count'));
+$parameters[] = $obj;
 
 //@param object[] $obj3 @string=$name @int=$count
-$complexRepositoryArray = new ComplexRepository();
-$complexRepositoryArray->add(new Object('obj3', $complexRepository));
-$complexRepository = new ComplexRepository();
-$complexRepository
-    ->add(new Simple('string', 'name'))
-    ->add(new Simple('int', 'count'));
-$parameters[] = new Arrays('array_of_obj3', $complexRepositoryArray);
+$obj = new Object('obj3');
+$obj->addElement(new Simple('string', 'name'))
+    ->addElement(new Simple('int', 'count'));
+$parameters[] = new Arrays('array_of_obj3', $obj);
 
 //@param object[] $obj4 @string=$name @int[]=$count
-$complexRepositoryArray1 = new ComplexRepository();
-$complexRepositoryArray1->add(new Simple('int', 'count'));
-$complexRepository = new ComplexRepository();
-$complexRepository
-    ->add(new Simple('string', 'name'))
-    ->add(new Arrays('array_of_count', $complexRepositoryArray1));
-$complexRepositoryArray2 = new ComplexRepository();
-$complexRepositoryArray2->add(new Object('obj4', $complexRepository));
-$parameters[] = new Arrays('array_of_obj4', $complexRepositoryArray2);
+$obj = new Object('obj4');
+$obj->addElement(new Simple('string', 'name'))
+    ->addElement(new Arrays('array_of_count', new Simple('int', 'count')));
+$parameters[] = new Arrays('array_of_obj4', $obj);
 
 //@param object $obj5 @(object $obj51 @string=name @int=age) @int=$count
-$complexRepository51 = new ComplexRepository();
-$complexRepository51
-    ->add(new Simple('string', 'name'))
-    ->add(new Simple('int', 'age'));
-$complexRepository = new ComplexRepository();
-$complexRepository
-    ->add(new Object('obj51', $complexRepository51))
-    ->add(new Simple('int', 'count'));
-$parameters[] = new Object('obj5', $complexRepository);
+$obj51 = new Object('obj51');
+$obj51
+    ->addElement(new Simple('string', 'name'))
+    ->addElement(new Simple('int', 'age'));
+$obj = new Object('obj5');
+$obj->addElement($obj51)
+    ->addElement(new Simple('int', 'count'));
+$parameters[] = $obj;
 
 //@param object $obj6 @(object $obj61 @string[]=name @int=age) @int=$count
-$complexRepositoryArray = new ComplexRepository();
-$complexRepositoryArray->add(new Simple('string', 'name'));
-$complexRepository61 = new ComplexRepository();
-$complexRepository61
-    ->add(new Arrays('array_of_name', $complexRepositoryArray))
-    ->add(new Simple('int', 'age'));
-$complexRepository = new ComplexRepository();
-$complexRepository
-    ->add(new Object('obj61', $complexRepository61))
-    ->add(new Simple('int', 'count'));
-$parameters[] = new Object('obj6', $complexRepository);
+$obj61 = new Object('obj61');
+$obj61
+    ->addElement(new Arrays('array_of_name', new Simple('string', 'name')))
+    ->addElement(new Simple('int', 'age'));
+$obj = new Object('obj6');
+$obj->addElement($obj61)
+    ->addElement(new Simple('int', 'count'));
+$parameters[] = $obj;
 
 //@param object $obj7 @(object[] $obj71 @string=name @int=age) @int=$count
-$complexRepository71 = new ComplexRepository();
-$complexRepository71
-    ->add(new Simple('string', 'name'))
-    ->add(new Simple('int', 'age'));
-$complexRepositoryArray = new ComplexRepository();
-$complexRepositoryArray->add(new Object('obj71', $complexRepository71));
-$complexRepository = new ComplexRepository();
-$complexRepository
-    ->add(new Arrays('array_of_obj71', $complexRepositoryArray))
-    ->add(new Simple('int', 'count'));
-$parameters[] = new Object('obj7', $complexRepository);
+$obj71 = new Object('obj71');
+$obj71
+    ->addElement(new Simple('string', 'name'))
+    ->addElement(new Simple('int', 'age'));
+$obj = new Object('obj7');
+$obj->addElement(new Arrays('array_of_obj71', $obj71))
+    ->addElement(new Simple('int', 'count'));
+$parameters[] = $obj;
 
 //@param object $obj8 @(object[] $obj81 @string[]=name @int=age) @int=$count
-$complexRepositoryArray1 = new ComplexRepository();
-$complexRepositoryArray1->add(new Simple('string', 'name'));
-$complexRepository81 = new ComplexRepository();
-$complexRepository81
-    ->add(new Arrays('array_of_obj81', $complexRepositoryArray))
-    ->add(new Simple('int', 'age'));
-$complexRepositoryArray2 = new ComplexRepository();
-$complexRepositoryArray2->add(new Object('obj81', $complexRepository81));
-$complexRepository = new ComplexRepository();
-$complexRepository
-    ->add(new Arrays('array_of_obj81', $complexRepositoryArray2))
-    ->add(new Simple('int', 'count'));
-$parameters[] = new Object('obj8', $complexRepository);
+$obj81 = new Object('obj81');
+$obj81
+    ->addElement(new Arrays('array_of_name', new Simple('string', 'name')))
+    ->addElement(new Simple('int', 'age'));
+$obj = new Object('obj8');
+$obj->addElement(new Arrays('array_of_obj81', $obj81))
+    ->addElement(new Simple('int', 'count'));
+$parameters[] = $obj;
 
 //@param wrapper $wr1 @className=Person
-$complexRepositoryWR1 = new ComplexRepository();
-$complexRepositoryWR1
-    ->add(new Simple('string', 'name'))
-    ->add(new Simple('int', 'count'));
-$complexRepository = new ComplexRepository();
-$complexRepository
-    ->add(new Simple('int', 'age'))
-    ->add(new Object('details', $complexRepositoryWR1));
-$parameters[] = new Object('wr1', $complexRepository, 'wrapper');
+$wr11 = new Object('details');
+$wr11
+    ->addElement(new Simple('string', 'name'))
+    ->addElement(new Simple('int', 'count'));
+$wr1 = new Object('wr1');
+$wr1->addElement(new Simple('int', 'age'))
+    ->addElement($wr11);
+$parameters[] = $wr1;
 
 //@param wrapper[] $wr2 @className=Person
-$complexRepositoryWR1 = new ComplexRepository();
-$complexRepositoryWR1
-    ->add(new Simple('string', 'name'))
-    ->add(new Simple('int', 'count'));
-$complexRepositoryArray = new ComplexRepository();
-$complexRepositoryArray->add(new Object('wr2', $complexRepository, 'wrapper'));
-$complexRepository = new ComplexRepository();
-$complexRepository
-    ->add(new Simple('int', 'age'))
-    ->add(new Object('details', $complexRepositoryWR1));
-$parameters[] = new Arrays('array_of_wr2', $complexRepositoryArray);
+$wr22 = new Object('details');
+$wr22
+    ->addElement(new Simple('string', 'name'))
+    ->addElement(new Simple('int', 'count'));
+$wr2 = new Object('wr2');
+$wr2->addElement(new Simple('int', 'age'))
+    ->addElement($wr22);
+$parameters[] = new Arrays('array_of_wr2', $wr2);
 
 print_r($parameters);
