@@ -139,7 +139,7 @@ class Tokenizer
         '/\s*\$\w+\s*/Am' => Token::NAME,
         '/\s*\[\]\s*/Am' => Token::ARRAYS,
         '/\s*\{\s*/Am' => Token::OPEN_OBJECT,
-        '/\s*\}\s*/Am' => Token::CLOSE_OBJECT,
+        '/\s*\}\s*/Am' => Token::CLOSE_OBJECT
     ];
 
     public function lex($string)
