@@ -11,8 +11,8 @@ R -> '[]' N O
 R -> N O
 O -> '{' P '}'
 O -> e
-N -> $\w+
-T -> \w+
+N -> 'token=name'
+T -> 'token=type'
  */
 
 class Node
@@ -33,12 +33,12 @@ class Node
 
 class Tree
 {
-    private $text;
+    private $tokens;
     private $position;
 
-    public function __construct($text)
+    public function __construct($tokens)
     {
-        $this->text = $text;
+        $this->tokens = $tokens;
         $this->position = 0;
     }
 
@@ -53,19 +53,23 @@ class Tree
         list($isArray, $name, $elements) = $this->R();
         $nodes = $this->I();
         $node = new Node($type, $name, $isArray, $elements);
-        $nodes[] = $node;
+        array_unshift($nodes, $node);
         return $nodes;
     }
 
     private function T()
     {
-        return $this->match('\w+');
+        $token = $this->shift();
+        if ($token->token == Token::TYPE) {
+            return $token->value;
+        }
+        throw new Exception('Parse error - wrong type');
     }
 
     private function R()
     {
-        if ($this->text[$this->position] == '[' && $this->text[$this->position + 1] == ']') {
-            $this->match('\[\]');
+        if ($this->lookahead()->token == Token::ARRAYS) {
+            $this->shift();
             $name = $this->N();
             $elements = $this->O();
             $isArray = true;
@@ -79,7 +83,7 @@ class Tree
 
     private function I()
     {
-        if ($this->position < strlen($this->text) && !$this->lookahead('\}')) {
+        if ($this->position < count($this->tokens) && $this->lookahead()->token != Token::CLOSE_OBJECT) {
             return $this->P();
         }
         return [];
@@ -87,48 +91,88 @@ class Tree
 
     private function N()
     {
-        return $this->match('\$\w+');
+        $token = $this->shift();
+        if ($token->token == Token::NAME) {
+            return $token->value;
+        }
+        throw new Exception('Parse error - wrong name');
     }
 
     private function O()
     {
-        if (isset($this->text[$this->position]) && $this->match('\{')) {
+        if ($this->lookahead()->token == Token::OPEN_OBJECT) {
+            $this->shift();
             $node = $this->P();
-            $this->match('\}');
+            $this->shift();
             return $node;
         }
         return [];
     }
 
-    private function lookahead($regexp)
+    private function lookahead()
     {
-        return preg_match('/^\s*' . $regexp . '/', $this->text, $m, 0, $this->position);
+        return $this->tokens[$this->position];
     }
 
-    private function match($regexp)
+    private function shift()
     {
-        if (preg_match('/^\s*' . $regexp . '/', $this->text, $m, PREG_OFFSET_CAPTURE, $this->position)) {
-            $match = $m[0][0];
-            $this->position = $this->position + strlen($match);
-            return $match;
-        }
-        return null;
+        $token = $this->lookahead();
+        $this->position++;
+        return $token;
     }
 }
 
-$params = [
-    'int $age
+class Token
+{
+    const TYPE = 'type';
+    const NAME = 'name';
+    const ARRAYS = 'array';
+    const OPEN_OBJECT = 'open_object';
+    const CLOSE_OBJECT = 'close_object';
+}
+
+class Tokenizer
+{
+    private static $tokenMap = [
+        '/\s*\w+\s*/Am' => Token::TYPE,
+        '/\s*\$\w+\s*/Am' => Token::NAME,
+        '/\s*\[\]\s*/Am' => Token::ARRAYS,
+        '/\s*\{\s*/Am' => Token::OPEN_OBJECT,
+        '/\s*\}\s*/Am' => Token::CLOSE_OBJECT,
+    ];
+
+    public function lex($string)
+    {
+        $tokens = [];
+        $offset = 0;
+        while (isset($string[$offset])) {
+            foreach (self::$tokenMap as $regex => $token) {
+                if (preg_match($regex, $string, $matches, null, $offset)) {
+                    $tokenDetails = new stdClass();
+                    $tokenDetails->token = trim($token);
+                    $tokenDetails->value = trim($matches[0]);
+                    $tokens[] = $tokenDetails;
+                    $offset += strlen($matches[0]);
+                    continue 2;
+                }
+            }
+            throw new Exception(sprintf('Unexpected character: >%s< offset >%d<', $string[$offset], $offset));
+        }
+        return $tokens;
+    }
+}
+
+$params = '
+    int $age
     int[] $ages
     object $agent {
         string $name
         int $count
-    }',
-];
+    }';
 
-foreach ($params as $param) {
-    $tree = new Tree($param);
-    echo 'Param: ' . $param . PHP_EOL;
-    print_r($tree->S());
-    echo '===' . PHP_EOL;
-}
-
+$tokenizer = new Tokenizer();
+$tokens = $tokenizer->lex($params);
+$tree = new Tree($tokens);
+echo 'Param: ' . $params . PHP_EOL;
+print_r($tree->S());
+echo '===' . PHP_EOL;
