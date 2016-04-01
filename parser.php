@@ -31,7 +31,7 @@ class Node
     }
 }
 
-class Tree
+class Parser
 {
     private $tokens;
     private $position;
@@ -172,7 +172,7 @@ $params = '
 
 $tokenizer = new Tokenizer();
 $tokens = $tokenizer->lex($params);
-$tree = new Tree($tokens);
+$tree = new Parser($tokens);
 echo 'Param: ' . $params . PHP_EOL;
 print_r($tree->S());
 echo '===' . PHP_EOL;
