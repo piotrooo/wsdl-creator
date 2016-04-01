@@ -18,12 +18,14 @@ class Node
     private $type;
     private $name;
     private $isArray;
+    private $elements;
 
-    public function __construct($type, $name, $isArray)
+    public function __construct($type, $name, $isArray, array $elements = [])
     {
         $this->type = $type;
         $this->name = $name;
         $this->isArray = (bool)$isArray;
+        $this->elements = $elements;
     }
 }
 
@@ -32,67 +34,69 @@ class Tree
     private $text;
     private $position;
 
-    public function __construct()
+    public function __construct($text)
     {
+        $this->text = $text;
         $this->position = 0;
     }
 
-    function S($text)
+    public function S()
     {
-        $this->text = $text;
-        $p = $this->P();
-        return $p;
+        return $this->P();
     }
 
-    function P()
+    private function P()
     {
         $type = $this->T();
-        list($isArray, $name) = $this->R();
-        $node = new Node($type, $name, $isArray);
-        var_dump($node);
-        return null;
+        list($isArray, $name, $elements) = $this->R();
+        return new Node($type, $name, $isArray, $elements);
     }
 
-    function T()
+    private function T()
     {
         return $this->match('/\w+/');
     }
 
-    function R()
+    private function R()
     {
         if ($this->text[$this->position] == '[' && $this->text[$this->position + 1] == ']') {
             $this->match('/\[\]/');
             $name = $this->N();
-            $this->O();
+            $elements = $this->O();
             $isArray = true;
         } else {
             $name = $this->N();
-            $this->O();
+            $elements = $this->O();
             $isArray = false;
         }
-        return [$isArray, $name];
+        return [$isArray, $name, $elements];
     }
 
-    function N()
+    private function N()
     {
         return $this->match('/\$\w+/');
     }
 
-    function O()
+    private function O()
     {
         if (isset($this->text[$this->position]) && $this->match('/\s*\{/')) {
-            $this->P();
-//            $this->match('/\s*\}/');
+            $elements = [];
+            $elements[] = $this->P();
+//            while ($this->match('/\s*\}/')) {
+//            }
+            return $elements;
         }
-        return '';
+        return [];
     }
 
-    function match($regexp)
+    private function match($regexp)
     {
-        preg_match($regexp, $this->text, $m, 0, $this->position);
-        $match = isset($m[0]) ? $m[0] : null;
-        $this->position = $this->position + strlen($match);
-        return $match;
+        if (preg_match($regexp, $this->text, $m, PREG_OFFSET_CAPTURE, $this->position)) {
+            $match = $m[0][0];
+            $this->position = $m[0][1] + strlen($match);
+            return $match;
+        }
+        return null;
     }
 }
 
@@ -106,8 +110,8 @@ $params = [
 ];
 
 foreach ($params as $param) {
-    $tree = new Tree();
+    $tree = new Tree($param);
     echo 'Param: ' . $param . PHP_EOL;
-    $tree->S($param);
+    print_r($tree->S());
     echo '===' . PHP_EOL;
 }
