@@ -83,7 +83,7 @@ class Parser
 
     private function I()
     {
-        if ($this->position < count($this->tokens) && $this->lookahead()->token != Token::CLOSE_OBJECT) {
+        if ($this->lookahead()->token != Token::EOF && $this->lookahead()->token != Token::CLOSE_OBJECT) {
             return $this->P();
         }
         return [];
@@ -129,6 +129,7 @@ class Token
     const ARRAYS = 'array';
     const OPEN_OBJECT = 'open_object';
     const CLOSE_OBJECT = 'close_object';
+    const EOF = 'eof';
 }
 
 class Tokenizer
@@ -149,7 +150,7 @@ class Tokenizer
             foreach (self::$tokenMap as $regex => $token) {
                 if (preg_match($regex, $string, $matches, null, $offset)) {
                     $tokenDetails = new stdClass();
-                    $tokenDetails->token = trim($token);
+                    $tokenDetails->token = $token;
                     $tokenDetails->value = trim($matches[0]);
                     $tokens[] = $tokenDetails;
                     $offset += strlen($matches[0]);
@@ -158,6 +159,10 @@ class Tokenizer
             }
             throw new Exception(sprintf('Unexpected character: >%s< offset >%d<', $string[$offset], $offset));
         }
+        $eofToken = new stdClass();
+        $eofToken->token = Token::EOF;
+        $eofToken->value = 'eof';
+        $tokens[] = $eofToken;
         return $tokens;
     }
 }
