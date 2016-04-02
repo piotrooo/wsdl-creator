@@ -21,8 +21,8 @@ class TokenizerTest extends PHPUnit_Framework_TestCase
         Assert::thatArray($tokens)
             ->extracting('token', 'value')
             ->containsExactly(
-                [Token::TYPE, Token::NAME, Token::EOF],
-                ['int', '$age', 'eof']
+                array(Token::TYPE, Token::NAME, Token::EOF),
+                array('int', '$age', 'eof')
             );
     }
 
@@ -42,8 +42,8 @@ class TokenizerTest extends PHPUnit_Framework_TestCase
         Assert::thatArray($tokens)
             ->extracting('token', 'value')
             ->containsExactly(
-                [Token::TYPE, Token::ARRAYS, Token::NAME, Token::EOF],
-                ['string', '[]', '$name', 'eof']
+                array(Token::TYPE, Token::ARRAYS, Token::NAME, Token::EOF),
+                array('string', '[]', '$name', 'eof')
             );
     }
 
@@ -63,8 +63,8 @@ class TokenizerTest extends PHPUnit_Framework_TestCase
         Assert::thatArray($tokens)
             ->extracting('token', 'value')
             ->containsExactly(
-                [Token::TYPE, Token::NAME, Token::OPEN_OBJECT, Token::TYPE, Token::NAME, Token::TYPE, Token::NAME, Token::CLOSE_OBJECT, Token::EOF],
-                ['object', '$name', '{', 'string', '$firstName', 'int', '$age', '}', 'eof']
+                array(Token::TYPE, Token::NAME, Token::OPEN_OBJECT, Token::TYPE, Token::NAME, Token::TYPE, Token::NAME, Token::CLOSE_OBJECT, Token::EOF),
+                array('object', '$name', '{', 'string', '$firstName', 'int', '$age', '}', 'eof')
             );
     }
 
@@ -84,8 +84,8 @@ class TokenizerTest extends PHPUnit_Framework_TestCase
         Assert::thatArray($tokens)
             ->extracting('token', 'value')
             ->containsExactly(
-                [Token::TYPE, Token::ARRAYS, Token::NAME, Token::OPEN_OBJECT, Token::TYPE, Token::NAME, Token::TYPE, Token::NAME, Token::CLOSE_OBJECT, Token::EOF],
-                ['object', '[]', '$name', '{', 'string', '$firstName', 'int', '$age', '}', 'eof']
+                array(Token::TYPE, Token::ARRAYS, Token::NAME, Token::OPEN_OBJECT, Token::TYPE, Token::NAME, Token::TYPE, Token::NAME, Token::CLOSE_OBJECT, Token::EOF),
+                array('object', '[]', '$name', '{', 'string', '$firstName', 'int', '$age', '}', 'eof')
             );
     }
 
@@ -111,7 +111,7 @@ class TokenizerTest extends PHPUnit_Framework_TestCase
         Assert::thatArray($tokens)
             ->extracting('token', 'value')
             ->containsExactly(
-                [
+                array(
                     Token::TYPE, Token::NAME, Token::OPEN_OBJECT,
                     Token::TYPE, Token::NAME, Token::OPEN_OBJECT,
                     Token::TYPE, Token::NAME,
@@ -120,8 +120,8 @@ class TokenizerTest extends PHPUnit_Framework_TestCase
                     Token::TYPE, Token::NAME,
                     Token::CLOSE_OBJECT,
                     Token::EOF
-                ],
-                ['object', '$name', '{', 'object', '$user', '{', 'string', '$firstName', 'int', '$age', '}', 'int', '$count', '}', 'eof']
+                ),
+                array('object', '$name', '{', 'object', '$user', '{', 'string', '$firstName', 'int', '$age', '}', 'int', '$count', '}', 'eof')
             );
     }
 }

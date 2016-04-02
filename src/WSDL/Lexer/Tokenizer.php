@@ -36,13 +36,13 @@ class Tokenizer
     /**
      * @var array
      */
-    private static $tokenMap = [
+    private static $tokenMap = array(
         '/\s*\w+\s*/Am' => Token::TYPE,
         '/\s*\$\w+\s*/Am' => Token::NAME,
         '/\s*\[\]\s*/Am' => Token::ARRAYS,
         '/\s*\{\s*/Am' => Token::OPEN_OBJECT,
         '/\s*\}\s*/Am' => Token::CLOSE_OBJECT
-    ];
+    );
 
     /**
      * @param string $string
