@@ -19,7 +19,7 @@
     }
   ],
   "require": {
-    "letsdrink/ouzo-goodies": "1.5.0"
+    "letsdrink/ouzo-goodies": "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "4.7.5",
