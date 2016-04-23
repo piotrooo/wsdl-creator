@@ -24,17 +24,54 @@
 namespace WSDL\Lexer;
 
 /**
- * Token
+ * TokenObject
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class Token
+class TokenObject
 {
-    const TYPE = 'type';
-    const NAME = 'name';
-    const ARRAYS = 'array';
-    const CLASS_NAME = 'class_name';
-    const OPEN_OBJECT = 'open_object';
-    const CLOSE_OBJECT = 'close_object';
-    const EOF = 'eof';
+    /**
+     * @var string
+     */
+    private $name;
+    /**
+     * @var string
+     */
+    private $value;
+
+    /**
+     * @param string $name
+     * @param string $value
+     */
+    private function __construct($name, $value)
+    {
+        $this->name = $name;
+        $this->value = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param string $name
+     * @param string $value
+     * @return TokenObject
+     */
+    public static function create($name, $value)
+    {
+        return new self($name, $value);
+    }
 }

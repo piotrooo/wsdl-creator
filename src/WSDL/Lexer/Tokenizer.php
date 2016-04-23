@@ -24,7 +24,6 @@
 namespace WSDL\Lexer;
 
 use Exception;
-use stdClass;
 
 /**
  * Tokenizer
@@ -40,6 +39,7 @@ class Tokenizer
         '/\s*\w+\s*/Am' => Token::TYPE,
         '/\s*\$\w+\s*/Am' => Token::NAME,
         '/\s*\[\]\s*/Am' => Token::ARRAYS,
+        '/\s*\\\.+\s*/Am' => Token::CLASS_NAME,
         '/\s*\{\s*/Am' => Token::OPEN_OBJECT,
         '/\s*\}\s*/Am' => Token::CLOSE_OBJECT
     );
@@ -56,27 +56,14 @@ class Tokenizer
         while (isset($string[$offset])) {
             foreach (self::$tokenMap as $regex => $token) {
                 if (preg_match($regex, $string, $matches, null, $offset)) {
-                    $tokens[] = $this->createTokenObject($token, trim($matches[0]));
+                    $tokens[] = TokenObject::create($token, trim($matches[0]));
                     $offset += strlen($matches[0]);
                     continue 2;
                 }
             }
             throw new Exception(sprintf('Unexpected character: >%s< offset >%d<', $string[$offset], $offset));
         }
-        $tokens[] = $this->createTokenObject(Token::EOF, 'eof');
+        $tokens[] = TokenObject::create(Token::EOF, 'eof');
         return $tokens;
-    }
-
-    /**
-     * @param string $token
-     * @param string $value
-     * @return stdClass
-     */
-    private function createTokenObject($token, $value)
-    {
-        $tokenDetails = new stdClass();
-        $tokenDetails->token = $token;
-        $tokenDetails->value = $value;
-        return $tokenDetails;
     }
 }
