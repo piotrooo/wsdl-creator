@@ -56,20 +56,22 @@ class Tokenizer
         while (isset($string[$offset])) {
             foreach (self::$tokenMap as $regex => $token) {
                 if (preg_match($regex, $string, $matches, null, $offset)) {
-                    $tokenDetails = new stdClass();
-                    $tokenDetails->token = $token;
-                    $tokenDetails->value = trim($matches[0]);
-                    $tokens[] = $tokenDetails;
+                    $tokens[] = $this->createTokenObject($token, trim($matches[0]));
                     $offset += strlen($matches[0]);
                     continue 2;
                 }
             }
             throw new Exception(sprintf('Unexpected character: >%s< offset >%d<', $string[$offset], $offset));
         }
-        $eofToken = new stdClass();
-        $eofToken->token = Token::EOF;
-        $eofToken->value = 'eof';
-        $tokens[] = $eofToken;
+        $tokens[] = $this->createTokenObject(Token::EOF, 'eof');
         return $tokens;
+    }
+
+    private function createTokenObject($token, $value)
+    {
+        $tokenDetails = new stdClass();
+        $tokenDetails->token = $token;
+        $tokenDetails->value = $value;
+        return $tokenDetails;
     }
 }
