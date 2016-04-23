@@ -33,6 +33,9 @@ class Node
 
 class Parser
 {
+    /**
+     * @var TokenObject[]
+     */
     private $tokens;
     private $position;
 
@@ -60,15 +63,15 @@ class Parser
     private function T()
     {
         $token = $this->shift();
-        if ($token->token == Token::TYPE) {
-            return $token->value;
+        if ($token->getName() == Token::TYPE) {
+            return $token->getValue();
         }
         throw new Exception('Parse error - wrong type');
     }
 
     private function R()
     {
-        if ($this->lookahead()->token == Token::ARRAYS) {
+        if ($this->lookahead()->getName() == Token::ARRAYS) {
             $this->shift();
             $name = $this->N();
             $elements = $this->O();
@@ -83,7 +86,7 @@ class Parser
 
     private function I()
     {
-        if ($this->lookahead()->token != Token::EOF && $this->lookahead()->token != Token::CLOSE_OBJECT) {
+        if ($this->lookahead()->getName() != Token::EOF && $this->lookahead()->getName() != Token::CLOSE_OBJECT) {
             return $this->P();
         }
         return [];
@@ -92,15 +95,15 @@ class Parser
     private function N()
     {
         $token = $this->shift();
-        if ($token->token == Token::NAME) {
-            return $token->value;
+        if ($token->getName() == Token::NAME || $token->getName() == Token::CLASS_NAME) {
+            return $token->getValue();
         }
         throw new Exception('Parse error - wrong name');
     }
 
     private function O()
     {
-        if ($this->lookahead()->token == Token::OPEN_OBJECT) {
+        if ($this->lookahead()->getName() == Token::OPEN_OBJECT) {
             $this->shift();
             $node = $this->P();
             $this->shift();
@@ -127,9 +130,37 @@ class Token
     const TYPE = 'type';
     const NAME = 'name';
     const ARRAYS = 'array';
+    const CLASS_NAME = 'class_name';
     const OPEN_OBJECT = 'open_object';
     const CLOSE_OBJECT = 'close_object';
     const EOF = 'eof';
+}
+
+class TokenObject
+{
+    private $name;
+    private $value;
+
+    public function __construct($name, $value)
+    {
+        $this->name = $name;
+        $this->value = $value;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    public static function create($name, $value)
+    {
+        return new self($name, $value);
+    }
 }
 
 class Tokenizer
@@ -138,6 +169,7 @@ class Tokenizer
         '/\s*\w+\s*/Am' => Token::TYPE,
         '/\s*\$\w+\s*/Am' => Token::NAME,
         '/\s*\[\]\s*/Am' => Token::ARRAYS,
+        '/\s*\\\.+\s*/Am' => Token::CLASS_NAME,
         '/\s*\{\s*/Am' => Token::OPEN_OBJECT,
         '/\s*\}\s*/Am' => Token::CLOSE_OBJECT
     ];
@@ -149,34 +181,25 @@ class Tokenizer
         while (isset($string[$offset])) {
             foreach (self::$tokenMap as $regex => $token) {
                 if (preg_match($regex, $string, $matches, null, $offset)) {
-                    $tokenDetails = new stdClass();
-                    $tokenDetails->token = $token;
-                    $tokenDetails->value = trim($matches[0]);
-                    $tokens[] = $tokenDetails;
+                    $tokens[] = TokenObject::create($token, trim($matches[0]));
                     $offset += strlen($matches[0]);
                     continue 2;
                 }
             }
             throw new Exception(sprintf('Unexpected character: >%s< offset >%d<', $string[$offset], $offset));
         }
-        $eofToken = new stdClass();
-        $eofToken->token = Token::EOF;
-        $eofToken->value = 'eof';
-        $tokens[] = $eofToken;
+        $tokens[] = TokenObject::create(Token::EOF, 'eof');
         return $tokens;
     }
 }
 
-$params = '
-    int $age
-    int[] $ages
-    object $agent {
-        string $name
-        int $count
+$params = 'object $wrap {
+        className \Foo\Bar
     }';
 
 $tokenizer = new Tokenizer();
 $tokens = $tokenizer->lex($params);
+print_r($tokens);
 $tree = new Parser($tokens);
 echo 'Param: ' . $params . PHP_EOL;
 print_r($tree->S());
