@@ -67,6 +67,11 @@ class Tokenizer
         return $tokens;
     }
 
+    /**
+     * @param string $token
+     * @param string $value
+     * @return stdClass
+     */
     private function createTokenObject($token, $value)
     {
         $tokenDetails = new stdClass();
