@@ -21,49 +21,75 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-namespace WSDL\Lexer;
-
-use Exception;
+namespace WSDL\Parser;
 
 /**
- * Tokenizer
+ * Node
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class Tokenizer
+class Node
 {
     /**
-     * @var array
+     * @var string
      */
-    private static $tokenMap = array(
-        '/\s*((?:[\\\]{1,2}\w+|\w+[\\\]{1,2})(?:\w+[\\\]{0,2})+)\s*/Am' => Token::CLASS_NAME,
-        '/\s*\w+\s*/Am' => Token::TYPE,
-        '/\s*\$\w+\s*/Am' => Token::NAME,
-        '/\s*\[\]\s*/Am' => Token::ARRAYS,
-        '/\s*\{\s*/Am' => Token::OPEN_OBJECT,
-        '/\s*\}\s*/Am' => Token::CLOSE_OBJECT
-    );
+    private $type;
+    /**
+     * @var string
+     */
+    private $name;
+    /**
+     * @var bool
+     */
+    private $isArray;
+    /**
+     * @var Node[]
+     */
+    private $elements;
 
     /**
-     * @param string $string
-     * @return array
-     * @throws Exception
+     * @param string $type
+     * @param string $name
+     * @param boolean $isArray
+     * @param Node[] $elements
      */
-    public function lex($string)
+    public function __construct($type, $name, $isArray, array $elements = array())
     {
-        $tokens = [];
-        $offset = 0;
-        while (isset($string[$offset])) {
-            foreach (self::$tokenMap as $regex => $token) {
-                if (preg_match($regex, $string, $matches, null, $offset)) {
-                    $tokens[] = TokenObject::create($token, trim($matches[0]));
-                    $offset += strlen($matches[0]);
-                    continue 2;
-                }
-            }
-            throw new Exception(sprintf('Unexpected character: >%s< offset >%d<', $string[$offset], $offset));
-        }
-        $tokens[] = TokenObject::create(Token::EOF, 'eof');
-        return $tokens;
+        $this->type = $type;
+        $this->name = $name;
+        $this->isArray = (bool)$isArray;
+        $this->elements = $elements;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isArray()
+    {
+        return $this->isArray;
+    }
+
+    /**
+     * @return Node[]
+     */
+    public function getElements()
+    {
+        return $this->elements;
     }
 }

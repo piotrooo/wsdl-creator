@@ -152,4 +152,82 @@ class TokenizerTest extends PHPUnit_Framework_TestCase
                 array('object', '$name', '{', 'className', '\Foo\Bar\Baz', '}', 'eof')
             );
     }
+
+    /**
+     * @test
+     */
+    public function shouldTokenizeClassWrapperOneLine()
+    {
+        //given
+        $param = 'object $name { className \Foo\Bar\Baz }';
+        $tokenizer = new Tokenizer();
+
+        //when
+        $tokens = $tokenizer->lex($param);
+
+        //then
+        Assert::thatArray($tokens)
+            ->extracting('getName()', 'getValue()')
+            ->containsExactly(
+                array(
+                    Token::TYPE, Token::NAME, Token::OPEN_OBJECT,
+                    Token::TYPE, Token::CLASS_NAME,
+                    Token::CLOSE_OBJECT,
+                    Token::EOF
+                ),
+                array('object', '$name', '{', 'className', '\Foo\Bar\Baz', '}', 'eof')
+            );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldTokenizeClassWrapperWithDuplicatedBackSlash()
+    {
+        //given
+        $param = 'object $name { className \\Foo\\Bar\\Baz }';
+        $tokenizer = new Tokenizer();
+
+        //when
+        $tokens = $tokenizer->lex($param);
+
+        //then
+        Assert::thatArray($tokens)
+            ->extracting('getName()', 'getValue()')
+            ->containsExactly(
+                array(
+                    Token::TYPE, Token::NAME, Token::OPEN_OBJECT,
+                    Token::TYPE, Token::CLASS_NAME,
+                    Token::CLOSE_OBJECT,
+                    Token::EOF
+                ),
+                array('object', '$name', '{', 'className', '\\Foo\\Bar\\Baz', '}', 'eof')
+            );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldTokenizeClassWrapperWithoutFirstBackSlash()
+    {
+        //given
+        $param = 'object $name { className Foo\Bar\Baz }';
+        $tokenizer = new Tokenizer();
+
+        //when
+        $tokens = $tokenizer->lex($param);
+
+        //then
+        Assert::thatArray($tokens)
+            ->extracting('getName()', 'getValue()')
+            ->containsExactly(
+                array(
+                    Token::TYPE, Token::NAME, Token::OPEN_OBJECT,
+                    Token::TYPE, Token::CLASS_NAME,
+                    Token::CLOSE_OBJECT,
+                    Token::EOF
+                ),
+                array('object', '$name', '{', 'className', 'Foo\Bar\Baz', '}', 'eof')
+            );
+    }
 }
