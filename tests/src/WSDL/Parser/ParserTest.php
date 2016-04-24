@@ -229,7 +229,9 @@ class ParserTest extends PHPUnit_Framework_TestCase
         CatchException::when($parser)->S();
 
         //then
-        CatchException::assertThat()->hasMessage('Parse error - wrong type');
+        CatchException::assertThat()
+            ->isInstanceOf('\WSDL\Parser\ParserException')
+            ->hasMessage('Wrong type');
     }
 
     /**
@@ -244,7 +246,9 @@ class ParserTest extends PHPUnit_Framework_TestCase
         CatchException::when($parser)->S();
 
         //then
-        CatchException::assertThat()->hasMessage('Parse error - wrong name');
+        CatchException::assertThat()
+            ->isInstanceOf('\WSDL\Parser\ParserException')
+            ->hasMessage('Wrong name');
     }
 
     /**
@@ -259,7 +263,9 @@ class ParserTest extends PHPUnit_Framework_TestCase
         CatchException::when($parser)->S();
 
         //then
-        CatchException::assertThat()->hasMessage('Parse error - wrong type');
+        CatchException::assertThat()
+            ->isInstanceOf('\WSDL\Parser\ParserException')
+            ->hasMessage('Wrong type');
     }
 
     /**
@@ -274,7 +280,9 @@ class ParserTest extends PHPUnit_Framework_TestCase
         CatchException::when($parser)->S();
 
         //then
-        CatchException::assertThat()->hasMessage('Parse error - wrong name');
+        CatchException::assertThat()
+            ->isInstanceOf('\WSDL\Parser\ParserException')
+            ->hasMessage('Wrong name');
     }
 
     /**
@@ -289,7 +297,9 @@ class ParserTest extends PHPUnit_Framework_TestCase
         CatchException::when($parser)->S();
 
         //then
-        CatchException::assertThat()->hasMessage('Parse error - wrong type');
+        CatchException::assertThat()
+            ->isInstanceOf('\WSDL\Parser\ParserException')
+            ->hasMessage('Wrong type');
     }
 
     /**
@@ -304,7 +314,9 @@ class ParserTest extends PHPUnit_Framework_TestCase
         CatchException::when($parser)->S();
 
         //then
-        CatchException::assertThat()->hasMessage('Parse error - wrong name');
+        CatchException::assertThat()
+            ->isInstanceOf('\WSDL\Parser\ParserException')
+            ->hasMessage('Wrong name');
     }
 
     /**
@@ -319,7 +331,9 @@ class ParserTest extends PHPUnit_Framework_TestCase
         CatchException::when($parser)->S();
 
         //then
-        CatchException::assertThat()->hasMessage('Parse error - missing open object');
+        CatchException::assertThat()
+            ->isInstanceOf('\WSDL\Parser\ParserException')
+            ->hasMessage('Missing open object');
     }
 
     /**
@@ -340,7 +354,9 @@ class ParserTest extends PHPUnit_Framework_TestCase
         CatchException::when($parser)->S();
 
         //then
-        CatchException::assertThat()->hasMessage('Parse error - missing open object');
+        CatchException::assertThat()
+            ->isInstanceOf('\WSDL\Parser\ParserException')
+            ->hasMessage('Missing open object');
     }
 
     /**
@@ -355,7 +371,9 @@ class ParserTest extends PHPUnit_Framework_TestCase
         CatchException::when($parser)->S();
 
         //then
-        CatchException::assertThat()->hasMessage('Parse error - missing close object');
+        CatchException::assertThat()
+            ->isInstanceOf('\WSDL\Parser\ParserException')
+            ->hasMessage('Missing close object');
     }
 
     /**
@@ -375,7 +393,9 @@ class ParserTest extends PHPUnit_Framework_TestCase
         CatchException::when($parser)->S();
 
         //then
-        CatchException::assertThat()->hasMessage('Parse error - missing close object');
+        CatchException::assertThat()
+            ->isInstanceOf('\WSDL\Parser\ParserException')
+            ->hasMessage('Missing close object');
     }
 
     private function parser($string)

@@ -89,7 +89,7 @@ class Parser
         if ($token->getName() == Token::TYPE) {
             return $token->getValue();
         }
-        throw new Exception('Parse error - wrong type');
+        throw new ParserException('Wrong type');
     }
 
     private function R()
@@ -118,10 +118,10 @@ class Parser
     private function N()
     {
         $token = $this->shift();
-        if ($token->getName() == Token::NAME || $token->getName() == Token::CLASS_NAME) {
+        if (in_array($token->getName(), array(Token::NAME, Token::CLASS_NAME))) {
             return $token->getValue();
         }
-        throw new Exception('Parse error - wrong name');
+        throw new ParserException('Wrong name');
     }
 
     private function O()
@@ -141,7 +141,7 @@ class Parser
     {
         $tokenObject = $this->lookAt(($this->position - 2));
         if ($tokenObject && $tokenObject->getValue() == 'object' && $token->getName() != Token::OPEN_OBJECT) {
-            throw new Exception('Parse error - missing open object');
+            throw new ParserException('Missing open object');
         }
     }
 
@@ -149,7 +149,7 @@ class Parser
     {
         $token = $this->shift();
         if ($token->getName() != Token::CLOSE_OBJECT) {
-            throw new Exception('Parse error - missing close object');
+            throw new ParserException('Missing close object');
         }
     }
 
