@@ -23,7 +23,7 @@
  */
 namespace WSDL\Parser;
 
-use Exception;
+use Ouzo\Utilities\Strings;
 use WSDL\Lexer\Token;
 use WSDL\Lexer\TokenObject;
 
@@ -47,6 +47,8 @@ use WSDL\Lexer\TokenObject;
  */
 class Parser
 {
+    const OBJECT_TYPE = 'object';
+
     /**
      * @var TokenObject[]
      */
@@ -140,7 +142,7 @@ class Parser
     private function checkObjectHasOpenBracket(TokenObject $token)
     {
         $tokenObject = $this->lookAt(($this->position - 2));
-        if ($tokenObject && $tokenObject->getValue() == 'object' && $token->getName() != Token::OPEN_OBJECT) {
+        if ($tokenObject && Strings::equalsIgnoreCase($tokenObject->getValue(), self::OBJECT_TYPE) && $token->getName() != Token::OPEN_OBJECT) {
             throw new ParserException('Missing open object');
         }
     }

@@ -72,6 +72,6 @@ class TokenObject
      */
     public static function create($name, $value)
     {
-        return new self(strtolower($name), $value);
+        return new self($name, $value);
     }
 }
