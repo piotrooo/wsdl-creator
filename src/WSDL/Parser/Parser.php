@@ -126,18 +126,41 @@ class Parser
 
     private function O()
     {
-        if ($this->lookahead()->getName() == Token::OPEN_OBJECT) {
+        $token = $this->lookahead();
+        $this->checkObjectHasOpenBracket($token);
+        if ($token->getName() == Token::OPEN_OBJECT) {
             $this->shift();
             $node = $this->P();
-            $this->shift();
+            $this->checkObjectHasCloseBracket();
             return $node;
         }
         return [];
     }
 
+    private function checkObjectHasOpenBracket(TokenObject $token)
+    {
+        $tokenObject = $this->lookAt(($this->position - 2));
+        if ($tokenObject && $tokenObject->getValue() == 'object' && $token->getName() != Token::OPEN_OBJECT) {
+            throw new Exception('Parse error - missing open object');
+        }
+    }
+
+    private function checkObjectHasCloseBracket()
+    {
+        $token = $this->shift();
+        if ($token->getName() != Token::CLOSE_OBJECT) {
+            throw new Exception('Parse error - missing close object');
+        }
+    }
+
     private function lookahead()
     {
         return $this->tokens[$this->position];
+    }
+
+    private function lookAt($position)
+    {
+        return $this->tokens[$position];
     }
 
     private function shift()

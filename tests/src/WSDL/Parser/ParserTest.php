@@ -1,5 +1,6 @@
 <?php
 use Ouzo\Tests\Assert;
+use Ouzo\Tests\CatchException;
 use Ouzo\Utilities\Arrays;
 use WSDL\Lexer\Tokenizer;
 use WSDL\Parser\Node;
@@ -13,8 +14,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
     public function shouldParseSimple()
     {
         //given
-        $tokens = $this->tokenize('int $age');
-        $parser = new Parser($tokens);
+        $parser = $this->parser('int $age');
 
         //when
         $nodes = $parser->S();
@@ -36,8 +36,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
     public function shouldParseSimpleArray()
     {
         //given
-        $tokens = $this->tokenize('int[] $age');
-        $parser = new Parser($tokens);
+        $parser = $this->parser('int[] $age');
 
         //when
         $nodes = $parser->S();
@@ -59,8 +58,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
     public function shouldParseObject()
     {
         //given
-        $tokens = $this->tokenize('object $user { string $name bool $isActive }');
-        $parser = new Parser($tokens);
+        $parser = $this->parser('object $user { string $name bool $isActive }');
 
         //when
         $nodes = $parser->S();
@@ -92,8 +90,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
     public function shouldParseObjectArray()
     {
         //given
-        $tokens = $this->tokenize('object[] $user { string $name bool $isActive }');
-        $parser = new Parser($tokens);
+        $parser = $this->parser('object[] $user { string $name bool $isActive }');
 
         //when
         $nodes = $parser->S();
@@ -125,9 +122,8 @@ class ParserTest extends PHPUnit_Framework_TestCase
     public function shouldParseSimpleAndObject()
     {
         //given
-        $tokens = $this->tokenize('int $age 
+        $parser = $this->parser('int $age 
         object $user { string $name bool $isActive }');
-        $parser = new Parser($tokens);
 
         //when
         $nodes = $parser->S();
@@ -163,8 +159,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
     public function shouldParseObjectWithArrayInsideAttribute()
     {
         //given
-        $tokens = $this->tokenize('object $user { string[] $name bool $isActive }');
-        $parser = new Parser($tokens);
+        $parser = $this->parser('object $user { string[] $name bool $isActive }');
 
         //when
         $nodes = $parser->S();
@@ -196,8 +191,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
     public function shouldParseObjectWithClassName()
     {
         //given
-        $tokens = $this->tokenize('object $user { className \Foo\Bar\Baz }');
-        $parser = new Parser($tokens);
+        $parser = $this->parser('object $user { className \Foo\Bar\Baz }');
 
         //when
         $nodes = $parser->S();
@@ -223,9 +217,172 @@ class ParserTest extends PHPUnit_Framework_TestCase
             );
     }
 
-    private function tokenize($string)
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenSimpleTypeNotHaveType()
+    {
+        //given
+        $parser = $this->parser('$name');
+
+        //when
+        CatchException::when($parser)->S();
+
+        //then
+        CatchException::assertThat()->hasMessage('Parse error - wrong type');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenSimpleTypeNotHaveName()
+    {
+        //given
+        $parser = $this->parser('int');
+
+        //when
+        CatchException::when($parser)->S();
+
+        //then
+        CatchException::assertThat()->hasMessage('Parse error - wrong name');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenObjectNotHaveType()
+    {
+        //given
+        $parser = $this->parser('$user { int $age }');
+
+        //when
+        CatchException::when($parser)->S();
+
+        //then
+        CatchException::assertThat()->hasMessage('Parse error - wrong type');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenObjectNotHaveName()
+    {
+        //given
+        $parser = $this->parser('object { int $age }');
+
+        //when
+        CatchException::when($parser)->S();
+
+        //then
+        CatchException::assertThat()->hasMessage('Parse error - wrong name');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenInsideObjectAttributeNotHaveType()
+    {
+        //given
+        $parser = $this->parser('object $user { $age }');
+
+        //when
+        CatchException::when($parser)->S();
+
+        //then
+        CatchException::assertThat()->hasMessage('Parse error - wrong type');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenInsideObjectAttributeNotHaveName()
+    {
+        //given
+        $parser = $this->parser('object $user { int }');
+
+        //when
+        CatchException::when($parser)->S();
+
+        //then
+        CatchException::assertThat()->hasMessage('Parse error - wrong name');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenObjectNotHaveOpen()
+    {
+        //given
+        $parser = $this->parser('object $user int $age }');
+
+        //when
+        CatchException::when($parser)->S();
+
+        //then
+        CatchException::assertThat()->hasMessage('Parse error - missing open object');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenObjectNotHaveOpenInNestedObject()
+    {
+        //given
+        $parser = $this->parser('object $user { 
+            int $age 
+            object $role 
+                int $id
+                string $name
+            }
+        }');
+
+        //when
+        CatchException::when($parser)->S();
+
+        //then
+        CatchException::assertThat()->hasMessage('Parse error - missing open object');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenObjectNotHaveClose()
+    {
+        //given
+        $parser = $this->parser('object $user { int $age ');
+
+        //when
+        CatchException::when($parser)->S();
+
+        //then
+        CatchException::assertThat()->hasMessage('Parse error - missing close object');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenObjectNotHaveCloseInNestedObject()
+    {
+        //given
+        $parser = $this->parser('object $user { 
+            int $age 
+            object $role {
+                int $id
+                string $name
+        }');
+
+        //when
+        CatchException::when($parser)->S();
+
+        //then
+        CatchException::assertThat()->hasMessage('Parse error - missing close object');
+    }
+
+    private function parser($string)
     {
         $tokenizer = new Tokenizer();
-        return $tokenizer->lex($string);
+        $tokens = $tokenizer->lex($string);
+        return new Parser($tokens);
+
     }
 }
