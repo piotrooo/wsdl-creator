@@ -19,7 +19,8 @@
     }
   ],
   "require": {
-    "letsdrink/ouzo-goodies": "dev-master"
+    "letsdrink/ouzo-goodies": "dev-master",
+    "doctrine/annotations": "1.2.*"
   },
   "require-dev": {
     "phpunit/phpunit": "4.7.5",
