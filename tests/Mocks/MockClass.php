@@ -50,7 +50,7 @@ class MockClass
 
     /**
      * @WebMethod
-     * @param object $object1 @string=$name @int=$id
+     * @param object $object1 { string $name int $id }
      * @return object $return @string=$new_name @int=$new_id
      */
     public function arrayTest($object1)
