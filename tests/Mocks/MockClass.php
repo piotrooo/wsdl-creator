@@ -1,9 +1,4 @@
 <?php
-/**
- * MockClass
- *
- * @author Piotr Olaszewski <piotroo89@gmail.com>
- */
 namespace Mocks;
 
 use stdClass;
