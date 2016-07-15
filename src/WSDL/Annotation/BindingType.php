@@ -33,10 +33,13 @@ namespace WSDL\Annotation;
  */
 final class BindingType
 {
+    const SOAP_11 = 'SOAP_11';
+    const SOAP_12 = 'SOAP_12';
+
     /**
      * @var mixed
      *
      * @Enum({"SOAP_11", "SOAP_12"})
      */
-    public $value;
+    public $value = self::SOAP_11;
 }

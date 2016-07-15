@@ -33,22 +33,29 @@ namespace WSDL\Annotation;
  */
 final class SoapBinding
 {
+    const RPC = 'RPC';
+    const DOCUMENT = 'DOCUMENT';
+    const LITERAL = 'LITERAL';
+    const ENCODED = 'ENCODED';
+    const BARE = 'BARE';
+    const WRAPPED = 'WRAPPED';
+
     /**
      * @var mixed
      *
      * @Enum({"RPC", "DOCUMENT"})
      */
-    public $style;
+    public $style = self::RPC;
     /**
      * @var mixed
      *
      * @Enum({"LITERAL", "ENCODED"})
      */
-    public $use;
+    public $use = self::LITERAL;
     /**
      * @var mixed
      *
      * @Enum({"BARE", "WRAPPED"})
      */
-    public $parameterStyle;
+    public $parameterStyle = self::BARE;
 }

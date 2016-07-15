@@ -7,7 +7,7 @@ use Ouzo\Utilities\Path;
 use WSDL\Annotation\BindingType;
 
 /**
- * @BindingType("SOAP_11")
+ * @BindingType
  */
 class S
 {
