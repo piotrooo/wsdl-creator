@@ -35,7 +35,6 @@ final class WebMethod
 {
     /**
      * @var string
-     * @Required
      */
     public $name;
 }

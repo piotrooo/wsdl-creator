@@ -105,9 +105,12 @@ class XMLGenerator
 
     public function generate()
     {
-        $this->_definitions();
+        $this->_definitions()
 //            ->_types()
-//            ->_message()->_portType()->_binding()->_service();
+            ->_message()
+            ->_portType()
+            ->_binding()
+            ->_service();
     }
 
     /**

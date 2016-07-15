@@ -77,6 +77,11 @@ class Node
         return $this->name;
     }
 
+    public function getSanitizedName()
+    {
+        return str_replace('$', '', $this->name);
+    }
+
     /**
      * @return boolean
      */
