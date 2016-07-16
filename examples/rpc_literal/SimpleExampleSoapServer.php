@@ -60,4 +60,14 @@ class SimpleSoapServer
         }
         return $array;
     }
+
+    /**
+     * @WebMethod
+     * @param object $info @string=$name @int=$age
+     * @return string $returnInfo
+     */
+    public function userInfo($info)
+    {
+        return 'Your name is: ' . $info->name . ' and you have ' . $info->age . ' years old, it\'s ok?';
+    }
 }

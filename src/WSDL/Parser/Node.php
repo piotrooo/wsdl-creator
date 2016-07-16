@@ -72,11 +72,30 @@ class Node
     /**
      * @return string
      */
+    public function getTypeForArray()
+    {
+        return 'ArrayOf' . $this->getTypeForObject();
+    }
+
+    /**
+     * @return string
+     */
+    public function getTypeForObject()
+    {
+        return ucfirst($this->getSanitizedName());
+    }
+
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @return string
+     */
     public function getSanitizedName()
     {
         return str_replace('$', '', $this->name);
@@ -88,6 +107,14 @@ class Node
     public function isArray()
     {
         return $this->isArray;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isObject()
+    {
+        return $this->type == Parser::OBJECT_TYPE;
     }
 
     /**

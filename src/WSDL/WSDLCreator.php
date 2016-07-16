@@ -24,13 +24,11 @@
 namespace WSDL;
 
 use Exception;
-use WSDL\Builder\WSDLBuilder;
 use WSDL\Parser\ClassParser;
 use WSDL\Service\Service;
 use WSDL\Utilities\Strings;
 use WSDL\XML\Styles\RpcLiteral;
 use WSDL\XML\Styles\Style;
-use WSDL\XML\XML;
 use WSDL\XML\XMLGenerator;
 
 /**
@@ -40,13 +38,6 @@ use WSDL\XML\XMLGenerator;
  */
 class WSDLCreator
 {
-    public static function fromBuilder(WSDLBuilder $builder)
-    {
-        $xml = new XML($builder);
-        $xml->generate();
-        return $xml;
-    }
-
     private $_class;
     private $_location;
     /**

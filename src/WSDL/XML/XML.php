@@ -4,6 +4,8 @@ namespace WSDL\XML;
 use DOMDocument;
 use WSDL\Builder\WSDLBuilder;
 use WSDL\Utilities\XMLAttributeHelper;
+use WSDL\XML\XMLStyle\XMLStyle;
+use WSDL\XML\XMLUse\XMLUse;
 
 class XML
 {
@@ -15,6 +17,10 @@ class XML
      * @var XMLStyle
      */
     private $XMLStyle;
+    /**
+     * @var XMLUse
+     */
+    private $XMLUse;
     /**
      * @var DOMDocument
      */
@@ -43,19 +49,19 @@ class XML
         $this->xml = $this->DOMDocument->saveXML();
     }
 
+    public function getXml()
+    {
+        return $this->xml;
+    }
+
     public function generate()
     {
         $this->definitions()
+            ->types()
             ->message()
             ->portType()
             ->binding()
             ->service();
-    }
-
-    public function render()
-    {
-        header("Content-Type: text/xml");
-        echo $this->xml;
     }
 
     private function definitions()
@@ -114,12 +120,10 @@ class XML
         $bindingElement->appendChild($soapBindingElement);
 
         foreach ($this->builder->getMethods() as $method) {
-            $soapBodyElement = $this->XMLUse->getDOMDocument($this->DOMDocument, $targetNamespace);
+            $soapBodyElement = $this->XMLUse->getBodyDOMDocument($this->DOMDocument, $targetNamespace);
 
             $operationElement = XMLAttributeHelper::forDOM($this->DOMDocument)
-                ->createElementWithAttributes('operation', array(
-                    'name' => $method->getName()
-                ));
+                ->createElementWithAttributes('operation', array('name' => $method->getName()));
 
             $soapOperationElement = XMLAttributeHelper::forDOM($this->DOMDocument)
                 ->createElementWithAttributes('soap:operation', array(
@@ -147,9 +151,7 @@ class XML
     {
         $name = $this->builder->getName();
         $portTypeElement = XMLAttributeHelper::forDOM($this->DOMDocument)
-            ->createElementWithAttributes('portType', array(
-                'name' => $name . 'PortType'
-            ));
+            ->createElementWithAttributes('portType', array('name' => $name . 'PortType'));
 
         foreach ($this->builder->getMethods() as $method) {
             $methodName = $method->getName();
@@ -188,12 +190,17 @@ class XML
 
     private function messageParts($name, $nodes)
     {
-        $messageInputElement = XMLAttributeHelper::forDOM($this->DOMDocument)
+        $messageElement = XMLAttributeHelper::forDOM($this->DOMDocument)
             ->createElementWithAttributes('message', array('name' => $name));
         $parts = $this->XMLStyle->getMessagePartDOMDocument($this->DOMDocument, $nodes);
         foreach ($parts as $part) {
-            $messageInputElement->appendChild($part);
+            $messageElement->appendChild($part);
         }
-        return $messageInputElement;
+        return $messageElement;
+    }
+
+    private function types()
+    {
+        return $this;
     }
 }

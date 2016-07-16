@@ -4,7 +4,7 @@ use WSDL\Builder\Method;
 use WSDL\Builder\WSDLBuilder;
 use WSDL\Lexer\Tokenizer;
 use WSDL\Parser\Parser;
-use WSDL\WSDLCreator;
+use WSDL\WSDL;
 
 require_once '../../vendor/autoload.php';
 
@@ -14,11 +14,27 @@ $tokenizer = new Tokenizer();
 
 $tokens = $tokenizer->lex('string $name int $age');
 $parser = new Parser($tokens);
-$parameters = $parser->S();
+$parameters1 = $parser->S();
 
 $tokens = $tokenizer->lex('string $nameWithAge');
 $parser = new Parser($tokens);
-$return = $parser->S();
+$return1 = $parser->S();
+
+$tokens = $tokenizer->lex('int $max');
+$parser = new Parser($tokens);
+$parameters2 = $parser->S();
+
+$tokens = $tokenizer->lex('string[] $count');
+$parser = new Parser($tokens);
+$return2 = $parser->S();
+
+$tokens = $tokenizer->lex('object $user { int $age }');
+$parser = new Parser($tokens);
+$parameters3 = $parser->S();
+
+$tokens = $tokenizer->lex('string $message');
+$parser = new Parser($tokens);
+$return3 = $parser->S();
 
 $builder = WSDLBuilder::instance()
     ->setName('SimpleSoapServer')
@@ -27,9 +43,11 @@ $builder = WSDLBuilder::instance()
     ->setLocation('http://localhost:7777/wsdl-creator/examples/rpc_literal/new.php')
     ->setStyle(SoapBinding::RPC)
     ->setUse(SoapBinding::LITERAL)
-    ->setMethod(new Method('getNameWithAge', $parameters, $return));
+    ->setMethod(new Method('getNameWithAge', $parameters1, $return1))
+    ->setMethod(new Method('countTo', $parameters2, $return2))
+    ->setMethod(new Method('userInfo', $parameters3, $return3));
 
-$wsdlCreator = WSDLCreator::fromBuilder($builder);
+$wsdlCreator = WSDL::fromBuilder($builder);
 
 if (isset($_GET['wsdl'])) {
     $wsdlCreator->render();
