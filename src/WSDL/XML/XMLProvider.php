@@ -7,7 +7,7 @@ use WSDL\Utilities\XMLAttributeHelper;
 use WSDL\XML\XMLStyle\XMLStyle;
 use WSDL\XML\XMLUse\XMLUse;
 
-class XML
+class XMLProvider
 {
     /**
      * @var WSDLBuilder
