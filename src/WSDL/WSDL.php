@@ -2,7 +2,7 @@
 namespace WSDL;
 
 use WSDL\Builder\WSDLBuilder;
-use WSDL\XML\XML;
+use WSDL\XML\XMLProvider;
 
 class WSDL
 {
@@ -21,7 +21,7 @@ class WSDL
 
     public static function fromBuilder(WSDLBuilder $builder)
     {
-        $xml = new XML($builder);
+        $xml = new XMLProvider($builder);
         $xml->generate();
         return new self($xml->getXml());
     }
