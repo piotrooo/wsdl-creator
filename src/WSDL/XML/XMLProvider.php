@@ -41,17 +41,17 @@ class XMLProvider
         $this->XMLUse = new XMLUse($builder->getUse());
         $this->DOMDocument = new DOMDocument("1.0", "UTF-8");
         $this->DOMDocument->formatOutput = true;
+    }
+
+    public function getXml()
+    {
         $this->saveXML();
+        return $this->xml;
     }
 
     private function saveXML()
     {
         $this->xml = $this->DOMDocument->saveXML();
-    }
-
-    public function getXml()
-    {
-        return $this->xml;
     }
 
     public function generate()
@@ -79,7 +79,6 @@ class XMLProvider
         ));
         $this->DOMDocument->appendChild($definitionsElement);
         $this->definitionsRootNode = $definitionsElement;
-        $this->saveXML();
         return $this;
     }
 
@@ -95,7 +94,6 @@ class XMLProvider
 
         $serviceElement->appendChild($portElement);
         $this->definitionsRootNode->appendChild($serviceElement);
-        $this->saveXML();
         return $this;
     }
 
@@ -130,7 +128,6 @@ class XMLProvider
         }
 
         $this->definitionsRootNode->appendChild($bindingElement);
-        $this->saveXML();
         return $this;
     }
 
@@ -153,7 +150,6 @@ class XMLProvider
         }
 
         $this->definitionsRootNode->appendChild($portTypeElement);
-        $this->saveXML();
         return $this;
     }
 
@@ -184,14 +180,12 @@ class XMLProvider
     private function types()
     {
         $ns = $this->builder->getNs();
-        $typesElement = XMLAttributeHelper::forDOM($this->DOMDocument)->createElement('types');
+        $typesElement = $this->createElement('types');
 
-        $schemaElement = XMLAttributeHelper::forDOM($this->DOMDocument)
-            ->createElementWithAttributes('xsd:schema', array('targetNamespace' => $ns, 'xmlns' => $ns));
+        $schemaElement = $this->createElementWithAttributes('xsd:schema', array('targetNamespace' => $ns, 'xmlns' => $ns));
         $typesElement->appendChild($schemaElement);
 
         $this->definitionsRootNode->appendChild($typesElement);
-        $this->saveXML();
         return $this;
     }
 
