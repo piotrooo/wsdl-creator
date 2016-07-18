@@ -67,17 +67,16 @@ class XMLProvider
     private function definitions()
     {
         $targetNamespace = $this->builder->getTargetNamespace();
-        $definitionsElement = XMLAttributeHelper::forDOM($this->DOMDocument)
-            ->createElementWithAttributes('definitions', array(
-                'name' => $this->builder->getName(),
-                'targetNamespace' => $targetNamespace,
-                'xmlns:tns' => $targetNamespace,
-                'xmlns:xsd' => 'http://www.w3.org/2001/XMLSchema',
-                'xmlns:soap' => 'http://schemas.xmlsoap.org/wsdl/soap/',
-                'xmlns:soapenc' => "http://schemas.xmlsoap.org/soap/encoding/",
-                'xmlns' => 'http://schemas.xmlsoap.org/wsdl/',
-                'xmlns:ns' => $this->builder->getNs()
-            ));
+        $definitionsElement = $this->createElementWithAttributes('definitions', array(
+            'name' => $this->builder->getName(),
+            'targetNamespace' => $targetNamespace,
+            'xmlns:tns' => $targetNamespace,
+            'xmlns:xsd' => 'http://www.w3.org/2001/XMLSchema',
+            'xmlns:soap' => 'http://schemas.xmlsoap.org/wsdl/soap/',
+            'xmlns:soapenc' => "http://schemas.xmlsoap.org/soap/encoding/",
+            'xmlns' => 'http://schemas.xmlsoap.org/wsdl/',
+            'xmlns:ns' => $this->builder->getNs()
+        ));
         $this->DOMDocument->appendChild($definitionsElement);
         $this->definitionsRootNode = $definitionsElement;
         $this->saveXML();
@@ -87,17 +86,11 @@ class XMLProvider
     private function service()
     {
         $name = $this->builder->getName();
-        $serviceElement = XMLAttributeHelper::forDOM($this->DOMDocument)
-            ->createElementWithAttributes('service', array('name' => $name . 'Service'));
+        $serviceElement = $this->createElementWithAttributes('service', array('name' => $name . 'Service'));
 
-        $portElement = XMLAttributeHelper::forDOM($this->DOMDocument)
-            ->createElementWithAttributes('port', array(
-                'name' => $name . 'Port',
-                'binding' => 'tns:' . $name . 'Binding'
-            ));
+        $portElement = $this->createElementWithAttributes('port', array('name' => $name . 'Port', 'binding' => 'tns:' . $name . 'Binding'));
 
-        $soapAddressElement = XMLAttributeHelper::forDOM($this->DOMDocument)
-            ->createElementWithAttributes('soap:address', array('location' => $this->builder->getLocation()));
+        $soapAddressElement = $this->createElementWithAttributes('soap:address', array('location' => $this->builder->getLocation()));
         $portElement->appendChild($soapAddressElement);
 
         $serviceElement->appendChild($portElement);
@@ -110,11 +103,7 @@ class XMLProvider
     {
         $name = $this->builder->getName();
         $targetNamespace = $this->builder->getTargetNamespace();
-        $bindingElement = XMLAttributeHelper::forDOM($this->DOMDocument)
-            ->createElementWithAttributes('binding', array(
-                'name' => $name . 'Binding',
-                'type' => 'tns:' . $name . 'PortType'
-            ));
+        $bindingElement = $this->createElementWithAttributes('binding', array('name' => $name . 'Binding', 'type' => 'tns:' . $name . 'PortType'));
 
         $soapBindingElement = $this->XMLStyle->getBindingDOMDocument($this->DOMDocument);
         $bindingElement->appendChild($soapBindingElement);
@@ -122,20 +111,18 @@ class XMLProvider
         foreach ($this->builder->getMethods() as $method) {
             $soapBodyElement = $this->XMLUse->getBodyDOMDocument($this->DOMDocument, $targetNamespace);
 
-            $operationElement = XMLAttributeHelper::forDOM($this->DOMDocument)
-                ->createElementWithAttributes('operation', array('name' => $method->getName()));
+            $operationElement = $this->createElementWithAttributes('operation', array('name' => $method->getName()));
 
-            $soapOperationElement = XMLAttributeHelper::forDOM($this->DOMDocument)
-                ->createElementWithAttributes('soap:operation', array(
-                    'soapAction' => $targetNamespace . '/#' . $method->getName()
-                ));
+            $soapOperationElement = $this->createElementWithAttributes('soap:operation', array(
+                'soapAction' => $targetNamespace . '/#' . $method->getName()
+            ));
             $operationElement->appendChild($soapOperationElement);
 
-            $inputElement = XMLAttributeHelper::forDOM($this->DOMDocument)->createElement('input');
+            $inputElement = $this->createElement('input');
             $inputElement->appendChild($soapBodyElement);
             $operationElement->appendChild($inputElement);
 
-            $outputElement = XMLAttributeHelper::forDOM($this->DOMDocument)->createElement('output');
+            $outputElement = $this->createElement('output');
             $outputElement->appendChild($soapBodyElement->cloneNode());
             $operationElement->appendChild($outputElement);
 
@@ -150,20 +137,16 @@ class XMLProvider
     private function portType()
     {
         $name = $this->builder->getName();
-        $portTypeElement = XMLAttributeHelper::forDOM($this->DOMDocument)
-            ->createElementWithAttributes('portType', array('name' => $name . 'PortType'));
+        $portTypeElement = $this->createElementWithAttributes('portType', array('name' => $name . 'PortType'));
 
         foreach ($this->builder->getMethods() as $method) {
             $methodName = $method->getName();
-            $operationElement = XMLAttributeHelper::forDOM($this->DOMDocument)
-                ->createElementWithAttributes('operation', array('name' => $methodName));
+            $operationElement = $this->createElementWithAttributes('operation', array('name' => $methodName));
 
-            $inputElement = XMLAttributeHelper::forDOM($this->DOMDocument)
-                ->createElementWithAttributes('input', array('message' => 'tns:' . $methodName . 'Request'));
+            $inputElement = $this->createElementWithAttributes('input', array('message' => 'tns:' . $methodName . 'Request'));
             $operationElement->appendChild($inputElement);
 
-            $outputElement = XMLAttributeHelper::forDOM($this->DOMDocument)
-                ->createElementWithAttributes('output', array('message' => 'tns:' . $methodName . 'Response'));
+            $outputElement = $this->createElementWithAttributes('output', array('message' => 'tns:' . $methodName . 'Response'));
             $operationElement->appendChild($outputElement);
 
             $portTypeElement->appendChild($operationElement);
@@ -190,8 +173,7 @@ class XMLProvider
 
     private function messageParts($name, $nodes)
     {
-        $messageElement = XMLAttributeHelper::forDOM($this->DOMDocument)
-            ->createElementWithAttributes('message', array('name' => $name));
+        $messageElement = $this->createElementWithAttributes('message', array('name' => $name));
         $parts = $this->XMLStyle->getMessagePartDOMDocument($this->DOMDocument, $nodes);
         foreach ($parts as $part) {
             $messageElement->appendChild($part);
@@ -202,5 +184,15 @@ class XMLProvider
     private function types()
     {
         return $this;
+    }
+
+    private function createElementWithAttributes($elementName, $attributes, $value = '')
+    {
+        return XMLAttributeHelper::forDOM($this->DOMDocument)->createElementWithAttributes($elementName, $attributes, $value);
+    }
+
+    private function createElement($elementName, $value = '')
+    {
+        return XMLAttributeHelper::forDOM($this->DOMDocument)->createElement($elementName, $value);
     }
 }
