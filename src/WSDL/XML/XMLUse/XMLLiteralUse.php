@@ -24,19 +24,24 @@
 namespace WSDL\XML\XMLUse;
 
 use DOMDocument;
-use DOMElement;
+use WSDL\Utilities\XMLAttributeHelper;
 
 /**
- * XMLUseStrategy
+ * XMLLiteralUse
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-interface XMLUseStrategy
+class XMLLiteralUse implements XMLUse
 {
     /**
-     * @param DOMDocument $DOMDocument
-     * @param string $targetNamespace
-     * @return DOMElement
+     * @inheritdoc
      */
-    public function generateBody(DOMDocument $DOMDocument, $targetNamespace);
+    public function generateBody(DOMDocument $DOMDocument, $targetNamespace)
+    {
+        return XMLAttributeHelper::forDOM($DOMDocument)
+            ->createElementWithAttributes('soap:body', array(
+                'use' => 'literal',
+                'namespace' => $targetNamespace
+            ));
+    }
 }

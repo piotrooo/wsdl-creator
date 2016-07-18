@@ -25,42 +25,18 @@ namespace WSDL\XML\XMLUse;
 
 use DOMDocument;
 use DOMElement;
-use WSDL\Annotation\SoapBinding;
 
 /**
- * XMLUse
+ * XMLUseStrategy
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class XMLUse
+interface XMLUse
 {
     /**
-     * @var XMLUseStrategy
-     */
-    private $strategy;
-
-    /**
-     * @param string $use
-     */
-    public function __construct($use)
-    {
-        switch ($use) {
-            case SoapBinding::LITERAL:
-                $this->strategy = new XMLLiteralUseStrategy();
-                break;
-            case SoapBinding::ENCODED:
-                $this->strategy = new XMLEncodedUseStrategy();
-                break;
-        }
-    }
-
-    /**
      * @param DOMDocument $DOMDocument
-     * @param $targetNamespace
+     * @param string $targetNamespace
      * @return DOMElement
      */
-    public function getBodyDOMDocument(DOMDocument $DOMDocument, $targetNamespace)
-    {
-        return $this->strategy->generateBody($DOMDocument, $targetNamespace);
-    }
+    public function generateBody(DOMDocument $DOMDocument, $targetNamespace);
 }

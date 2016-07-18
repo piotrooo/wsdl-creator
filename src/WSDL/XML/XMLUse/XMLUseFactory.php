@@ -23,25 +23,26 @@
  */
 namespace WSDL\XML\XMLUse;
 
-use DOMDocument;
-use WSDL\Utilities\XMLAttributeHelper;
+use WSDL\Annotation\SoapBinding;
 
 /**
- * XMLLiteralUseStrategy
+ * XMLUseFactory
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class XMLLiteralUseStrategy implements XMLUseStrategy
+class XMLUseFactory
 {
     /**
-     * @inheritdoc
+     * @param $use
+     * @return XMLUse
      */
-    public function generateBody(DOMDocument $DOMDocument, $targetNamespace)
+    public static function create($use)
     {
-        return XMLAttributeHelper::forDOM($DOMDocument)
-            ->createElementWithAttributes('soap:body', array(
-                'use' => 'literal',
-                'namespace' => $targetNamespace
-            ));
+        switch ($use) {
+            case SoapBinding::LITERAL:
+                return new XMLLiteralUse();
+            case SoapBinding::ENCODED:
+                return new XMLEncodedUse();
+        }
     }
 }

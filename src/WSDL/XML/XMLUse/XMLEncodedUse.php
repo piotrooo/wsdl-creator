@@ -27,11 +27,11 @@ use DOMDocument;
 use WSDL\Utilities\XMLAttributeHelper;
 
 /**
- * XMLEncodedUseStrategy
+ * XMLEncodedUse
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class XMLEncodedUseStrategy implements XMLUseStrategy
+class XMLEncodedUse implements XMLUse
 {
     /**
      * @inheritdoc

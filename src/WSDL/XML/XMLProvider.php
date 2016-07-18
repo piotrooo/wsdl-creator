@@ -6,6 +6,7 @@ use WSDL\Builder\WSDLBuilder;
 use WSDL\Utilities\XMLAttributeHelper;
 use WSDL\XML\XMLStyle\XMLStyle;
 use WSDL\XML\XMLUse\XMLUse;
+use WSDL\XML\XMLUse\XMLUseFactory;
 
 class XMLProvider
 {
@@ -38,7 +39,7 @@ class XMLProvider
     {
         $this->builder = $builder;
         $this->XMLStyle = new XMLStyle($builder->getStyle());
-        $this->XMLUse = new XMLUse($builder->getUse());
+        $this->XMLUse = XMLUseFactory::create($builder->getUse());
         $this->DOMDocument = new DOMDocument("1.0", "UTF-8");
         $this->DOMDocument->formatOutput = true;
     }
@@ -107,7 +108,7 @@ class XMLProvider
         $bindingElement->appendChild($soapBindingElement);
 
         foreach ($this->builder->getMethods() as $method) {
-            $soapBodyElement = $this->XMLUse->getBodyDOMDocument($this->DOMDocument, $targetNamespace);
+            $soapBodyElement = $this->XMLUse->generateBody($this->DOMDocument, $targetNamespace);
 
             $operationElement = $this->createElementWithAttributes('operation', array('name' => $method->getName()));
 
