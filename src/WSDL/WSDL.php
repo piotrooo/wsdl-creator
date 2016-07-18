@@ -13,7 +13,7 @@ class WSDL
         $this->xml = $xml;
     }
 
-    public function render()
+    public function create()
     {
         header("Content-Type: text/xml");
         echo $this->xml;

@@ -47,10 +47,10 @@ $builder = WSDLBuilder::instance()
     ->setMethod(new Method('countTo', $parameters2, $return2))
     ->setMethod(new Method('userInfo', $parameters3, $return3));
 
-$wsdlCreator = WSDL::fromBuilder($builder);
+$wsdl = WSDL::fromBuilder($builder);
 
 if (isset($_GET['wsdl'])) {
-    $wsdlCreator->render();
+    $wsdl->create();
     exit;
 }
 

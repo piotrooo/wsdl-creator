@@ -183,6 +183,15 @@ class XMLProvider
 
     private function types()
     {
+        $ns = $this->builder->getNs();
+        $typesElement = XMLAttributeHelper::forDOM($this->DOMDocument)->createElement('types');
+
+        $schemaElement = XMLAttributeHelper::forDOM($this->DOMDocument)
+            ->createElementWithAttributes('xsd:schema', array('targetNamespace' => $ns, 'xmlns' => $ns));
+        $typesElement->appendChild($schemaElement);
+
+        $this->definitionsRootNode->appendChild($typesElement);
+        $this->saveXML();
         return $this;
     }
 
