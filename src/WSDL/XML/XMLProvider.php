@@ -58,7 +58,7 @@ class XMLProvider
     public function generate()
     {
         $this->definitions()
-            ->types()
+//            ->types()
             ->message()
             ->portType()
             ->binding()

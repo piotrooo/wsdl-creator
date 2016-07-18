@@ -12,9 +12,15 @@ ini_set("soap.wsdl_cache_enabled", 0);
 
 $tokenizer = new Tokenizer();
 
-$tokens = $tokenizer->lex('string $name int $age');
+$tokens = $tokenizer->lex('string $name');
 $parser = new Parser($tokens);
-$parameters1 = $parser->S();
+$parameters1a = $parser->S();
+$tokens = $tokenizer->lex('int $age');
+$parser = new Parser($tokens);
+$parameters1b = $parser->S();
+
+print_r($parameters1a);
+print_r($parameters1b);
 
 $tokens = $tokenizer->lex('string $nameWithAge');
 $parser = new Parser($tokens);
@@ -43,7 +49,7 @@ $builder = WSDLBuilder::instance()
     ->setLocation('http://localhost:7777/wsdl-creator/examples/rpc_literal/new.php')
     ->setStyle(SoapBinding::RPC)
     ->setUse(SoapBinding::LITERAL)
-    ->setMethod(new Method('getNameWithAge', $parameters1, $return1))
+    ->setMethod(new Method('getNameWithAge', $parameters1a, $return1))
     ->setMethod(new Method('countTo', $parameters2, $return2))
     ->setMethod(new Method('userInfo', $parameters3, $return3));
 
