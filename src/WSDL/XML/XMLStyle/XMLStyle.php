@@ -28,7 +28,7 @@ use DOMElement;
 use WSDL\Parser\Node;
 
 /**
- * XMLStyleStrategy
+ * XMLStyle
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
