@@ -118,8 +118,8 @@ class XMLProvider
             $operationElement->appendChild($soapOperationElement);
 
             $soapBodyElement = $this->XMLUse->generateBody($this->DOMDocument, $targetNamespace);
-            $this->bindingElement($method->getName(), $soapBodyElement, $operationElement, 'input', 'RequestHeader', $method->parameterHeader());
-            $this->bindingElement($method->getName(), $soapBodyElement, $operationElement, 'output', 'ResponseHeader', $method->returnHeader());
+            $this->bindingElement($methodName, $soapBodyElement, $operationElement, 'input', 'RequestHeader', $method->parameterHeader());
+            $this->bindingElement($methodName, $soapBodyElement, $operationElement, 'output', 'ResponseHeader', $method->returnHeader());
 
             $bindingElement->appendChild($operationElement);
         }
