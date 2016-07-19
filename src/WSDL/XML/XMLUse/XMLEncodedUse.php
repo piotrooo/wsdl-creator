@@ -47,4 +47,12 @@ class XMLEncodedUse implements XMLUse
         var_dump($DOMElement);
         return $DOMElement;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function generateHeaderIfNeeded($DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null)
+    {
+
+    }
 }

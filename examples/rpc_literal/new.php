@@ -1,6 +1,8 @@
 <?php
+use Ouzo\Utilities\Arrays;
 use WSDL\Annotation\SoapBinding;
 use WSDL\Builder\Method;
+use WSDL\Builder\Parameter;
 use WSDL\Builder\WSDLBuilder;
 use WSDL\Lexer\Tokenizer;
 use WSDL\Parser\Parser;
@@ -18,13 +20,11 @@ $parameters1a = $parser->S();
 $tokens = $tokenizer->lex('int $age');
 $parser = new Parser($tokens);
 $parameters1b = $parser->S();
-
-print_r($parameters1a);
-print_r($parameters1b);
+$parameters1 = [new Parameter(Arrays::firstOrNull($parameters1a), true), new Parameter(Arrays::firstOrNull($parameters1b))];
 
 $tokens = $tokenizer->lex('string $nameWithAge');
 $parser = new Parser($tokens);
-$return1 = $parser->S();
+$return1 = new Parameter(Arrays::firstOrNull($parser->S()));
 
 $tokens = $tokenizer->lex('int $max');
 $parser = new Parser($tokens);
@@ -49,9 +49,9 @@ $builder = WSDLBuilder::instance()
     ->setLocation('http://localhost:7777/wsdl-creator/examples/rpc_literal/new.php')
     ->setStyle(SoapBinding::RPC)
     ->setUse(SoapBinding::LITERAL)
-    ->setMethod(new Method('getNameWithAge', $parameters1a, $return1))
-    ->setMethod(new Method('countTo', $parameters2, $return2))
-    ->setMethod(new Method('userInfo', $parameters3, $return3));
+    ->setMethod(new Method('getNameWithAge', $parameters1, $return1));
+//    ->setMethod(new Method('countTo', $parameters2, $return2))
+//    ->setMethod(new Method('userInfo', $parameters3, $return3));
 
 $wsdl = WSDL::fromBuilder($builder);
 

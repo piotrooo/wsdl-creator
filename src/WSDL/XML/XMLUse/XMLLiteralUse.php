@@ -24,6 +24,7 @@
 namespace WSDL\XML\XMLUse;
 
 use DOMDocument;
+use WSDL\Builder\Parameter;
 use WSDL\Utilities\XMLAttributeHelper;
 
 /**
@@ -43,5 +44,22 @@ class XMLLiteralUse implements XMLUse
                 'use' => 'literal',
                 'namespace' => $targetNamespace
             ));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function generateHeaderIfNeeded($DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null)
+    {
+        if ($header) {
+            return XMLAttributeHelper::forDOM($DOMDocument)
+                ->createElementWithAttributes('soap:header', array(
+                    'use' => 'literal',
+                    'namespace' => $targetNamespace,
+                    'part' => $header->getNode()->getSanitizedName(),
+                    'message' => $soapHeaderMessage
+                ));
+        }
+        return null;
     }
 }

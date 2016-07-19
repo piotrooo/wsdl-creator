@@ -25,6 +25,7 @@ namespace WSDL\XML\XMLUse;
 
 use DOMDocument;
 use DOMElement;
+use WSDL\Builder\Parameter;
 
 /**
  * XMLUseStrategy
@@ -39,4 +40,13 @@ interface XMLUse
      * @return DOMElement
      */
     public function generateBody(DOMDocument $DOMDocument, $targetNamespace);
+
+    /**
+     * @param DOMDocument $DOMDocument
+     * @param string $targetNamespace
+     * @param string $soapHeaderMessage
+     * @param Parameter|null $header
+     * @return DOMElement|null
+     */
+    public function generateHeaderIfNeeded($DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null);
 }

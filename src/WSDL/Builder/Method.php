@@ -1,6 +1,9 @@
 <?php
 namespace WSDL\Builder;
 
+use Ouzo\Utilities\Arrays;
+use Ouzo\Utilities\Functions;
+
 class Method
 {
     private $name;
@@ -19,13 +22,28 @@ class Method
         return $this->name;
     }
 
-    public function getParameters()
+    public function getParametersNodes()
     {
-        return $this->parameters;
+        return Arrays::map($this->parameters, Functions::extractExpression('getNode()'));
     }
 
-    public function getReturn()
+    public function getReturnNode()
     {
-        return $this->return;
+        return $this->return->getNode();
+    }
+
+    public function parameterHeader()
+    {
+        return Arrays::find($this->parameters, function (Parameter $parameter) {
+            return $parameter->isHeader();
+        });
+    }
+
+    public function returnHeader()
+    {
+        if ($this->return->isHeader()) {
+            return $this->return;
+        }
+        return null;
     }
 }

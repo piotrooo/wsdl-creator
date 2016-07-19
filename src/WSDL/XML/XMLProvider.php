@@ -2,6 +2,7 @@
 namespace WSDL\XML;
 
 use DOMDocument;
+use Ouzo\Utilities\Arrays;
 use WSDL\Builder\WSDLBuilder;
 use WSDL\Utilities\XMLAttributeHelper;
 use WSDL\XML\XMLStyle\XMLStyle;
@@ -108,21 +109,24 @@ class XMLProvider
         $bindingElement->appendChild($soapBindingElement);
 
         foreach ($this->builder->getMethods() as $method) {
-            $soapBodyElement = $this->XMLUse->generateBody($this->DOMDocument, $targetNamespace);
-
-            $operationElement = $this->createElementWithAttributes('operation', array('name' => $method->getName()));
-
+            $methodName = $method->getName();
+            $operationElement = $this->createElementWithAttributes('operation', array('name' => $methodName));
             $soapOperationElement = $this->createElementWithAttributes('soap:operation', array(
-                'soapAction' => $targetNamespace . '/#' . $method->getName()
+                'soapAction' => $targetNamespace . '/#' . $methodName
             ));
             $operationElement->appendChild($soapOperationElement);
 
-            $inputElement = $this->createElement('input');
-            $inputElement->appendChild($soapBodyElement);
-            $operationElement->appendChild($inputElement);
+            $soapBodyElement = $this->XMLUse->generateBody($this->DOMDocument, $targetNamespace);
+
+            $this->bindingElement($soapBodyElement, $methodName, $targetNamespace, $method, $operationElement);
 
             $outputElement = $this->createElement('output');
             $outputElement->appendChild($soapBodyElement->cloneNode());
+            $soapHeaderMessage = 'tns:' . $methodName . 'ResponseHeader';
+            $soapHeaderElement = $this->XMLUse->generateHeaderIfNeeded($this->DOMDocument, $targetNamespace, $soapHeaderMessage, $method->returnHeader());
+            if ($soapHeaderElement) {
+                $outputElement->appendChild($soapHeaderElement);
+            }
             $operationElement->appendChild($outputElement);
 
             $bindingElement->appendChild($operationElement);
@@ -130,6 +134,19 @@ class XMLProvider
 
         $this->definitionsRootNode->appendChild($bindingElement);
         return $this;
+    }
+
+    private function bindingElement($soapBodyElement, $methodName, $targetNamespace, $method, $operationElement)
+    {
+        $inputElement = $this->createElement('input');
+        $inputElement->appendChild($soapBodyElement);
+        $soapHeaderMessage = 'tns:' . $methodName . 'RequestHeader';
+        $soapHeaderElement = $this->XMLUse->generateHeaderIfNeeded($this->DOMDocument, $targetNamespace, $soapHeaderMessage, $method->parameterHeader());
+        if ($soapHeaderElement) {
+            $inputElement->appendChild($soapHeaderElement);
+        }
+        $operationElement->appendChild($inputElement);
+        return array($soapHeaderMessage, $soapHeaderElement);
     }
 
     private function portType()
@@ -159,10 +176,10 @@ class XMLProvider
         foreach ($this->builder->getMethods() as $method) {
             $name = $method->getName();
 
-            $messageInputElement = $this->messageParts($name . 'Request', $method->getParameters());
+            $messageInputElement = $this->messageParts($name . 'Request', $method->getParametersNodes());
             $this->definitionsRootNode->appendChild($messageInputElement);
 
-            $messageOutputElement = $this->messageParts($name . 'Response', $method->getReturn());
+            $messageOutputElement = $this->messageParts($name . 'Response', $method->getReturnNode());
             $this->definitionsRootNode->appendChild($messageOutputElement);
         }
         return $this;
@@ -170,6 +187,7 @@ class XMLProvider
 
     private function messageParts($name, $nodes)
     {
+        $nodes = Arrays::toArray($nodes);
         $messageElement = $this->createElementWithAttributes('message', array('name' => $name));
         $parts = $this->XMLStyle->getMessagePartDOMDocument($this->DOMDocument, $nodes);
         foreach ($parts as $part) {
