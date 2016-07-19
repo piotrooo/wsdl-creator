@@ -23,27 +23,24 @@
  */
 namespace WSDL\XML\XMLStyle;
 
-use DOMDocument;
-use DOMElement;
-use WSDL\Parser\Node;
+use WSDL\Annotation\SoapBinding;
 
 /**
- * XMLStyleStrategy
+ * XMLStyleFactory
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-interface XMLStyleStrategy
+class XMLStyleFactory
 {
     /**
-     * @param DOMDocument $DOMDocument
-     * @return DOMElement
+     * @param string $style
+     * @return XMLStyle
      */
-    public function generateBinding(DOMDocument $DOMDocument);
-
-    /**
-     * @param DOMDocument $DOMDocument
-     * @param Node[] $nodes
-     * @return DOMElement
-     */
-    public function generateMessagePart(DOMDocument $DOMDocument, $nodes);
+    public static function create($style)
+    {
+        switch ($style) {
+            case SoapBinding::RPC:
+                return new XMLRpcStyle();
+        }
+    }
 }

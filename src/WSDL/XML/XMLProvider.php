@@ -8,6 +8,7 @@ use WSDL\Builder\Parameter;
 use WSDL\Builder\WSDLBuilder;
 use WSDL\Utilities\XMLAttributeHelper;
 use WSDL\XML\XMLStyle\XMLStyle;
+use WSDL\XML\XMLStyle\XMLStyleFactory;
 use WSDL\XML\XMLUse\XMLUse;
 use WSDL\XML\XMLUse\XMLUseFactory;
 
@@ -41,7 +42,7 @@ class XMLProvider
     public function __construct(WSDLBuilder $builder)
     {
         $this->builder = $builder;
-        $this->XMLStyle = new XMLStyle($builder->getStyle());
+        $this->XMLStyle = XMLStyleFactory::create($builder->getStyle());
         $this->XMLUse = XMLUseFactory::create($builder->getUse());
         $this->DOMDocument = new DOMDocument("1.0", "UTF-8");
         $this->DOMDocument->formatOutput = true;
@@ -107,7 +108,7 @@ class XMLProvider
         $targetNamespace = $this->builder->getTargetNamespace();
         $bindingElement = $this->createElementWithAttributes('binding', array('name' => $name . 'Binding', 'type' => 'tns:' . $name . 'PortType'));
 
-        $soapBindingElement = $this->XMLStyle->getBindingDOMDocument($this->DOMDocument);
+        $soapBindingElement = $this->XMLStyle->generateBinding($this->DOMDocument);
         $bindingElement->appendChild($soapBindingElement);
 
         foreach ($this->builder->getMethods() as $method) {
@@ -195,7 +196,7 @@ class XMLProvider
     {
         $nodes = Arrays::toArray($nodes);
         $messageElement = $this->createElementWithAttributes('message', array('name' => $name));
-        $parts = $this->XMLStyle->getMessagePartDOMDocument($this->DOMDocument, $nodes);
+        $parts = $this->XMLStyle->generateMessagePart($this->DOMDocument, $nodes);
         foreach ($parts as $part) {
             $messageElement->appendChild($part);
         }

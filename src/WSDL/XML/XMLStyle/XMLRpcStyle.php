@@ -27,11 +27,11 @@ use DOMDocument;
 use WSDL\Utilities\XMLAttributeHelper;
 
 /**
- * XMLRpcStyleStrategy
+ * XMLRpcStyle
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class XMLRpcStyleStrategy implements XMLStyleStrategy
+class XMLRpcStyle implements XMLStyle
 {
     /**
      * @inheritdoc
