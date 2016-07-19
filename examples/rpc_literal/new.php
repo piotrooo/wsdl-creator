@@ -14,13 +14,20 @@ ini_set("soap.wsdl_cache_enabled", 0);
 
 $tokenizer = new Tokenizer();
 
-$tokens = $tokenizer->lex('string $name');
+$tokens = $tokenizer->lex('string $token');
 $parser = new Parser($tokens);
 $parameters1a = $parser->S();
-$tokens = $tokenizer->lex('int $age');
+$tokens = $tokenizer->lex('string $name');
 $parser = new Parser($tokens);
 $parameters1b = $parser->S();
-$parameters1 = [new Parameter(Arrays::firstOrNull($parameters1a), true), new Parameter(Arrays::firstOrNull($parameters1b))];
+$tokens = $tokenizer->lex('int $age');
+$parser = new Parser($tokens);
+$parameters1c = $parser->S();
+$parameters1 = [
+    new Parameter(Arrays::firstOrNull($parameters1a), true),
+    new Parameter(Arrays::firstOrNull($parameters1b)),
+    new Parameter(Arrays::firstOrNull($parameters1c))
+];
 
 $tokens = $tokenizer->lex('string $nameWithAge');
 $parser = new Parser($tokens);
@@ -48,7 +55,7 @@ $builder = WSDLBuilder::instance()
     ->setNs('http://foo.bar/simplesoapserver/types')
     ->setLocation('http://localhost:7777/wsdl-creator/examples/rpc_literal/new.php')
     ->setStyle(SoapBinding::RPC)
-    ->setUse(SoapBinding::LITERAL)
+    ->setUse(SoapBinding::ENCODED)
     ->setMethod(new Method('getNameWithAge', $parameters1, $return1));
 //    ->setMethod(new Method('countTo', $parameters2, $return2))
 //    ->setMethod(new Method('userInfo', $parameters3, $return3));
@@ -64,7 +71,7 @@ $server = new SoapServer('http://localhost:7777/wsdl-creator/examples/rpc_litera
     'uri' => 'http://foo.bar/simplesoapserver',
     'location' => $builder->getLocation(),
     'style' => SOAP_RPC,
-    'use' => SOAP_LITERAL
+    'use' => SOAP_ENCODED
 ));
 $server->setClass('NewSimpleSoapServer');
 $server->handle();

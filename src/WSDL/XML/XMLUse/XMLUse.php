@@ -48,5 +48,5 @@ interface XMLUse
      * @param Parameter|null $header
      * @return DOMElement|null
      */
-    public function generateHeaderIfNeeded($DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null);
+    public function generateHeaderIfNeeded(DOMDocument $DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null);
 }

@@ -24,6 +24,7 @@
 namespace WSDL\XML\XMLUse;
 
 use DOMDocument;
+use WSDL\Builder\Parameter;
 use WSDL\Utilities\XMLAttributeHelper;
 
 /**
@@ -51,7 +52,7 @@ class XMLEncodedUse implements XMLUse
     /**
      * @inheritdoc
      */
-    public function generateHeaderIfNeeded($DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null)
+    public function generateHeaderIfNeeded(DOMDocument $DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null)
     {
 
     }

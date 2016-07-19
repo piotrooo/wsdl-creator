@@ -176,7 +176,14 @@ class XMLProvider
         foreach ($this->builder->getMethods() as $method) {
             $name = $method->getName();
 
-            $messageInputElement = $this->messageParts($name . 'Request', $method->getParametersNodes());
+            $parameterHeader = $method->parameterHeader();
+            if ($parameterHeader) {
+                $messageInputHeaderElement = $this->messageParts($name . 'RequestHeader', $parameterHeader->getNode());
+                $this->definitionsRootNode->appendChild($messageInputHeaderElement);
+            }
+
+//            print_r($method->noParameterHeader());
+            $messageInputElement = $this->messageParts($name . 'Request', $method->getNoParameterHeaderNodes());
             $this->definitionsRootNode->appendChild($messageInputElement);
 
             $messageOutputElement = $this->messageParts($name . 'Response', $method->getReturnNode());

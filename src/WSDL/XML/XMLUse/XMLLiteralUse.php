@@ -49,7 +49,7 @@ class XMLLiteralUse implements XMLUse
     /**
      * @inheritdoc
      */
-    public function generateHeaderIfNeeded($DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null)
+    public function generateHeaderIfNeeded(DOMDocument $DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null)
     {
         if ($header) {
             return XMLAttributeHelper::forDOM($DOMDocument)

@@ -39,7 +39,7 @@ final class WebParam
      */
     public $param;
     /**
-     * @var mixed
+     * @var boolean
      */
     public $header;
 }
