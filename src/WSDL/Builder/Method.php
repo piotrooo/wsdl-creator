@@ -68,25 +68,9 @@ class Method
     }
 
     /**
-     * @return Node[]
-     */
-    public function getParametersNodes()
-    {
-        return Arrays::map($this->parameters, Functions::extractExpression('getNode()'));
-    }
-
-    /**
-     * @return Node
-     */
-    public function getReturnNode()
-    {
-        return $this->return->getNode();
-    }
-
-    /**
      * @return Parameter|null
      */
-    public function parameterHeader()
+    public function getHeaderParameter()
     {
         return Arrays::find($this->parameters, function (Parameter $parameter) {
             return $parameter->isHeader();
@@ -96,7 +80,7 @@ class Method
     /**
      * @return Parameter[]|array
      */
-    public function noParameterHeader()
+    public function getNoHeaderParameters()
     {
         return Arrays::filter($this->parameters, function (Parameter $parameter) {
             return !$parameter->isHeader();
@@ -106,19 +90,27 @@ class Method
     /**
      * @return Node[]
      */
-    public function getNoParameterHeaderNodes()
+    public function getNoHeaderParametersNodes()
     {
-        return Arrays::map($this->noParameterHeader(), Functions::extractExpression('getNode()'));
+        return Arrays::map($this->getNoHeaderParameters(), Functions::extractExpression('getNode()'));
     }
 
     /**
      * @return Parameter|null
      */
-    public function returnHeader()
+    public function getHeaderReturn()
     {
         if ($this->return->isHeader()) {
             return $this->return;
         }
         return null;
+    }
+
+    /**
+     * @return Node
+     */
+    public function getReturnNode()
+    {
+        return $this->return->getNode();
     }
 }

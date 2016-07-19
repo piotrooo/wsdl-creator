@@ -37,7 +37,7 @@ class XMLLiteralUse implements XMLUse
     /**
      * @inheritdoc
      */
-    public function generateBody(DOMDocument $DOMDocument, $targetNamespace)
+    public function generateSoapBody(DOMDocument $DOMDocument, $targetNamespace)
     {
         return XMLAttributeHelper::forDOM($DOMDocument)
             ->createElementWithAttributes('soap:body', array(
@@ -49,7 +49,7 @@ class XMLLiteralUse implements XMLUse
     /**
      * @inheritdoc
      */
-    public function generateHeaderIfNeeded(DOMDocument $DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null)
+    public function generateSoapHeaderIfNeeded(DOMDocument $DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null)
     {
         if ($header) {
             return XMLAttributeHelper::forDOM($DOMDocument)

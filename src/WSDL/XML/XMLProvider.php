@@ -4,6 +4,7 @@ namespace WSDL\XML;
 use DOMDocument;
 use DOMElement;
 use Ouzo\Utilities\Arrays;
+use WSDL\Builder\Parameter;
 use WSDL\Builder\WSDLBuilder;
 use WSDL\Utilities\XMLAttributeHelper;
 use WSDL\XML\XMLStyle\XMLStyle;
@@ -117,9 +118,9 @@ class XMLProvider
             ));
             $operationElement->appendChild($soapOperationElement);
 
-            $soapBodyElement = $this->XMLUse->generateBody($this->DOMDocument, $targetNamespace);
-            $this->bindingElement($methodName, $soapBodyElement, $operationElement, 'input', 'RequestHeader', $method->parameterHeader());
-            $this->bindingElement($methodName, $soapBodyElement, $operationElement, 'output', 'ResponseHeader', $method->returnHeader());
+            $soapBodyElement = $this->XMLUse->generateSoapBody($this->DOMDocument, $targetNamespace);
+            $this->bindingElement($methodName, $soapBodyElement, $operationElement, 'input', 'RequestHeader', $method->getHeaderParameter());
+            $this->bindingElement($methodName, $soapBodyElement, $operationElement, 'output', 'ResponseHeader', $method->getHeaderReturn());
 
             $bindingElement->appendChild($operationElement);
         }
@@ -136,7 +137,7 @@ class XMLProvider
 
         $soapHeaderMessage = 'tns:' . $methodName . $headerName;
         $soapHeaderElement = $this->XMLUse
-            ->generateHeaderIfNeeded($this->DOMDocument, $targetNamespace, $soapHeaderMessage, $header);
+            ->generateSoapHeaderIfNeeded($this->DOMDocument, $targetNamespace, $soapHeaderMessage, $header);
         if ($soapHeaderElement) {
             $inputElement->appendChild($soapHeaderElement);
         }
@@ -171,25 +172,23 @@ class XMLProvider
         foreach ($this->builder->getMethods() as $method) {
             $name = $method->getName();
 
-            $requestHeader = $method->parameterHeader();
-            if ($requestHeader) {
-                $messageInputHeaderElement = $this->messageParts($name . 'RequestHeader', $requestHeader->getNode());
-                $this->definitionsRootNode->appendChild($messageInputHeaderElement);
-            }
-
-            $messageInputElement = $this->messageParts($name . 'Request', $method->getNoParameterHeaderNodes());
+            $this->messageHeaderIfNeeded($name, 'RequestHeader', $method->getHeaderParameter());
+            $messageInputElement = $this->messageParts($name . 'Request', $method->getNoHeaderParametersNodes());
             $this->definitionsRootNode->appendChild($messageInputElement);
 
-            $responseHeader = $method->parameterHeader();
-            if ($responseHeader) {
-                $messageInputHeaderElement = $this->messageParts($name . 'ResponseHeader', $responseHeader->getNode());
-                $this->definitionsRootNode->appendChild($messageInputHeaderElement);
-            }
-
+            $this->messageHeaderIfNeeded($name, 'ResponseHeader', $method->getHeaderReturn());
             $messageOutputElement = $this->messageParts($name . 'Response', $method->getReturnNode());
             $this->definitionsRootNode->appendChild($messageOutputElement);
         }
         return $this;
+    }
+
+    private function messageHeaderIfNeeded($method, $headerSuffix, Parameter $parameter = null)
+    {
+        if ($parameter) {
+            $messageHeaderElement = $this->messageParts($method . $headerSuffix, $parameter->getNode());
+            $this->definitionsRootNode->appendChild($messageHeaderElement);
+        }
     }
 
     private function messageParts($name, $nodes)

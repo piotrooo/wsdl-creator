@@ -39,7 +39,7 @@ interface XMLUse
      * @param string $targetNamespace
      * @return DOMElement
      */
-    public function generateBody(DOMDocument $DOMDocument, $targetNamespace);
+    public function generateSoapBody(DOMDocument $DOMDocument, $targetNamespace);
 
     /**
      * @param DOMDocument $DOMDocument
@@ -48,5 +48,5 @@ interface XMLUse
      * @param Parameter|null $header
      * @return DOMElement|null
      */
-    public function generateHeaderIfNeeded(DOMDocument $DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null);
+    public function generateSoapHeaderIfNeeded(DOMDocument $DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null);
 }
