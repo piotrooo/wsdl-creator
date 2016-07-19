@@ -182,7 +182,6 @@ class XMLProvider
                 $this->definitionsRootNode->appendChild($messageInputHeaderElement);
             }
 
-//            print_r($method->noParameterHeader());
             $messageInputElement = $this->messageParts($name . 'Request', $method->getNoParameterHeaderNodes());
             $this->definitionsRootNode->appendChild($messageInputElement);
 

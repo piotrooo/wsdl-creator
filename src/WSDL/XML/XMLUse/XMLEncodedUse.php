@@ -45,7 +45,6 @@ class XMLEncodedUse implements XMLUse
                 'namespace' => $targetNamespace,
                 'encodingStyle' => 'http://schemas.xmlsoap.org/soap/encoding/'
             ));
-        var_dump($DOMElement);
         return $DOMElement;
     }
 
@@ -54,6 +53,16 @@ class XMLEncodedUse implements XMLUse
      */
     public function generateHeaderIfNeeded(DOMDocument $DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null)
     {
-
+        if ($header) {
+            return XMLAttributeHelper::forDOM($DOMDocument)
+                ->createElementWithAttributes('soap:header', array(
+                    'use' => 'encoded',
+                    'namespace' => $targetNamespace,
+                    'encodingStyle' => 'http://schemas.xmlsoap.org/soap/encoding/',
+                    'part' => $header->getNode()->getSanitizedName(),
+                    'message' => $soapHeaderMessage
+                ));
+        }
+        return null;
     }
 }
