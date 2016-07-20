@@ -72,25 +72,25 @@ class Node
     /**
      * @return string
      */
-    public function getTypeForArray()
-    {
-        return 'ArrayOf' . $this->getTypeForObject();
-    }
-
-    /**
-     * @return string
-     */
-    public function getTypeForObject()
-    {
-        return ucfirst($this->getSanitizedName());
-    }
-
-    /**
-     * @return string
-     */
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameForArray()
+    {
+        return 'ArrayOf' . $this->getNameForObject();
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameForObject()
+    {
+        return ucfirst($this->getSanitizedName());
     }
 
     /**

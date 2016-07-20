@@ -25,6 +25,7 @@ namespace WSDL\XML\XMLStyle;
 
 use DOMDocument;
 use DOMElement;
+use WSDL\Builder\Parameter;
 use WSDL\Parser\Node;
 
 /**
@@ -46,4 +47,11 @@ interface XMLStyle
      * @return DOMElement
      */
     public function generateMessagePart(DOMDocument $DOMDocument, $nodes);
+
+    /**
+     * @param DOMDocument $DOMDocument
+     * @param Parameter[] $parameters
+     * @return mixed
+     */
+    public function generateTypes(DOMDocument $DOMDocument, $parameters);
 }

@@ -55,12 +55,12 @@ class XMLRpcStyle implements XMLStyle
             if ($node->isObject()) {
                 $attributes = array(
                     'name' => $node->getSanitizedName(),
-                    'type' => 'ns:' . $node->getTypeForObject()
+                    'type' => 'ns:' . $node->getNameForObject()
                 );
             } else if ($node->isArray()) {
                 $attributes = array(
                     'name' => $node->getSanitizedName(),
-                    'type' => 'ns:' . $node->getTypeForArray()
+                    'type' => 'ns:' . $node->getNameForArray()
                 );
             } else {
                 $attributes = array(
@@ -71,5 +71,33 @@ class XMLRpcStyle implements XMLStyle
             $parts[] = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('part', $attributes);
         }
         return $parts;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function generateTypes(DOMDocument $DOMDocument, $parameters)
+    {
+        $return = array();
+        foreach ($parameters as $parameter) {
+            $node = $parameter->getNode();
+            if ($node->isArray()) {
+                $complexTypeElement = XMLAttributeHelper::forDOM($DOMDocument)
+                    ->createElementWithAttributes('xsd:complexType', array('name' => $node->getNameForArray()));
+                $complexContentElement = XMLAttributeHelper::forDOM($DOMDocument)->createElement('xsd:complexContent');
+                $restrictionElement = XMLAttributeHelper::forDOM($DOMDocument)
+                    ->createElementWithAttributes('xsd:restriction', array('base' => 'soapenc:Array'));
+                $attributeElement = XMLAttributeHelper::forDOM($DOMDocument)
+                    ->createElementWithAttributes('xsd:attribute', array(
+                        'ref' => 'soapenc:arrayType',
+                        'soap:arrayType' => 'xsd:' . $node->getType() . '[]'
+                    ));
+                $restrictionElement->appendChild($attributeElement);
+                $complexContentElement->appendChild($restrictionElement);
+                $complexTypeElement->appendChild($complexContentElement);
+                $return[] = $complexTypeElement;
+            }
+        }
+        return $return;
     }
 }

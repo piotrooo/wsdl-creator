@@ -59,7 +59,7 @@ $builder = WSDLBuilder::instance()
     ->setNs('http://foo.bar/simplesoapserver/types')
     ->setLocation('http://localhost:7777/wsdl-creator/examples/rpc_literal/new.php')
     ->setStyle(SoapBinding::RPC)
-    ->setUse(SoapBinding::ENCODED)
+    ->setUse(SoapBinding::LITERAL)
     ->setMethod(new Method('getNameWithAge', $parameters1, $return1));
 //    ->setMethod(new Method('countTo', $parameters2, $return2))
 //    ->setMethod(new Method('userInfo', $parameters3, $return3));
@@ -75,21 +75,15 @@ $server = new SoapServer('http://localhost:7777/wsdl-creator/examples/rpc_litera
     'uri' => 'http://foo.bar/simplesoapserver',
     'location' => $builder->getLocation(),
     'style' => SOAP_RPC,
-    'use' => SOAP_ENCODED
+    'use' => SOAP_LITERAL
 ));
 $server->setClass('NewSimpleSoapServer');
 $server->handle();
 
 class NewSimpleSoapServer
 {
-    /**
-     * @WebMethod
-     * @param string $name
-     * @param int $age
-     * @return string $nameWithAge
-     */
-    public function getNameWithAge($name, $age)
+    public function getNameWithAge($name, $age, $countTo)
     {
-        return 'Your name is: ' . $name . ' and you have ' . $age . ' years old';
+        return 'Your name is: ' . $name . ' and you have ' . $age . ' years old [' . implode(', ', $countTo) . ']';
     }
 }
