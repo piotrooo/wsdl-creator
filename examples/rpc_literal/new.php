@@ -26,11 +26,15 @@ $parameters1c = $parser->S();
 $tokens = $tokenizer->lex('string[] $count');
 $parser = new Parser($tokens);
 $parameters1d = $parser->S();
+$tokens = $tokenizer->lex('object $user { int $age }');
+$parser = new Parser($tokens);
+$parameters1e = $parser->S();
 $parameters1 = [
     new Parameter(Arrays::firstOrNull($parameters1a), true),
     new Parameter(Arrays::firstOrNull($parameters1b)),
     new Parameter(Arrays::firstOrNull($parameters1c)),
-    new Parameter(Arrays::firstOrNull($parameters1d))
+    new Parameter(Arrays::firstOrNull($parameters1d)),
+    new Parameter(Arrays::firstOrNull($parameters1e))
 ];
 
 $tokens = $tokenizer->lex('string $nameWithAge');
