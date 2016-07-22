@@ -210,7 +210,7 @@ class XMLProvider
 
         $schemaElement = $this->createElementWithAttributes('xsd:schema', array('targetNamespace' => $ns, 'xmlns' => $ns));
         foreach ($this->builder->getMethods() as $method) {
-            $types = $this->XMLStyle->generateTypes($this->DOMDocument, $method->getNoHeaderParameters());
+            $types = $this->XMLStyle->generateTypes($this->DOMDocument, $method->getParameters());
             foreach ($types as $type) {
                 $schemaElement->appendChild($type);
             }

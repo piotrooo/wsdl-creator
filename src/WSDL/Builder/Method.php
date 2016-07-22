@@ -68,6 +68,14 @@ class Method
     }
 
     /**
+     * @return Parameter[]
+     */
+    public function getParameters()
+    {
+        return $this->parameters;
+    }
+
+    /**
      * @return Parameter|null
      */
     public function getHeaderParameter()

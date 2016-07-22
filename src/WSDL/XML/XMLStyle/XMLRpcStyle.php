@@ -24,6 +24,8 @@
 namespace WSDL\XML\XMLStyle;
 
 use DOMDocument;
+use DOMElement;
+use WSDL\Parser\Node;
 use WSDL\Utilities\XMLAttributeHelper;
 
 /**
@@ -81,56 +83,68 @@ class XMLRpcStyle implements XMLStyle
         $return = array();
         foreach ($parameters as $parameter) {
             $node = $parameter->getNode();
-            if ($node->isArray()) {
-                $complexTypeElement = XMLAttributeHelper::forDOM($DOMDocument)
-                    ->createElementWithAttributes('xsd:complexType', array('name' => $node->getNameForArray()));
-                $complexContentElement = XMLAttributeHelper::forDOM($DOMDocument)->createElement('xsd:complexContent');
-                $restrictionElement = XMLAttributeHelper::forDOM($DOMDocument)
-                    ->createElementWithAttributes('xsd:restriction', array('base' => 'soapenc:Array'));
-                $attributeElement = XMLAttributeHelper::forDOM($DOMDocument)
-                    ->createElementWithAttributes('xsd:attribute', array(
-                        'ref' => 'soapenc:arrayType',
-                        'soap:arrayType' => 'xsd:' . $node->getType() . '[]'
-                    ));
-                $restrictionElement->appendChild($attributeElement);
-                $complexContentElement->appendChild($restrictionElement);
-                $complexTypeElement->appendChild($complexContentElement);
-                $return[] = $complexTypeElement;
-            }
-            if ($node->isObject()) {
-                $name = $node->getNameForObject();
-                $element = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('xsd:element', array(
-                    'name' => $name, 'nillable' => 'true', 'type' => 'ns:' . $name
-                ));
-                $return[] = $element;
-
-                $complexTypeElement = XMLAttributeHelper::forDOM($DOMDocument)
-                    ->createElementWithAttributes('xsd:complexType', array('name' => $node->getNameForObject()));
-                $sequenceElement = XMLAttributeHelper::forDOM($DOMDocument)->createElement('xsd:sequence');
-                $complexTypeElement->appendChild($sequenceElement);
-                foreach ($node->getElements() as $element) {
-                    if ($element->isObject()) {
-                        $attributes = array(
-                            'name' => $element->getSanitizedName(),
-                            'element' => 'ns:' . $element->getNameForObject()
-                        );
-                    } else if ($element->isArray()) {
-                        $attributes = array(
-                            'name' => $element->getSanitizedName(),
-                            'type' => 'ns:' . $element->getNameForArray()
-                        );
-                    } else {
-                        $attributes = array(
-                            'name' => $element->getSanitizedName(),
-                            'type' => 'xsd:' . $element->getType()
-                        );
-                    }
-                    $elementPartElement = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('xsd:element', $attributes);
-                    $sequenceElement->appendChild($elementPartElement);
-                }
-                $return[] = $complexTypeElement;
-            }
+            $nodeGen = $this->nodeGen($DOMDocument, $node);
+            $return = array_merge($return, $nodeGen);
         }
         return $return;
+    }
+
+    private function nodeGen(DOMDocument $DOMDocument, Node $node, DOMElement $sequenceElement = null)
+    {
+        $res = array();
+        if ($sequenceElement) {
+            if ($node->isObject()) {
+                $attributes = array(
+                    'name' => $node->getNameForObject(),
+                    'element' => 'ns:' . $node->getNameForObject()
+                );
+            } else if ($node->isArray()) {
+                $attributes = array(
+                    'name' => $node->getSanitizedName(),
+                    'type' => 'ns:' . $node->getNameForArray()
+                );
+            } else {
+                $attributes = array(
+                    'name' => $node->getSanitizedName(),
+                    'type' => 'xsd:' . $node->getType()
+                );
+            }
+            $elementPartElement = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('xsd:element', $attributes);
+            $sequenceElement->appendChild($elementPartElement);
+        }
+        if ($node->isArray()) {
+            $complexTypeElement = XMLAttributeHelper::forDOM($DOMDocument)
+                ->createElementWithAttributes('xsd:complexType', array('name' => $node->getNameForArray()));
+            $complexContentElement = XMLAttributeHelper::forDOM($DOMDocument)->createElement('xsd:complexContent');
+            $restrictionElement = XMLAttributeHelper::forDOM($DOMDocument)
+                ->createElementWithAttributes('xsd:restriction', array('base' => 'soapenc:Array'));
+            $attributeElement = XMLAttributeHelper::forDOM($DOMDocument)
+                ->createElementWithAttributes('xsd:attribute', array(
+                    'ref' => 'soapenc:arrayType',
+                    'soap:arrayType' => 'xsd:' . $node->getType() . '[]'
+                ));
+            $restrictionElement->appendChild($attributeElement);
+            $complexContentElement->appendChild($restrictionElement);
+            $complexTypeElement->appendChild($complexContentElement);
+            $res[] = $complexTypeElement;
+        } else if ($node->isObject()) {
+            $name = $node->getNameForObject();
+            $element = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('xsd:element', array(
+                'name' => $name, 'nillable' => 'true', 'type' => 'ns:' . $name
+            ));
+            $res[] = $element;
+
+            $complexTypeElement = XMLAttributeHelper::forDOM($DOMDocument)
+                ->createElementWithAttributes('xsd:complexType', array('name' => $node->getNameForObject()));
+            $sequenceElement = XMLAttributeHelper::forDOM($DOMDocument)->createElement('xsd:sequence');
+            $complexTypeElement->appendChild($sequenceElement);
+
+            $res[] = $complexTypeElement;
+            foreach ($node->getElements() as $nodeElement) {
+                $tmp = $this->nodeGen($DOMDocument, $nodeElement, $sequenceElement);
+                $res = array_merge($res, $tmp);
+            }
+        }
+        return $res;
     }
 }
