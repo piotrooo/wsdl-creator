@@ -1,12 +1,12 @@
 <?php
-namespace WSDL;
+namespace WSDL\Builder;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Ouzo\Utilities\Path;
 use ReflectionClass;
 
-class AnnotationWSDLCreator
+class AnnotationWSDLBuilder
 {
     private $class;
 
