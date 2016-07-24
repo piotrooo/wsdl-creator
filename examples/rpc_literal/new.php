@@ -26,36 +26,24 @@ $parameters1c = $parser->S();
 $tokens = $tokenizer->lex('string[] $count');
 $parser = new Parser($tokens);
 $parameters1d = $parser->S();
-$tokens = $tokenizer->lex('object $user { int $age object $agent { int $code string $name } }');
+$tokens = $tokenizer->lex('object $user { int $age object $agent { int $code string $name string[] $tags } }');
 $parser = new Parser($tokens);
 $parameters1e = $parser->S();
-$parameters1 = [
+$tokens = $tokenizer->lex('object[] $clients { int $identifier string $name }');
+$parser = new Parser($tokens);
+$parameters1f = $parser->S();
+$parameters = [
     new Parameter(Arrays::firstOrNull($parameters1a), true),
     new Parameter(Arrays::firstOrNull($parameters1b)),
     new Parameter(Arrays::firstOrNull($parameters1c)),
     new Parameter(Arrays::firstOrNull($parameters1d)),
-    new Parameter(Arrays::firstOrNull($parameters1e))
+    new Parameter(Arrays::firstOrNull($parameters1e)),
+    new Parameter(Arrays::firstOrNull($parameters1f))
 ];
 
 $tokens = $tokenizer->lex('string $nameWithAge');
 $parser = new Parser($tokens);
-$return1 = new Parameter(Arrays::firstOrNull($parser->S()));
-
-$tokens = $tokenizer->lex('int $max');
-$parser = new Parser($tokens);
-$parameters2 = $parser->S();
-
-$tokens = $tokenizer->lex('string[] $count');
-$parser = new Parser($tokens);
-$return2 = $parser->S();
-
-$tokens = $tokenizer->lex('object $user { int $age }');
-$parser = new Parser($tokens);
-$parameters3 = $parser->S();
-
-$tokens = $tokenizer->lex('string $message');
-$parser = new Parser($tokens);
-$return3 = $parser->S();
+$return = new Parameter(Arrays::firstOrNull($parser->S()));
 
 $builder = WSDLBuilder::instance()
     ->setName('SimpleSoapServer')
@@ -64,9 +52,7 @@ $builder = WSDLBuilder::instance()
     ->setLocation('http://localhost:7777/wsdl-creator/examples/rpc_literal/new.php')
     ->setStyle(SoapBinding::RPC)
     ->setUse(SoapBinding::LITERAL)
-    ->setMethod(new Method('getNameWithAge', $parameters1, $return1));
-//    ->setMethod(new Method('countTo', $parameters2, $return2))
-//    ->setMethod(new Method('userInfo', $parameters3, $return3));
+    ->setMethod(new Method('getNameWithAge', $parameters, $return));
 
 $wsdl = WSDL::fromBuilder($builder);
 

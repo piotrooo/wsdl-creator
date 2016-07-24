@@ -25,6 +25,7 @@ namespace WSDL\XML\XMLStyle;
 
 use DOMDocument;
 use DOMElement;
+use Ouzo\Utilities\Inflector;
 use WSDL\Parser\Node;
 use WSDL\Utilities\XMLAttributeHelper;
 
@@ -54,15 +55,15 @@ class XMLRpcStyle implements XMLStyle
     {
         $parts = array();
         foreach ($nodes as $node) {
-            if ($node->isObject()) {
-                $attributes = array(
-                    'name' => $node->getSanitizedName(),
-                    'element' => 'ns:' . $node->getNameForObject()
-                );
-            } else if ($node->isArray()) {
+            if ($node->isArray()) {
                 $attributes = array(
                     'name' => $node->getSanitizedName(),
                     'type' => 'ns:' . $node->getNameForArray()
+                );
+            } else if ($node->isObject()) {
+                $attributes = array(
+                    'name' => $node->getSanitizedName(),
+                    'element' => 'ns:' . $node->getNameForObject()
                 );
             } else {
                 $attributes = array(
@@ -118,16 +119,18 @@ class XMLRpcStyle implements XMLStyle
             $complexContentElement = XMLAttributeHelper::forDOM($DOMDocument)->createElement('xsd:complexContent');
             $restrictionElement = XMLAttributeHelper::forDOM($DOMDocument)
                 ->createElementWithAttributes('xsd:restriction', array('base' => 'soapenc:Array'));
+            $type = $node->isObject() ? 'ns:' . $node->getNameForObject() . '[]' : 'xsd:' . $node->getType() . '[]';
             $attributeElement = XMLAttributeHelper::forDOM($DOMDocument)
                 ->createElementWithAttributes('xsd:attribute', array(
                     'ref' => 'soapenc:arrayType',
-                    'soap:arrayType' => 'xsd:' . $node->getType() . '[]'
+                    'soap:arrayType' => $type
                 ));
             $restrictionElement->appendChild($attributeElement);
             $complexContentElement->appendChild($restrictionElement);
             $complexTypeElement->appendChild($complexContentElement);
             $res[] = $complexTypeElement;
-        } else if ($node->isObject()) {
+        }
+        if ($node->isObject()) {
             $name = $node->getNameForObject();
             $element = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('xsd:element', array(
                 'name' => $name, 'nillable' => 'true', 'type' => 'ns:' . $name

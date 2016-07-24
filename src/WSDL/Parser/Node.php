@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 namespace WSDL\Parser;
+use Ouzo\Utilities\Inflector;
 
 /**
  * Node
@@ -82,7 +83,7 @@ class Node
      */
     public function getNameForArray()
     {
-        return 'ArrayOf' . $this->getNameForObject();
+        return 'ArrayOf' . ucfirst($this->getSanitizedName());
     }
 
     /**
@@ -90,7 +91,7 @@ class Node
      */
     public function getNameForObject()
     {
-        return ucfirst($this->getSanitizedName());
+        return Inflector::singularize(ucfirst($this->getSanitizedName()));
     }
 
     /**
