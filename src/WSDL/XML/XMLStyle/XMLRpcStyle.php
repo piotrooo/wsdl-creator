@@ -26,7 +26,7 @@ namespace WSDL\XML\XMLStyle;
 use DOMDocument;
 use DOMElement;
 use WSDL\Parser\Node;
-use WSDL\Utilities\XMLAttributeHelper;
+use WSDL\XML\XMLAttributeHelper;
 
 /**
  * XMLRpcStyle

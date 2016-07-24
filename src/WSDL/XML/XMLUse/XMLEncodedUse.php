@@ -25,7 +25,7 @@ namespace WSDL\XML\XMLUse;
 
 use DOMDocument;
 use WSDL\Builder\Parameter;
-use WSDL\Utilities\XMLAttributeHelper;
+use WSDL\XML\XMLAttributeHelper;
 
 /**
  * XMLEncodedUse

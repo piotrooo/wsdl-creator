@@ -28,7 +28,6 @@ use DOMElement;
 use Ouzo\Utilities\Arrays;
 use WSDL\Builder\Parameter;
 use WSDL\Builder\WSDLBuilder;
-use WSDL\Utilities\XMLAttributeHelper;
 use WSDL\XML\XMLSoapVersion\XMLSoapVersion;
 use WSDL\XML\XMLStyle\XMLStyle;
 use WSDL\XML\XMLStyle\XMLStyleFactory;

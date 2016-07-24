@@ -1,5 +1,5 @@
 <?php
-namespace WSDL\Utilities;
+namespace WSDL\XML;
 
 use DOMDocument;
 
