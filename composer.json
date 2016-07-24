@@ -27,10 +27,7 @@
   },
   "autoload": {
     "psr-0": {
-      "WSDL\\": "src/",
-      "Mocks\\": "tests/",
-      "Factory\\": "tests/",
-      "Clients\\": "examples/"
+      "WSDL\\": "src/"
     }
   }
 }
