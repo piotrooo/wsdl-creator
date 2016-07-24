@@ -38,10 +38,10 @@ class XMLRpcStyle implements XMLStyle
     /**
      * @inheritdoc
      */
-    public function generateBinding(DOMDocument $DOMDocument)
+    public function generateBinding(DOMDocument $DOMDocument, $soapVersion)
     {
         return XMLAttributeHelper::forDOM($DOMDocument)
-            ->createElementWithAttributes('soap:binding', array(
+            ->createElementWithAttributes($soapVersion . ':binding', array(
                 'style' => 'rpc',
                 'transport' => 'http://schemas.xmlsoap.org/soap/http'
             ));
@@ -78,12 +78,12 @@ class XMLRpcStyle implements XMLStyle
     /**
      * @inheritdoc
      */
-    public function generateTypes(DOMDocument $DOMDocument, $parameters)
+    public function generateTypes(DOMDocument $DOMDocument, $parameters, $soapVersion)
     {
         $return = array();
         foreach ($parameters as $parameter) {
             $node = $parameter->getNode();
-            $nodeGen = $this->parameterGenerate($DOMDocument, $node);
+            $nodeGen = $this->parameterGenerate($DOMDocument, $node, null, $soapVersion);
             $return = array_merge($return, $nodeGen);
         }
         return $return;
@@ -93,9 +93,10 @@ class XMLRpcStyle implements XMLStyle
      * @param DOMDocument $DOMDocument
      * @param Node $node
      * @param DOMElement|null $sequenceElement
+     * @param string $soapVersion
      * @return array
      */
-    private function parameterGenerate(DOMDocument $DOMDocument, Node $node, DOMElement $sequenceElement = null)
+    private function parameterGenerate(DOMDocument $DOMDocument, Node $node, DOMElement $sequenceElement = null, $soapVersion)
     {
         $result = array();
         if ($sequenceElement) {
@@ -128,7 +129,7 @@ class XMLRpcStyle implements XMLStyle
             $attributeElement = XMLAttributeHelper::forDOM($DOMDocument)
                 ->createElementWithAttributes('xsd:attribute', array(
                     'ref' => 'soapenc:arrayType',
-                    'soap:arrayType' => $type
+                    $soapVersion . ':arrayType' => $type
                 ));
             $restrictionElement->appendChild($attributeElement);
             $complexContentElement->appendChild($restrictionElement);
@@ -149,7 +150,7 @@ class XMLRpcStyle implements XMLStyle
 
             $result[] = $complexTypeElement;
             foreach ($node->getElements() as $nodeElement) {
-                $tmp = $this->parameterGenerate($DOMDocument, $nodeElement, $sequenceElement);
+                $tmp = $this->parameterGenerate($DOMDocument, $nodeElement, $sequenceElement, $soapVersion);
                 $result = array_merge($result, $tmp);
             }
         }

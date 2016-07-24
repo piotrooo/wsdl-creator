@@ -1,5 +1,6 @@
 <?php
 use Ouzo\Utilities\Arrays;
+use WSDL\Annotation\BindingType;
 use WSDL\Annotation\SoapBinding;
 use WSDL\Builder\Method;
 use WSDL\Builder\Parameter;
@@ -52,6 +53,7 @@ $builder = WSDLBuilder::instance()
     ->setLocation('http://localhost:7777/wsdl-creator/examples/rpc_literal/new.php')
     ->setStyle(SoapBinding::RPC)
     ->setUse(SoapBinding::LITERAL)
+    ->setSoapVersion(BindingType::SOAP_12)
     ->setMethod(new Method('getNameWithAge', $parameters, $return));
 
 $wsdl = WSDL::fromBuilder($builder);

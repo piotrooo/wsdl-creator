@@ -55,6 +55,10 @@ class WSDLBuilder
      */
     private $use;
     /**
+     * @var string
+     */
+    private $soapVersion;
+    /**
      * @var Method[]
      */
     private $methods;
@@ -172,6 +176,24 @@ class WSDLBuilder
     public function setUse($use)
     {
         $this->use = $use;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSoapVersion()
+    {
+        return $this->soapVersion;
+    }
+
+    /**
+     * @param string $soapVersion
+     * @return $this
+     */
+    public function setSoapVersion($soapVersion)
+    {
+        $this->soapVersion = $soapVersion;
         return $this;
     }
 

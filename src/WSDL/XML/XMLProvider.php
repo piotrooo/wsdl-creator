@@ -7,6 +7,7 @@ use Ouzo\Utilities\Arrays;
 use WSDL\Builder\Parameter;
 use WSDL\Builder\WSDLBuilder;
 use WSDL\Utilities\XMLAttributeHelper;
+use WSDL\XML\XMLSoapVersion\XMLSoapVersion;
 use WSDL\XML\XMLStyle\XMLStyle;
 use WSDL\XML\XMLStyle\XMLStyleFactory;
 use WSDL\XML\XMLUse\XMLUse;
@@ -27,6 +28,10 @@ class XMLProvider
      */
     private $XMLUse;
     /**
+     * @var string
+     */
+    private $XMLSoapVersion;
+    /**
      * @var DOMDocument
      */
     private $DOMDocument;
@@ -44,6 +49,7 @@ class XMLProvider
         $this->builder = $builder;
         $this->XMLStyle = XMLStyleFactory::create($builder->getStyle());
         $this->XMLUse = XMLUseFactory::create($builder->getUse());
+        $this->XMLSoapVersion = XMLSoapVersion::getTagFor($builder->getSoapVersion());
         $this->DOMDocument = new DOMDocument("1.0", "UTF-8");
         $this->DOMDocument->formatOutput = true;
     }
@@ -77,7 +83,7 @@ class XMLProvider
             'targetNamespace' => $targetNamespace,
             'xmlns:tns' => $targetNamespace,
             'xmlns:xsd' => 'http://www.w3.org/2001/XMLSchema',
-            'xmlns:soap' => 'http://schemas.xmlsoap.org/wsdl/soap/',
+            'xmlns:' . $this->XMLSoapVersion => 'http://schemas.xmlsoap.org/wsdl/' . $this->XMLSoapVersion . '/',
             'xmlns:soapenc' => "http://schemas.xmlsoap.org/soap/encoding/",
             'xmlns' => 'http://schemas.xmlsoap.org/wsdl/',
             'xmlns:ns' => $this->builder->getNs()
@@ -94,7 +100,8 @@ class XMLProvider
 
         $portElement = $this->createElementWithAttributes('port', array('name' => $name . 'Port', 'binding' => 'tns:' . $name . 'Binding'));
 
-        $soapAddressElement = $this->createElementWithAttributes('soap:address', array('location' => $this->builder->getLocation()));
+        $soapAddressElement = $this
+            ->createElementWithAttributes($this->XMLSoapVersion . ':address', array('location' => $this->builder->getLocation()));
         $portElement->appendChild($soapAddressElement);
 
         $serviceElement->appendChild($portElement);
@@ -108,18 +115,18 @@ class XMLProvider
         $targetNamespace = $this->builder->getTargetNamespace();
         $bindingElement = $this->createElementWithAttributes('binding', array('name' => $name . 'Binding', 'type' => 'tns:' . $name . 'PortType'));
 
-        $soapBindingElement = $this->XMLStyle->generateBinding($this->DOMDocument);
+        $soapBindingElement = $this->XMLStyle->generateBinding($this->DOMDocument, $this->XMLSoapVersion);
         $bindingElement->appendChild($soapBindingElement);
 
         foreach ($this->builder->getMethods() as $method) {
             $methodName = $method->getName();
             $operationElement = $this->createElementWithAttributes('operation', array('name' => $methodName));
-            $soapOperationElement = $this->createElementWithAttributes('soap:operation', array(
+            $soapOperationElement = $this->createElementWithAttributes($this->XMLSoapVersion . ':operation', array(
                 'soapAction' => $targetNamespace . '/#' . $methodName
             ));
             $operationElement->appendChild($soapOperationElement);
 
-            $soapBodyElement = $this->XMLUse->generateSoapBody($this->DOMDocument, $targetNamespace);
+            $soapBodyElement = $this->XMLUse->generateSoapBody($this->DOMDocument, $targetNamespace, $this->XMLSoapVersion);
             $this->bindingElement($methodName, $soapBodyElement, $operationElement, 'input', 'RequestHeader', $method->getHeaderParameter());
             $this->bindingElement($methodName, $soapBodyElement, $operationElement, 'output', 'ResponseHeader', $method->getHeaderReturn());
 
@@ -138,7 +145,7 @@ class XMLProvider
 
         $soapHeaderMessage = 'tns:' . $methodName . $headerName;
         $soapHeaderElement = $this->XMLUse
-            ->generateSoapHeaderIfNeeded($this->DOMDocument, $targetNamespace, $soapHeaderMessage, $header);
+            ->generateSoapHeaderIfNeeded($this->DOMDocument, $targetNamespace, $soapHeaderMessage, $header, $this->XMLSoapVersion);
         if ($soapHeaderElement) {
             $inputElement->appendChild($soapHeaderElement);
         }
@@ -210,7 +217,7 @@ class XMLProvider
 
         $schemaElement = $this->createElementWithAttributes('xsd:schema', array('targetNamespace' => $ns, 'xmlns' => $ns));
         foreach ($this->builder->getMethods() as $method) {
-            $types = $this->XMLStyle->generateTypes($this->DOMDocument, $method->getParameters());
+            $types = $this->XMLStyle->generateTypes($this->DOMDocument, $method->getParameters(), $this->XMLSoapVersion);
             foreach ($types as $type) {
                 $schemaElement->appendChild($type);
             }

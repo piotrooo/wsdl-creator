@@ -37,9 +37,10 @@ interface XMLStyle
 {
     /**
      * @param DOMDocument $DOMDocument
+     * @param string $soapVersion
      * @return DOMElement
      */
-    public function generateBinding(DOMDocument $DOMDocument);
+    public function generateBinding(DOMDocument $DOMDocument, $soapVersion);
 
     /**
      * @param DOMDocument $DOMDocument
@@ -51,7 +52,8 @@ interface XMLStyle
     /**
      * @param DOMDocument $DOMDocument
      * @param Parameter[] $parameters
+     * @param string $soapVersion
      * @return mixed
      */
-    public function generateTypes(DOMDocument $DOMDocument, $parameters);
+    public function generateTypes(DOMDocument $DOMDocument, $parameters, $soapVersion);
 }

@@ -21,45 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-namespace WSDL\XML\XMLUse;
+namespace WSDL\XML\XMLSoapVersion;
 
-use DOMDocument;
-use WSDL\Builder\Parameter;
-use WSDL\Utilities\XMLAttributeHelper;
+use Exception;
+use WSDL\Annotation\BindingType;
 
 /**
- * XMLLiteralUse
+ * XMLSoapVersion
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class XMLLiteralUse implements XMLUse
+class XMLSoapVersion
 {
     /**
-     * @inheritdoc
+     * @param string $version
+     * @return string
+     * @throws Exception
      */
-    public function generateSoapBody(DOMDocument $DOMDocument, $targetNamespace, $soapVersion)
+    public static function getTagFor($version)
     {
-        return XMLAttributeHelper::forDOM($DOMDocument)
-            ->createElementWithAttributes($soapVersion . ':body', array(
-                'use' => 'literal',
-                'namespace' => $targetNamespace
-            ));
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function generateSoapHeaderIfNeeded(DOMDocument $DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null, $soapVersion)
-    {
-        if ($header) {
-            return XMLAttributeHelper::forDOM($DOMDocument)
-                ->createElementWithAttributes($soapVersion . ':header', array(
-                    'use' => 'literal',
-                    'namespace' => $targetNamespace,
-                    'part' => $header->getNode()->getSanitizedName(),
-                    'message' => $soapHeaderMessage
-                ));
+        switch ($version) {
+            case BindingType::SOAP_11:
+                return 'soap';
+            case BindingType::SOAP_12:
+                return 'soap12';
+            default:
+                throw new Exception('Unsupported soap version [' . $version . ']');
         }
-        return null;
     }
 }

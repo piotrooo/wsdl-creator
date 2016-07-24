@@ -37,16 +37,18 @@ interface XMLUse
     /**
      * @param DOMDocument $DOMDocument
      * @param string $targetNamespace
+     * @param string $soapVersion
      * @return DOMElement
      */
-    public function generateSoapBody(DOMDocument $DOMDocument, $targetNamespace);
+    public function generateSoapBody(DOMDocument $DOMDocument, $targetNamespace, $soapVersion);
 
     /**
      * @param DOMDocument $DOMDocument
      * @param string $targetNamespace
      * @param string $soapHeaderMessage
      * @param Parameter|null $header
+     * @param string $soapVersion
      * @return DOMElement|null
      */
-    public function generateSoapHeaderIfNeeded(DOMDocument $DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null);
+    public function generateSoapHeaderIfNeeded(DOMDocument $DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null, $soapVersion);
 }

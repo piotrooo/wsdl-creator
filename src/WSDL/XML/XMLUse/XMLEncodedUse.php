@@ -37,10 +37,10 @@ class XMLEncodedUse implements XMLUse
     /**
      * @inheritdoc
      */
-    public function generateSoapBody(DOMDocument $DOMDocument, $targetNamespace)
+    public function generateSoapBody(DOMDocument $DOMDocument, $targetNamespace, $soapVersion)
     {
         $DOMElement = XMLAttributeHelper::forDOM($DOMDocument)
-            ->createElementWithAttributes('soap:body', array(
+            ->createElementWithAttributes($soapVersion . ':body', array(
                 'use' => 'encoded',
                 'namespace' => $targetNamespace,
                 'encodingStyle' => 'http://schemas.xmlsoap.org/soap/encoding/'
@@ -51,11 +51,11 @@ class XMLEncodedUse implements XMLUse
     /**
      * @inheritdoc
      */
-    public function generateSoapHeaderIfNeeded(DOMDocument $DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null)
+    public function generateSoapHeaderIfNeeded(DOMDocument $DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null, $soapVersion)
     {
         if ($header) {
             return XMLAttributeHelper::forDOM($DOMDocument)
-                ->createElementWithAttributes('soap:header', array(
+                ->createElementWithAttributes($soapVersion . ':header', array(
                     'use' => 'encoded',
                     'namespace' => $targetNamespace,
                     'encodingStyle' => 'http://schemas.xmlsoap.org/soap/encoding/',
