@@ -4,6 +4,7 @@ checks:
 build:
   tests:
     override:
-    - coverage:
+    - command: 'phpunit --coverage-clover=build/logs/clover.xml'
+      coverage:
         file: 'build/logs/clover.xml'
         format: 'clover'
