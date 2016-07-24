@@ -54,22 +54,7 @@ class XMLRpcStyle implements XMLStyle
     {
         $parts = array();
         foreach ($nodes as $node) {
-            if ($node->isArray()) {
-                $attributes = array(
-                    'name' => $node->getSanitizedName(),
-                    'type' => 'ns:' . $node->getNameForArray()
-                );
-            } else if ($node->isObject()) {
-                $attributes = array(
-                    'name' => $node->getSanitizedName(),
-                    'element' => 'ns:' . $node->getNameForObject()
-                );
-            } else {
-                $attributes = array(
-                    'name' => $node->getSanitizedName(),
-                    'type' => 'xsd:' . $node->getType()
-                );
-            }
+            $attributes = $this->attributes($node, $node->getSanitizedName());
             $parts[] = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('part', $attributes);
         }
         return $parts;
@@ -100,22 +85,7 @@ class XMLRpcStyle implements XMLStyle
     {
         $result = array();
         if ($sequenceElement) {
-            if ($node->isObject()) {
-                $attributes = array(
-                    'name' => $node->getNameForObject(),
-                    'element' => 'ns:' . $node->getNameForObject()
-                );
-            } else if ($node->isArray()) {
-                $attributes = array(
-                    'name' => $node->getSanitizedName(),
-                    'type' => 'ns:' . $node->getNameForArray()
-                );
-            } else {
-                $attributes = array(
-                    'name' => $node->getSanitizedName(),
-                    'type' => 'xsd:' . $node->getType()
-                );
-            }
+            $attributes = $this->attributes($node, $node->getNameForObject());
             $elementPartElement = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('xsd:element', $attributes);
             $sequenceElement->appendChild($elementPartElement);
         }
@@ -155,5 +125,31 @@ class XMLRpcStyle implements XMLStyle
             }
         }
         return $result;
+    }
+
+    /**
+     * @param Node $node
+     * @param string $nameForObject
+     * @return array
+     */
+    private function attributes(Node $node, $nameForObject)
+    {
+        if ($node->isArray()) {
+            $attributes = array(
+                'name' => $node->getSanitizedName(),
+                'type' => 'ns:' . $node->getNameForArray()
+            );
+        } else if ($node->isObject()) {
+            $attributes = array(
+                'name' => $nameForObject,
+                'element' => 'ns:' . $node->getNameForObject()
+            );
+        } else {
+            $attributes = array(
+                'name' => $node->getSanitizedName(),
+                'type' => 'xsd:' . $node->getType()
+            );
+        }
+        return $attributes;
     }
 }
