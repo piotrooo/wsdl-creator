@@ -45,7 +45,7 @@ interface XMLStyle
     /**
      * @param DOMDocument $DOMDocument
      * @param Node[] $nodes
-     * @return DOMElement
+     * @return DOMElement[]
      */
     public function generateMessagePart(DOMDocument $DOMDocument, $nodes);
 
