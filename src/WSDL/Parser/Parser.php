@@ -106,7 +106,7 @@ class Parser
             $elements = $this->O();
             $isArray = false;
         }
-        return [$isArray, $name, $elements];
+        return array($isArray, $name, $elements);
     }
 
     private function I()
