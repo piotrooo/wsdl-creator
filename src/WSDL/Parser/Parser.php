@@ -114,7 +114,7 @@ class Parser
         if ($this->lookahead()->getName() != Token::EOF && $this->lookahead()->getName() != Token::CLOSE_OBJECT) {
             return $this->P();
         }
-        return [];
+        return array();
     }
 
     private function N()
@@ -136,7 +136,7 @@ class Parser
             $this->checkObjectHasCloseBracket();
             return $node;
         }
-        return [];
+        return array();
     }
 
     private function checkObjectHasOpenBracket(TokenObject $token)
