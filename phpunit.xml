@@ -1,4 +1,4 @@
-<phpunit bootstrap="tests/bootstrap.php">
+<phpunit>
     <logging>
         <log type="coverage-html" target="build/coverage" title="wsdl-creator" charset="UTF-8" yui="true"
              highlight="true" lowUpperBound="35" highLowerBound="70"/>
