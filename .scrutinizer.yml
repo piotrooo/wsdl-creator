@@ -4,7 +4,6 @@ checks:
 build:
   tests:
     override:
-    -
-      coverage:
+    - coverage:
         file: 'build/logs/clover.xml'
         format: 'clover'
