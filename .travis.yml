@@ -14,3 +14,9 @@ matrix:
 
 before_script:
   - composer install --dev --no-interaction
+
+script:
+  - mkdir -p build/logs
+  - phpunit --configuration phpunit.xml tests
+
+
