@@ -51,7 +51,7 @@ class Tokenizer
      */
     public function lex($string)
     {
-        $tokens = [];
+        $tokens = array();
         $offset = 0;
         while (isset($string[$offset])) {
             foreach (self::$tokenMap as $regex => $token) {
