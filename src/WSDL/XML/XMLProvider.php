@@ -67,7 +67,7 @@ class XMLProvider
      */
     private $xml;
     /**
-     * @var DOMDocument
+     * @var DOMElement
      */
     private $definitionsRootNode;
 
