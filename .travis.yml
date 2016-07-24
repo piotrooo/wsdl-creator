@@ -20,4 +20,4 @@ script:
   - phpunit --configuration phpunit.xml tests
 
 after_script:
-  - php vendor/ocular code-coverage:upload --format=php-clover build/logs/clover.xml
+  - php vendor/bin/ocular code-coverage:upload --format=php-clover build/logs/clover.xml
