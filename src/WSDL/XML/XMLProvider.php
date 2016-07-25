@@ -292,7 +292,9 @@ class XMLProvider
 
         $schemaElement = $this->createElementWithAttributes('xsd:schema', array('targetNamespace' => $ns, 'xmlns' => $ns));
         foreach ($this->builder->getMethods() as $method) {
-            $types = $this->XMLStyle->generateTypes($this->DOMDocument, $method->getParameters(), $this->XMLSoapVersion);
+            $typesForParameters = $this->XMLStyle->generateTypes($this->DOMDocument, $method->getParameters(), $this->XMLSoapVersion);
+            $typesForReturn = $this->XMLStyle->generateTypes($this->DOMDocument, Arrays::toArray($method->getReturn()), $this->XMLSoapVersion);
+            $types = array_merge($typesForParameters, $typesForReturn);
             foreach ($types as $type) {
                 $schemaElement->appendChild($type);
             }

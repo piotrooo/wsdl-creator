@@ -23,7 +23,10 @@
  */
 namespace WSDL\Builder;
 
+use Ouzo\Utilities\Arrays;
+use WSDL\Lexer\TokenObject;
 use WSDL\Parser\Node;
+use WSDL\Parser\Parser;
 
 /**
  * Parameter
@@ -65,5 +68,16 @@ class Parameter
     public function isHeader()
     {
         return $this->header;
+    }
+
+    /**
+     * @param TokenObject[] $tokens
+     * @param boolean $header
+     * @return Parameter
+     */
+    public static function fromTokens($tokens, $header = false)
+    {
+        $parser = new Parser($tokens);
+        return new Parameter(Arrays::firstOrNull($parser->S()), $header);
     }
 }

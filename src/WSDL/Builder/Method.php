@@ -104,6 +104,14 @@ class Method
     }
 
     /**
+     * @return Parameter
+     */
+    public function getReturn()
+    {
+        return $this->return;
+    }
+
+    /**
      * @return Parameter|null
      */
     public function getHeaderReturn()
