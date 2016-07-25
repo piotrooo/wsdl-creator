@@ -27,7 +27,7 @@ use WSDL\Builder\WSDLBuilder;
 use WSDL\XML\XMLProvider;
 
 /**
- * Class WSDL
+ * WSDL
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
