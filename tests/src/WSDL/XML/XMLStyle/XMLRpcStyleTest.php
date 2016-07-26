@@ -124,7 +124,8 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
         //    </xsd:sequence>
         //</xsd:complexType>
         $this->assertEquals('User', $DOMElements[1]->getAttribute('name'));
-        $sequenceActual = $DOMElements[1]->childNodes->item(0);
+        $sequenceActual = $DOMElements[1]->getElementsByTagName('xsd:sequence');
+        $sequenceActual = $sequenceActual->item(0);
         print_r($sequenceActual);
         $this->assertEquals('xsd:sequence', $sequenceActual->tagName);
         $DOMElements1Nodes = $sequenceActual->childNodes;
