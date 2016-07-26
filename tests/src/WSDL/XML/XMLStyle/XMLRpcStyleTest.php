@@ -25,7 +25,6 @@ namespace Tests\WSDL\XML\XMLStyle;
 
 use DOMDocument;
 use Ouzo\Tests\Assert;
-use Ouzo\Utilities\Arrays;
 use PHPUnit_Framework_TestCase;
 use WSDL\Builder\Parameter;
 use WSDL\Parser\Node;
@@ -38,7 +37,6 @@ use WSDL\XML\XMLStyle\XMLRpcStyle;
  */
 class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
 {
-    private $nodes;
     /**
      * @var DOMDocument
      */
@@ -53,11 +51,6 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
         parent::setUp();
         $this->DOMDocument = new DOMDocument();
         $this->XMLRpcStyle = new XMLRpcStyle();
-        $this->nodes = [
-            new Node('int', '$age', false),
-            new Node('object', '$user', false, [new Node('string', '$name', false)]),
-            new Node('string', '$numbers', true)
-        ];
     }
 
     /**
@@ -79,8 +72,15 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
      */
     public function shouldGenerateDOMElementsForMessage()
     {
+        //given
+        $nodes = [
+            new Node('int', '$age', false),
+            new Node('object', '$user', false, [new Node('string', '$name', false)]),
+            new Node('string', '$numbers', true)
+        ];
+
         //when
-        $DOMElements = $this->XMLRpcStyle->generateMessagePart($this->DOMDocument, $this->nodes);
+        $DOMElements = $this->XMLRpcStyle->generateMessagePart($this->DOMDocument, $nodes);
 
         //then
         Assert::thatArray($DOMElements)->extracting('tagName')->containsExactly('part', 'part', 'part');
@@ -98,14 +98,12 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldGenerateDOMElementsForTypes()
+    public function shouldGenerateDOMElementsForTypesObject()
     {
         //given
-        $parameters = Arrays::map($this->nodes, function ($node) {
-            return new Parameter($node, false);
-        });
-        $parameter = new Parameter(new Node('object', '$agents', true, [new Node('string', '$number', false)]));
-        array_push($parameters, $parameter);
+        $parameters = [
+            new Parameter(new Node('object', '$user', false, [new Node('string', '$name', false)]), false)
+        ];
 
         //when
         $DOMElements = $this->XMLRpcStyle->generateTypes($this->DOMDocument, $parameters, 'soap');
@@ -113,7 +111,7 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
         //then
         Assert::thatArray($DOMElements)
             ->extracting('tagName')
-            ->containsExactly('xsd:element', 'xsd:complexType', 'xsd:complexType', 'xsd:complexType', 'xsd:element', 'xsd:complexType');
+            ->containsExactly('xsd:element', 'xsd:complexType');
 
         //<xsd:element name="User" nillable="true" type="ns:User"/>
         $this->assertEquals('User', $DOMElements[0]->getAttribute('name'));
@@ -133,6 +131,25 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
             ->containsExactly('xsd:element');
         $this->assertEquals('name', $DOMElements1Nodes[0]->getAttribute('name'));
         $this->assertEquals('xsd:string', $DOMElements1Nodes[0]->getAttribute('type'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldGenerateDOMElementsForTypesArrayOdSimpleType()
+    {
+        //given
+        $parameters = [
+            new Parameter(new Node('string', '$numbers', true), true)
+        ];
+
+        //when
+        $DOMElements = $this->XMLRpcStyle->generateTypes($this->DOMDocument, $parameters, 'soap');
+
+        //then
+        Assert::thatArray($DOMElements)
+            ->extracting('tagName')
+            ->containsExactly('xsd:complexType');
 
         //<xsd:complexType name="ArrayOfNumbers">
         //    <xsd:complexContent>
@@ -141,12 +158,12 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
         //        </xsd:restriction>
         //    </xsd:complexContent>
         //</xsd:complexType>
-        $this->assertEquals('ArrayOfNumbers', $DOMElements[2]->getAttribute('name'));
-        $this->assertEquals('xsd:complexContent', $DOMElements[2]->firstChild->tagName);
-        $this->assertEquals('xsd:restriction', $DOMElements[2]->firstChild->firstChild->tagName);
-        $this->assertEquals('soapenc:Array', $DOMElements[2]->firstChild->firstChild->getAttribute('base'));
-        $this->assertEquals('xsd:attribute', $DOMElements[2]->firstChild->firstChild->firstChild->tagName);
-        $this->assertEquals('soapenc:arrayType', $DOMElements[2]->firstChild->firstChild->firstChild->getAttribute('ref'));
-        $this->assertEquals('xsd:string[]', $DOMElements[2]->firstChild->firstChild->firstChild->getAttribute('soap:arrayType'));
+        $this->assertEquals('ArrayOfNumbers', $DOMElements[0]->getAttribute('name'));
+        $this->assertEquals('xsd:complexContent', $DOMElements[0]->firstChild->tagName);
+        $this->assertEquals('xsd:restriction', $DOMElements[0]->firstChild->firstChild->tagName);
+        $this->assertEquals('soapenc:Array', $DOMElements[0]->firstChild->firstChild->getAttribute('base'));
+        $this->assertEquals('xsd:attribute', $DOMElements[0]->firstChild->firstChild->firstChild->tagName);
+        $this->assertEquals('soapenc:arrayType', $DOMElements[0]->firstChild->firstChild->firstChild->getAttribute('ref'));
+        $this->assertEquals('xsd:string[]', $DOMElements[0]->firstChild->firstChild->firstChild->getAttribute('soap:arrayType'));
     }
 }
