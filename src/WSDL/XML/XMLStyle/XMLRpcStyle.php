@@ -41,10 +41,10 @@ class XMLRpcStyle implements XMLStyle
     public function generateBinding(DOMDocument $DOMDocument, $soapVersion)
     {
         return XMLAttributeHelper::forDOM($DOMDocument)
-            ->createElementWithAttributes($soapVersion . ':binding', array(
+            ->createElementWithAttributes($soapVersion . ':binding', [
                 'style' => 'rpc',
                 'transport' => 'http://schemas.xmlsoap.org/soap/http'
-            ));
+            ]);
     }
 
     /**
@@ -52,7 +52,7 @@ class XMLRpcStyle implements XMLStyle
      */
     public function generateMessagePart(DOMDocument $DOMDocument, $nodes)
     {
-        $parts = array();
+        $parts = [];
         foreach ($nodes as $node) {
             $attributes = $this->attributes($node, $node->getSanitizedName());
             $parts[] = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('part', $attributes);
@@ -65,7 +65,7 @@ class XMLRpcStyle implements XMLStyle
      */
     public function generateTypes(DOMDocument $DOMDocument, $parameters, $soapVersion)
     {
-        $return = array();
+        $return = [];
         foreach ($parameters as $parameter) {
             $node = $parameter->getNode();
             $nodeGen = $this->parameterGenerate($DOMDocument, $node, null, $soapVersion);
@@ -79,11 +79,11 @@ class XMLRpcStyle implements XMLStyle
      * @param Node $node
      * @param DOMElement|null $sequenceElement
      * @param string $soapVersion
-     * @return array
+     * @return DOMElement[]
      */
     private function parameterGenerate(DOMDocument $DOMDocument, Node $node, DOMElement $sequenceElement = null, $soapVersion)
     {
-        $result = array();
+        $result = [];
         if ($sequenceElement) {
             $attributes = $this->attributes($node, $node->getNameForObject());
             $elementPartElement = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('xsd:element', $attributes);
@@ -91,16 +91,16 @@ class XMLRpcStyle implements XMLStyle
         }
         if ($node->isArray()) {
             $complexTypeElement = XMLAttributeHelper::forDOM($DOMDocument)
-                ->createElementWithAttributes('xsd:complexType', array('name' => $node->getNameForArray()));
+                ->createElementWithAttributes('xsd:complexType', ['name' => $node->getNameForArray()]);
             $complexContentElement = XMLAttributeHelper::forDOM($DOMDocument)->createElement('xsd:complexContent');
             $restrictionElement = XMLAttributeHelper::forDOM($DOMDocument)
-                ->createElementWithAttributes('xsd:restriction', array('base' => 'soapenc:Array'));
+                ->createElementWithAttributes('xsd:restriction', ['base' => 'soapenc:Array']);
             $type = $node->isObject() ? 'ns:' . $node->getNameForObject() . '[]' : 'xsd:' . $node->getType() . '[]';
             $attributeElement = XMLAttributeHelper::forDOM($DOMDocument)
-                ->createElementWithAttributes('xsd:attribute', array(
+                ->createElementWithAttributes('xsd:attribute', [
                     'ref' => 'soapenc:arrayType',
                     $soapVersion . ':arrayType' => $type
-                ));
+                ]);
             $restrictionElement->appendChild($attributeElement);
             $complexContentElement->appendChild($restrictionElement);
             $complexTypeElement->appendChild($complexContentElement);
@@ -108,13 +108,13 @@ class XMLRpcStyle implements XMLStyle
         }
         if ($node->isObject()) {
             $name = $node->getNameForObject();
-            $element = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('xsd:element', array(
+            $element = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('xsd:element', [
                 'name' => $name, 'nillable' => 'true', 'type' => 'ns:' . $name
-            ));
+            ]);
             $result[] = $element;
 
             $complexTypeElement = XMLAttributeHelper::forDOM($DOMDocument)
-                ->createElementWithAttributes('xsd:complexType', array('name' => $node->getNameForObject()));
+                ->createElementWithAttributes('xsd:complexType', ['name' => $node->getNameForObject()]);
             $sequenceElement = XMLAttributeHelper::forDOM($DOMDocument)->createElement('xsd:sequence');
             $complexTypeElement->appendChild($sequenceElement);
 
@@ -135,20 +135,20 @@ class XMLRpcStyle implements XMLStyle
     private function attributes(Node $node, $nameForObject)
     {
         if ($node->isArray()) {
-            $attributes = array(
+            $attributes = [
                 'name' => $node->getSanitizedName(),
                 'type' => 'ns:' . $node->getNameForArray()
-            );
+            ];
         } else if ($node->isObject()) {
-            $attributes = array(
+            $attributes = [
                 'name' => $nameForObject,
                 'element' => 'ns:' . $node->getNameForObject()
-            );
+            ];
         } else {
-            $attributes = array(
+            $attributes = [
                 'name' => $node->getSanitizedName(),
                 'type' => 'xsd:' . $node->getType()
-            );
+            ];
         }
         return $attributes;
     }

@@ -53,7 +53,7 @@ interface XMLStyle
      * @param DOMDocument $DOMDocument
      * @param Parameter[] $parameters
      * @param string $soapVersion
-     * @return mixed
+     * @return DOMElement[]
      */
     public function generateTypes(DOMDocument $DOMDocument, $parameters, $soapVersion);
 }
