@@ -65,4 +65,148 @@ class NodeTest extends PHPUnit_Framework_TestCase
         //then
         $this->assertEquals('object', $type);
     }
+
+    /**
+     * @test
+     */
+    public function shouldReturnName()
+    {
+        //given
+        $node = new Node('int', '$age', false);
+
+        //when
+        $name = $node->getName();
+
+        //then
+        $this->assertEquals('$age', $name);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldGetSanitizedName()
+    {
+        //given
+        $node = new Node('int', '$age', false);
+
+        //when
+        $name = $node->getSanitizedName();
+
+        //then
+        $this->assertEquals('age', $name);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldGetNameForArray()
+    {
+        //given
+        $node = new Node('int', '$age', true);
+
+        //when
+        $name = $node->getNameForArray();
+
+        //then
+        $this->assertEquals('ArrayOfAge', $name);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldGetNameForObject()
+    {
+        //given
+        $elements = [
+            new Node('string', '$name', false)
+        ];
+        $node = new Node('object', '$user', false, $elements);
+
+        //when
+        $name = $node->getNameForObject();
+
+        //then
+        $this->assertEquals('User', $name);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSingularizeeNameForObject()
+    {
+        //given
+        $elements = [
+            new Node('string', '$name', false)
+        ];
+        $node = new Node('object', '$users', true, $elements);
+
+        //when
+        $name = $node->getNameForObject();
+
+        //then
+        $this->assertEquals('User', $name);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnFalseWhenTypeIsNotArray()
+    {
+        //given
+        $node = new Node('string', '$name', false);
+
+        //when
+        $isArray = $node->isArray();
+
+        //then
+        $this->assertFalse($isArray);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnTrueWhenTypeIsArray()
+    {
+        //given
+        $node = new Node('string', '$name', true);
+
+        //when
+        $isArray = $node->isArray();
+
+        //then
+        $this->assertTrue($isArray);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnFalseWhenTypeIsNotObject()
+    {
+        //given
+        $node = new Node('string', '$name', true);
+
+        //when
+        $isArray = $node->isObject();
+
+        //then
+        $this->assertFalse($isArray);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnTrueWhenTypeIsObject()
+    {
+        //given
+        $elements = [
+            new Node('string', '$name', false)
+        ];
+        $node = new Node('object', '$users', true, $elements);
+
+        //when
+        $isArray = $node->isObject();
+
+        //then
+        $this->assertTrue($isArray);
+    }
 }
