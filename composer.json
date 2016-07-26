@@ -19,6 +19,7 @@
     }
   ],
   "require": {
+    "php": ">=5.4",
     "letsdrink/ouzo-goodies": "dev-master",
     "doctrine/annotations": "1.2.*"
   },
