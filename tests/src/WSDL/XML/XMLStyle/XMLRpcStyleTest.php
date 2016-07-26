@@ -126,7 +126,6 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('User', $DOMElements[1]->getAttribute('name'));
         $sequenceActual = $DOMElements[1]->getElementsByTagName('xsd:sequence');
         $sequenceActual = $sequenceActual->item(0);
-        print_r($sequenceActual);
         $this->assertEquals('xsd:sequence', $sequenceActual->tagName);
         $DOMElements1Nodes = $sequenceActual->childNodes;
         Assert::thatArray(iterator_to_array($DOMElements1Nodes))
@@ -164,7 +163,8 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('ArrayOfNumbers', $DOMElements[0]->getAttribute('name'));
         $complexContentActual = $DOMElements[0]->firstChild;
         $this->assertEquals('xsd:complexContent', $complexContentActual->tagName);
-        $restrictionActual = $complexContentActual->firstChild;
+        $restrictionActual = $DOMElements[1]->getElementsByTagName('xsd:restriction');
+        $restrictionActual = $restrictionActual->item(0);
         $this->assertEquals('xsd:restriction', $restrictionActual->tagName);
         $this->assertEquals('soapenc:Array', $restrictionActual->getAttribute('base'));
         $attributeActual = $restrictionActual->firstChild;
@@ -201,7 +201,8 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('ArrayOfUsers', $DOMElements[0]->getAttribute('name'));
         $complexContentActual = $DOMElements[0]->firstChild;
         $this->assertEquals('xsd:complexContent', $complexContentActual->tagName);
-        $restrictionActual = $complexContentActual->firstChild;
+        $restrictionActual = $DOMElements[1]->getElementsByTagName('xsd:restriction');
+        $restrictionActual = $restrictionActual->item(0);
         $this->assertEquals('xsd:restriction', $restrictionActual->tagName);
         $this->assertEquals('soapenc:Array', $restrictionActual->getAttribute('base'));
         $attributeActual = $restrictionActual->firstChild;
