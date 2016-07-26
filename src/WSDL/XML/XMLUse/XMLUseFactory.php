@@ -23,6 +23,7 @@
  */
 namespace WSDL\XML\XMLUse;
 
+use Exception;
 use WSDL\Annotation\SoapBinding;
 
 /**
@@ -35,6 +36,7 @@ class XMLUseFactory
     /**
      * @param string $use
      * @return XMLUse
+     * @throws Exception
      */
     public static function create($use)
     {
@@ -43,6 +45,8 @@ class XMLUseFactory
                 return new XMLLiteralUse();
             case SoapBinding::ENCODED:
                 return new XMLEncodedUse();
+            default:
+                throw new Exception('Unsupported soap binding use [' . $use . ']');
         }
     }
 }

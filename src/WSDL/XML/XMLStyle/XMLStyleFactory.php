@@ -23,6 +23,7 @@
  */
 namespace WSDL\XML\XMLStyle;
 
+use Exception;
 use WSDL\Annotation\SoapBinding;
 
 /**
@@ -35,12 +36,15 @@ class XMLStyleFactory
     /**
      * @param string $style
      * @return XMLStyle
+     * @throws Exception
      */
     public static function create($style)
     {
         switch ($style) {
             case SoapBinding::RPC:
                 return new XMLRpcStyle();
+            default:
+                throw new Exception('Unsupported soap binding style [' . $style . ']');
         }
     }
 }
