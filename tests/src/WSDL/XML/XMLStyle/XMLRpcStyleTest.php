@@ -124,8 +124,9 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
         //    </xsd:sequence>
         //</xsd:complexType>
         $this->assertEquals('User', $DOMElements[1]->getAttribute('name'));
-        $this->assertEquals('xsd:sequence', $DOMElements[1]->firstChild->tagName);
-        $DOMElements1Nodes = $DOMElements[1]->firstChild->childNodes;
+        $sequenceActual = $DOMElements[1]->firstChild;
+        $this->assertEquals('xsd:sequence', $sequenceActual->tagName);
+        $DOMElements1Nodes = $sequenceActual->childNodes;
         Assert::thatArray(iterator_to_array($DOMElements1Nodes))
             ->extracting('tagName')
             ->containsExactly('xsd:element');
@@ -136,7 +137,7 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldGenerateDOMElementsForTypesArrayOdSimpleType()
+    public function shouldGenerateDOMElementsForTypesArrayOfSimpleType()
     {
         //given
         $parameters = [
@@ -159,11 +160,71 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
         //    </xsd:complexContent>
         //</xsd:complexType>
         $this->assertEquals('ArrayOfNumbers', $DOMElements[0]->getAttribute('name'));
-        $this->assertEquals('xsd:complexContent', $DOMElements[0]->firstChild->tagName);
-        $this->assertEquals('xsd:restriction', $DOMElements[0]->firstChild->firstChild->tagName);
-        $this->assertEquals('soapenc:Array', $DOMElements[0]->firstChild->firstChild->getAttribute('base'));
-        $this->assertEquals('xsd:attribute', $DOMElements[0]->firstChild->firstChild->firstChild->tagName);
-        $this->assertEquals('soapenc:arrayType', $DOMElements[0]->firstChild->firstChild->firstChild->getAttribute('ref'));
-        $this->assertEquals('xsd:string[]', $DOMElements[0]->firstChild->firstChild->firstChild->getAttribute('soap:arrayType'));
+        $complexContentActual = $DOMElements[0]->firstChild;
+        $this->assertEquals('xsd:complexContent', $complexContentActual->tagName);
+        $restrictionActual = $complexContentActual->firstChild;
+        $this->assertEquals('xsd:restriction', $restrictionActual->tagName);
+        $this->assertEquals('soapenc:Array', $restrictionActual->getAttribute('base'));
+        $attributeActual = $restrictionActual->firstChild;
+        $this->assertEquals('xsd:attribute', $attributeActual->tagName);
+        $this->assertEquals('soapenc:arrayType', $attributeActual->getAttribute('ref'));
+        $this->assertEquals('xsd:string[]', $attributeActual->getAttribute('soap:arrayType'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldGenerateDOMElementsForTypesArrayOfObjectType()
+    {
+        //given
+        $parameters = [
+            new Parameter(new Node('object', '$users', true, [new Node('string', '$name', false)]), true)
+        ];
+
+        //when
+        $DOMElements = $this->XMLRpcStyle->generateTypes($this->DOMDocument, $parameters, 'soap');
+
+        //then
+        Assert::thatArray($DOMElements)
+            ->extracting('tagName')
+            ->containsExactly('xsd:complexType', 'xsd:element', 'xsd:complexType');
+
+        //<xsd:complexType name="ArrayOfUsers">
+        //    <xsd:complexContent>
+        //        <xsd:restriction base="soapenc:Array">
+        //            <xsd:attribute ref="soapenc:arrayType" soap:arrayType="ns:User[]"/>
+        //        </xsd:restriction>
+        //    </xsd:complexContent>
+        //</xsd:complexType>
+        $this->assertEquals('ArrayOfUsers', $DOMElements[0]->getAttribute('name'));
+        $complexContentActual = $DOMElements[0]->firstChild;
+        $this->assertEquals('xsd:complexContent', $complexContentActual->tagName);
+        $restrictionActual = $complexContentActual->firstChild;
+        $this->assertEquals('xsd:restriction', $restrictionActual->tagName);
+        $this->assertEquals('soapenc:Array', $restrictionActual->getAttribute('base'));
+        $attributeActual = $restrictionActual->firstChild;
+        $this->assertEquals('xsd:attribute', $attributeActual->tagName);
+        $this->assertEquals('soapenc:arrayType', $attributeActual->getAttribute('ref'));
+        $this->assertEquals('ns:User[]', $attributeActual->getAttribute('soap:arrayType'));
+
+        //<xsd:element name="User" nillable="true" type="ns:User"/>
+        $this->assertEquals('User', $DOMElements[1]->getAttribute('name'));
+        $this->assertEquals('true', $DOMElements[1]->getAttribute('nillable'));
+        $this->assertEquals('ns:User', $DOMElements[1]->getAttribute('type'));
+
+        //<xsd:complexType name="User">
+        //    <xsd:sequence>
+        //        <xsd:element name="name" type="xsd:string"/>
+        //    </xsd:sequence>
+        //</xsd:complexType>
+        $this->assertEquals('User', $DOMElements[2]->getAttribute('name'));
+        $sequenceActual = $DOMElements[2]->firstChild;
+        $this->assertEquals('xsd:sequence', $sequenceActual->tagName);
+        $DOMElements1Nodes = $sequenceActual->childNodes;
+        Assert::thatArray(iterator_to_array($DOMElements1Nodes))
+            ->extracting('tagName')
+            ->containsExactly('xsd:element');
+        $this->assertEquals('name', $DOMElements1Nodes[0]->getAttribute('name'));
+        $this->assertEquals('xsd:string', $DOMElements1Nodes[0]->getAttribute('type'));
     }
 }
