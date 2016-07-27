@@ -109,6 +109,7 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
         $DOMElements = $this->XMLRpcStyle->generateTypes($this->DOMDocument, $parameters, 'soap');
 
         //then
+        print_r($DOMElements);
         Assert::thatArray($DOMElements)
             ->extracting('tagName')
             ->containsExactly('xsd:element', 'xsd:complexType');
@@ -225,7 +226,8 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
         //    </xsd:sequence>
         //</xsd:complexType>
         $this->assertEquals('User', $DOMElements[2]->getAttribute('name'));
-        $sequenceActual = $DOMElements[2]->firstChild;
+        $sequenceActual = $DOMElements[2]->getElementsByTagName('xsd:sequence');
+        $sequenceActual = $sequenceActual->item(0);
         $this->assertEquals('xsd:sequence', $sequenceActual->tagName);
         $DOMElements1Nodes = $sequenceActual->childNodes;
         Assert::thatArray(iterator_to_array($DOMElements1Nodes))
