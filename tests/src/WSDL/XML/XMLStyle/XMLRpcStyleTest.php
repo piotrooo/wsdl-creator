@@ -128,12 +128,12 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
         $sequenceActual = $DOMElements[1]->getElementsByTagName('xsd:sequence');
         $sequenceActual = $sequenceActual->item(0);
         $this->assertEquals('xsd:sequence', $sequenceActual->tagName);
-        $DOMElements1Nodes = $sequenceActual->childNodes;
-        Assert::thatArray(iterator_to_array($DOMElements1Nodes))
-            ->extracting('tagName')
-            ->containsExactly('xsd:element');
-        $this->assertEquals('name', $DOMElements1Nodes[0]->getAttribute('name'));
-        $this->assertEquals('xsd:string', $DOMElements1Nodes[0]->getAttribute('type'));
+        $DOMElements1Nodes = $sequenceActual->getElementsByTagName('xsd:element');
+        foreach ($DOMElements1Nodes as $DOMElements1Node) {
+            $this->assertEquals('xsd:element', $DOMElements1Node->tagName);
+            $this->assertEquals('name', $DOMElements1Node->getAttribute('name'));
+            $this->assertEquals('xsd:string', $DOMElements1Node->getAttribute('type'));
+        }
     }
 
     /**
@@ -229,11 +229,11 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
         $sequenceActual = $DOMElements[2]->getElementsByTagName('xsd:sequence');
         $sequenceActual = $sequenceActual->item(0);
         $this->assertEquals('xsd:sequence', $sequenceActual->tagName);
-        $DOMElements1Nodes = $sequenceActual->childNodes;
-        Assert::thatArray(iterator_to_array($DOMElements1Nodes))
-            ->extracting('tagName')
-            ->containsExactly('xsd:element');
-        $this->assertEquals('name', $DOMElements1Nodes[0]->getAttribute('name'));
-        $this->assertEquals('xsd:string', $DOMElements1Nodes[0]->getAttribute('type'));
+        $DOMElements1Nodes = $sequenceActual->getElementsByTagName('xsd:element');
+        foreach ($DOMElements1Nodes as $DOMElements1Node) {
+            $this->assertEquals('xsd:element', $DOMElements1Node->tagName);
+            $this->assertEquals('name', $DOMElements1Node->getAttribute('name'));
+            $this->assertEquals('xsd:string', $DOMElements1Node->getAttribute('type'));
+        }
     }
 }
