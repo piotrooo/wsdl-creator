@@ -168,7 +168,8 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
         $restrictionActual = $restrictionActual->item(0);
         $this->assertEquals('xsd:restriction', $restrictionActual->tagName);
         $this->assertEquals('soapenc:Array', $restrictionActual->getAttribute('base'));
-        $attributeActual = $restrictionActual->firstChild;
+        $attributeActual = $restrictionActual->getElementsByTagName('xsd:attribute');
+        $attributeActual = $attributeActual->item(0);
         $this->assertEquals('xsd:attribute', $attributeActual->tagName);
         $this->assertEquals('soapenc:arrayType', $attributeActual->getAttribute('ref'));
         $this->assertEquals('xsd:string[]', $attributeActual->getAttribute('soap:arrayType'));
@@ -207,7 +208,8 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
         $restrictionActual = $restrictionActual->item(0);
         $this->assertEquals('xsd:restriction', $restrictionActual->tagName);
         $this->assertEquals('soapenc:Array', $restrictionActual->getAttribute('base'));
-        $attributeActual = $restrictionActual->firstChild;
+        $attributeActual = $restrictionActual->getElementsByTagName('xsd:attribute');
+        $attributeActual = $attributeActual->item(0);
         $this->assertEquals('xsd:attribute', $attributeActual->tagName);
         $this->assertEquals('soapenc:arrayType', $attributeActual->getAttribute('ref'));
         $this->assertEquals('ns:User[]', $attributeActual->getAttribute('soap:arrayType'));
