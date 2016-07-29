@@ -274,15 +274,16 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
         $sequenceActual = $DOMElements[1]->getElementsByTagName('xsd:sequence');
         $sequenceActual = $sequenceActual->item(0);
         $this->assertEquals('xsd:sequence', $sequenceActual->tagName);
-        $DOMElements1Nodes = $sequenceActual->getElementsByTagName('xsd:element');
 
-        $this->assertEquals('xsd:element', $DOMElements1Nodes[0]->tagName);
-        $this->assertEquals('name', $DOMElements1Nodes[0]->getAttribute('name'));
-        $this->assertEquals('xsd:string', $DOMElements1Nodes[0]->getAttribute('type'));
-
-        $this->assertEquals('xsd:element', $DOMElements1Nodes[1]->tagName);
-        $this->assertEquals('Agent', $DOMElements1Nodes[1]->getAttribute('name'));
-        $this->assertEquals('ns:Agent', $DOMElements1Nodes[1]->getAttribute('element'));
+        $DOMElementsNodes = $sequenceActual->getElementsByTagName('xsd:element');
+        $DOMElements1Nodes = $DOMElementsNodes->item(0);
+        $this->assertEquals('xsd:element', $DOMElements1Nodes->tagName);
+        $this->assertEquals('name', $DOMElements1Nodes->getAttribute('name'));
+        $this->assertEquals('xsd:string', $DOMElements1Nodes->getAttribute('type'));
+        $DOMElements2Nodes = $DOMElementsNodes->item(1);
+        $this->assertEquals('xsd:element', $DOMElements2Nodes->tagName);
+        $this->assertEquals('Agent', $DOMElements2Nodes->getAttribute('name'));
+        $this->assertEquals('ns:Agent', $DOMElements2Nodes->getAttribute('element'));
 
         //<xsd:element name="Agent" nillable="true" type="ns:Agent"/>
         $this->assertEquals('Agent', $DOMElements[2]->getAttribute('name'));
@@ -341,10 +342,11 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
         $sequenceActual = $sequenceActual->item(0);
         $this->assertEquals('xsd:sequence', $sequenceActual->tagName);
 
-        $DOMElements1Nodes = $sequenceActual->getElementsByTagName('xsd:element');
-        $this->assertEquals('xsd:element', $DOMElements1Nodes[0]->tagName);
-        $this->assertEquals('names', $DOMElements1Nodes[0]->getAttribute('name'));
-        $this->assertEquals('ns:ArrayOfNames', $DOMElements1Nodes[0]->getAttribute('type'));
+        $DOMElementsNodes = $sequenceActual->getElementsByTagName('xsd:element');
+        $DOMElements1Nodes = $DOMElementsNodes->item(0);
+        $this->assertEquals('xsd:element', $DOMElements1Nodes->tagName);
+        $this->assertEquals('names', $DOMElements1Nodes->getAttribute('name'));
+        $this->assertEquals('ns:ArrayOfNames', $DOMElements1Nodes->getAttribute('type'));
 
         //<xsd:complexType name="ArrayOfNames">
         //    <xsd:complexContent>
