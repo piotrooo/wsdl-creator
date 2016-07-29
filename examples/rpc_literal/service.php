@@ -30,6 +30,9 @@ $return3 = Parameter::fromTokens($tokenizer->lex('object $userContext { int $id 
 $parameters4 = [Parameter::fromTokens($tokenizer->lex('object[] $companies { string $name int $postcode }'))];
 $return4 = Parameter::fromTokens($tokenizer->lex('string[] $companiesNames'));
 
+$parameters5 = [Parameter::fromTokens($tokenizer->lex('string[] $errors'))];
+$return5 = Parameter::fromTokens($tokenizer->lex('object $result { bool $result string[] $errors }'));
+
 $builder = WSDLBuilder::instance()
     ->setName('RpcLiteralService')
     ->setTargetNamespace('http://foo.bar/rpcliteralservice')
@@ -41,7 +44,8 @@ $builder = WSDLBuilder::instance()
     ->setMethod(new Method('uppercaseUserName', $parameters1, $return1))
     ->setMethod(new Method('appendPrefixToNumbers', $parameters2, $return2))
     ->setMethod(new Method('getUserContext', $parameters3, $return3))
-    ->setMethod(new Method('extractCompaniesNames', $parameters4, $return4));
+    ->setMethod(new Method('extractCompaniesNames', $parameters4, $return4))
+    ->setMethod(new Method('wrapErrors', $parameters5, $return5));
 
 $wsdl = WSDL::fromBuilder($builder);
 
