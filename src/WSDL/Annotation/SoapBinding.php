@@ -41,19 +41,19 @@ final class SoapBinding
     const WRAPPED = 'WRAPPED';
 
     /**
-     * @var mixed
+     * @var string
      *
      * @Enum({"RPC", "DOCUMENT"})
      */
     public $style = self::RPC;
     /**
-     * @var mixed
+     * @var string
      *
      * @Enum({"LITERAL", "ENCODED"})
      */
     public $use = self::LITERAL;
     /**
-     * @var mixed
+     * @var string
      *
      * @Enum({"BARE", "WRAPPED"})
      */

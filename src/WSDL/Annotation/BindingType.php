@@ -37,7 +37,7 @@ final class BindingType
     const SOAP_12 = 'SOAP_12';
 
     /**
-     * @var mixed
+     * @var string
      *
      * @Enum({"SOAP_11", "SOAP_12"})
      */
