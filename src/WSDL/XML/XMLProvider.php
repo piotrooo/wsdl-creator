@@ -89,16 +89,8 @@ class XMLProvider
      */
     public function getXml()
     {
-        $this->saveXML();
-        return $this->xml;
-    }
-
-    /**
-     * @return void
-     */
-    private function saveXML()
-    {
         $this->xml = $this->DOMDocument->saveXML();
+        return $this->xml;
     }
 
     /**
