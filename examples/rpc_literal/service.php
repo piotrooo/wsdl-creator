@@ -31,7 +31,7 @@ $parameters4 = [Parameter::fromTokens($tokenizer->lex('object[] $companies { str
 $return4 = Parameter::fromTokens($tokenizer->lex('string[] $companiesNames'));
 
 $parameters5 = [Parameter::fromTokens($tokenizer->lex('string[] $errors'))];
-$return5 = Parameter::fromTokens($tokenizer->lex('object $result { bool $result string[] $errors }'));
+$return5 = Parameter::fromTokens($tokenizer->lex('object $result { boolean $result string[] $errors }'));
 
 $builder = WSDLBuilder::instance()
     ->setName('RpcLiteralService')
@@ -88,5 +88,13 @@ class RpcLiteralService
     public function extractCompaniesNames($companies)
     {
         return Arrays::map($companies, Functions::extractField('name'));
+    }
+
+    public function wrapErrors($errors)
+    {
+        $result = new stdClass();
+        $result->result = false;
+        $result->errors = $errors;
+        return $result;
     }
 }

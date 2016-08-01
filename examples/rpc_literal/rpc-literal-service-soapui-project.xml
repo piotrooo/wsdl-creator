@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project id="f79e9d01-5100-47c3-a54d-6b69deb85427" activeEnvironment="Default" name="rpc_literal_service" resourceRoot="" soapui-version="5.2.1" xmlns:con="http://eviware.com/soapui/config"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.actions.iface.tools.soapui.TestRunnerAction@values-local"><![CDATA[<xml-fragment xmlns:con="http://eviware.com/soapui/config">
+<con:soapui-project id="f79e9d01-5100-47c3-a54d-6b69deb85427" activeEnvironment="Default" name="rpc_literal_service" resourceRoot="" soapui-version="5.2.1" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.actions.iface.tools.soapui.TestRunnerAction@values-local"><![CDATA[<xml-fragment xmlns:con="http://eviware.com/soapui/config">
   <con:entry key="Environment" value="Default"/>
   <con:entry key="Global Properties" value=""/>
   <con:entry key="TestSuite" value="&lt;all>"/>
@@ -30,7 +30,7 @@
   <con:entry key="Save After" value="false"/>
   <con:entry key="Add Settings" value="false"/>
   <con:entry key="Endpoint" value=""/>
-</xml-fragment>]]></con:setting></con:settings><con:interface xsi:type="con:WsdlInterface" id="b7897649-394f-4be7-af3f-f3a19a63eb93" wsaVersion="NONE" name="RpcLiteralServiceBinding" type="wsdl" bindingName="{http://foo.bar/rpcliteralservice}RpcLiteralServiceBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php?wsdl"><con:part><con:url>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php?wsdl</con:url><con:content><![CDATA[<definitions name="RpcLiteralService" targetNamespace="http://foo.bar/rpcliteralservice" xmlns:tns="http://foo.bar/rpcliteralservice" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://foo.bar/rpcliteralservice/types">
+</xml-fragment>]]></con:setting></con:settings><con:interface xsi:type="con:WsdlInterface" id="b7897649-394f-4be7-af3f-f3a19a63eb93" wsaVersion="NONE" name="RpcLiteralServiceBinding" type="wsdl" bindingName="{http://foo.bar/rpcliteralservice}RpcLiteralServiceBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings><con:setting id="CreateWsdlDocumentationAction@report-directory">/tmp</con:setting></con:settings><con:definitionCache type="TEXT" rootPart="http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php?wsdl"><con:part><con:url>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php?wsdl</con:url><con:content><![CDATA[<definitions name="RpcLiteralService" targetNamespace="http://foo.bar/rpcliteralservice" xmlns:tns="http://foo.bar/rpcliteralservice" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://foo.bar/rpcliteralservice/types">
   <types>
     <xsd:schema targetNamespace="http://foo.bar/rpcliteralservice/types" xmlns="http://foo.bar/rpcliteralservice/types">
       <xsd:complexType name="ArrayOfNumbers">
@@ -89,6 +89,27 @@
           </xsd:restriction>
         </xsd:complexContent>
       </xsd:complexType>
+      <xsd:complexType name="ArrayOfErrors">
+        <xsd:complexContent>
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute ref="soapenc:arrayType" soap:arrayType="xsd:string[]"/>
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:element name="Result" nillable="true" type="ns:Result"/>
+      <xsd:complexType name="Result">
+        <xsd:sequence>
+          <xsd:element name="result" type="xsd:boolean"/>
+          <xsd:element name="errors" type="ns:ArrayOfErrors"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfErrors">
+        <xsd:complexContent>
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute ref="soapenc:arrayType" soap:arrayType="xsd:string[]"/>
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
     </xsd:schema>
   </types>
   <message name="uppercaseUserNameRequest">
@@ -116,6 +137,12 @@
   <message name="extractCompaniesNamesResponse">
     <part name="companiesNames" type="ns:ArrayOfCompaniesNames"/>
   </message>
+  <message name="wrapErrorsRequest">
+    <part name="errors" type="ns:ArrayOfErrors"/>
+  </message>
+  <message name="wrapErrorsResponse">
+    <part name="result" element="ns:Result"/>
+  </message>
   <portType name="RpcLiteralServicePortType">
     <operation name="uppercaseUserName">
       <input message="tns:uppercaseUserNameRequest"/>
@@ -132,6 +159,10 @@
     <operation name="extractCompaniesNames">
       <input message="tns:extractCompaniesNamesRequest"/>
       <output message="tns:extractCompaniesNamesResponse"/>
+    </operation>
+    <operation name="wrapErrors">
+      <input message="tns:wrapErrorsRequest"/>
+      <output message="tns:wrapErrorsResponse"/>
     </operation>
   </portType>
   <binding name="RpcLiteralServiceBinding" type="tns:RpcLiteralServicePortType">
@@ -172,13 +203,22 @@
         <soap:body use="literal" namespace="http://foo.bar/rpcliteralservice"/>
       </output>
     </operation>
+    <operation name="wrapErrors">
+      <soap:operation soapAction="http://foo.bar/rpcliteralservice/#wrapErrors"/>
+      <input>
+        <soap:body use="literal" namespace="http://foo.bar/rpcliteralservice"/>
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://foo.bar/rpcliteralservice"/>
+      </output>
+    </operation>
   </binding>
   <service name="RpcLiteralServiceService">
     <port name="RpcLiteralServicePort" binding="tns:RpcLiteralServiceBinding">
       <soap:address location="http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php"/>
     </port>
   </service>
-</definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint></con:endpoints><con:operation id="a0a77db0-49c5-4b16-8166-9f2c7fd74887" isOneWay="false" action="http://foo.bar/rpcliteralservice/#uppercaseUserName" name="uppercaseUserName" bindingOperationName="uppercaseUserName" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="3fe7db5a-f1d3-48ea-a10e-c861ec33ca73" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:rpc="http://foo.bar/rpcliteralservice">
+</definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:endpoint>http://piotrooo:8088/mockRpcLiteralServiceBinding</con:endpoint></con:endpoints><con:operation id="a0a77db0-49c5-4b16-8166-9f2c7fd74887" isOneWay="false" action="http://foo.bar/rpcliteralservice/#uppercaseUserName" name="uppercaseUserName" bindingOperationName="uppercaseUserName" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="3fe7db5a-f1d3-48ea-a10e-c861ec33ca73" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:rpc="http://foo.bar/rpcliteralservice">
    <soapenv:Header/>
    <soapenv:Body>
       <rpc:uppercaseUserName>
@@ -210,4 +250,11 @@
          <companies soapenc:arrayType="?" soapenc:offset="?" id="?" href="?"/>
       </rpc:extractCompaniesNames>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#extractCompaniesNames"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/></con:soapui-project>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#extractCompaniesNames"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="5370bc7e-329b-4934-acbc-b2fab92581b3" isOneWay="false" action="http://foo.bar/rpcliteralservice/#wrapErrors" name="wrapErrors" bindingOperationName="wrapErrors" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="00b2d8af-4bca-4614-8938-f454c4961821" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:rpc="http://foo.bar/rpcliteralservice" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <rpc:wrapErrors>
+         <errors soapenc:arrayType="?" soapenc:offset="?" id="?" href="?"/>
+      </rpc:wrapErrors>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#wrapErrors"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/></con:soapui-project>
