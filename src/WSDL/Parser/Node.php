@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 namespace WSDL\Parser;
+
 use Ouzo\Utilities\Inflector;
 
 /**

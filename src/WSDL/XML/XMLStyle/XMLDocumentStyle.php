@@ -23,30 +23,33 @@
  */
 namespace WSDL\XML\XMLStyle;
 
-use Exception;
-use WSDL\Annotation\SoapBinding;
+use DOMDocument;
 
 /**
- * XMLStyleFactory
+ * XMLDocumentStyle
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class XMLStyleFactory
+class XMLDocumentStyle implements XMLStyle
 {
     /**
-     * @param string $style
-     * @return XMLStyle
-     * @throws Exception
+     * @inheritdoc
      */
-    public static function create($style)
+    public function generateBinding(DOMDocument $DOMDocument, $soapVersion)
     {
-        switch ($style) {
-            case SoapBinding::RPC:
-                return new XMLRpcStyle();
-            case SoapBinding::DOCUMENT:
-                return new XMLDocumentStyle();
-            default:
-                throw new Exception('Unsupported soap binding style [' . $style . ']');
-        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function generateMessagePart(DOMDocument $DOMDocument, $nodes)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function generateTypes(DOMDocument $DOMDocument, $parameters, $soapVersion)
+    {
     }
 }

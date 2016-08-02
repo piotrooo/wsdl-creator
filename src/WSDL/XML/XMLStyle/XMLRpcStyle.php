@@ -139,7 +139,7 @@ class XMLRpcStyle implements XMLStyle
                 'name' => $node->getSanitizedName(),
                 'type' => 'ns:' . $node->getNameForArray()
             ];
-        } else if ($node->isObject()) {
+        } elseif ($node->isObject()) {
             $attributes = [
                 'name' => $nameForObject,
                 'element' => 'ns:' . $node->getNameForObject()

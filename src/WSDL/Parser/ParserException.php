@@ -32,5 +32,4 @@ use Exception;
  */
 class ParserException extends Exception
 {
-
 }
