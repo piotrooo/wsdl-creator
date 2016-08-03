@@ -42,8 +42,7 @@ class XMLRpcStyle implements XMLStyle
     {
         return XMLAttributeHelper::forDOM($DOMDocument)
             ->createElementWithAttributes($soapVersion . ':binding', [
-                'style' => 'rpc',
-                'transport' => 'http://schemas.xmlsoap.org/soap/http'
+                'style' => 'rpc', 'transport' => 'http://schemas.xmlsoap.org/soap/http'
             ]);
     }
 
@@ -65,13 +64,13 @@ class XMLRpcStyle implements XMLStyle
      */
     public function generateTypes(DOMDocument $DOMDocument, $parameters, $soapVersion)
     {
-        $return = [];
+        $types = [];
         foreach ($parameters as $parameter) {
             $node = $parameter->getNode();
             $nodeGen = $this->parameterGenerate($DOMDocument, $node, null, $soapVersion);
-            $return = array_merge($return, $nodeGen);
+            $types = array_merge($types, $nodeGen);
         }
-        return $return;
+        return $types;
     }
 
     /**
@@ -135,20 +134,11 @@ class XMLRpcStyle implements XMLStyle
     private function attributes(Node $node, $nameForObject)
     {
         if ($node->isArray()) {
-            $attributes = [
-                'name' => $node->getSanitizedName(),
-                'type' => 'ns:' . $node->getNameForArray()
-            ];
+            $attributes = ['name' => $node->getSanitizedName(), 'type' => 'ns:' . $node->getNameForArray()];
         } elseif ($node->isObject()) {
-            $attributes = [
-                'name' => $nameForObject,
-                'element' => 'ns:' . $node->getNameForObject()
-            ];
+            $attributes = ['name' => $nameForObject, 'element' => 'ns:' . $node->getNameForObject()];
         } else {
-            $attributes = [
-                'name' => $node->getSanitizedName(),
-                'type' => 'xsd:' . $node->getType()
-            ];
+            $attributes = ['name' => $node->getSanitizedName(), 'type' => 'xsd:' . $node->getType()];
         }
         return $attributes;
     }

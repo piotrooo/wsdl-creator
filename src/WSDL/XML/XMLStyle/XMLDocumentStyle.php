@@ -24,6 +24,9 @@
 namespace WSDL\XML\XMLStyle;
 
 use DOMDocument;
+use DOMElement;
+use WSDL\Parser\Node;
+use WSDL\XML\XMLAttributeHelper;
 
 /**
  * XMLDocumentStyle
@@ -37,6 +40,10 @@ class XMLDocumentStyle implements XMLStyle
      */
     public function generateBinding(DOMDocument $DOMDocument, $soapVersion)
     {
+        return XMLAttributeHelper::forDOM($DOMDocument)
+            ->createElementWithAttributes($soapVersion . ':binding', [
+                'style' => 'document', 'transport' => 'http://schemas.xmlsoap.org/soap/http'
+            ]);
     }
 
     /**
@@ -44,6 +51,13 @@ class XMLDocumentStyle implements XMLStyle
      */
     public function generateMessagePart(DOMDocument $DOMDocument, $nodes)
     {
+        $parts = [];
+        foreach ($nodes as $node) {
+            $parts[] = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('part', [
+                'name' => $node->getSanitizedName(), 'element' => 'ns:' . $node->getSanitizedName()
+            ]);
+        }
+        return $parts;
     }
 
     /**
@@ -51,5 +65,69 @@ class XMLDocumentStyle implements XMLStyle
      */
     public function generateTypes(DOMDocument $DOMDocument, $parameters, $soapVersion)
     {
+        $types = [];
+        foreach ($parameters as $parameter) {
+            $node = $parameter->getNode();
+            if ($node->isArray()) {
+                $attributes = ['name' => $node->getSanitizedName(), 'type' => 'ns:' . $node->getNameForArray()];
+            } elseif ($node->isObject()) {
+                $attributes = ['name' => $node->getSanitizedName(), 'type' => 'ns:' . $node->getNameForObject()];
+            } else {
+                $attributes = ['name' => $node->getSanitizedName(), 'type' => 'xsd:' . $node->getType()];
+            }
+            $element = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('xsd:element', $attributes);
+            $types[] = $element;
+            $complexIfNeeded = $this->generateComplexIfNeeded($DOMDocument, $node, null, $soapVersion);
+            if ($complexIfNeeded) {
+                $types = array_merge($types, $complexIfNeeded);
+            }
+        }
+        return $types;
+    }
+
+    private function generateComplexIfNeeded(DOMDocument $DOMDocument, Node $node, DOMElement $sequenceElement = null, $soapVersion)
+    {
+        $result = [];
+        if ($sequenceElement) {
+            if ($node->isArray()) {
+                $attributes = ['name' => $node->getSanitizedName(), 'type' => 'ns:' . $node->getNameForArray()];
+            } elseif ($node->isObject()) {
+                $attributes = ['name' => $node->getSanitizedName(), 'type' => 'ns:' . $node->getNameForObject()];
+            } else {
+                $attributes = ['name' => $node->getSanitizedName(), 'type' => 'xsd:' . $node->getType()];
+            }
+            $elementPartElement = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('xsd:element', $attributes);
+            $sequenceElement->appendChild($elementPartElement);
+        }
+        if ($node->isArray()) {
+            $complexTypeElement = XMLAttributeHelper::forDOM($DOMDocument)
+                ->createElementWithAttributes('xsd:complexType', ['name' => $node->getNameForArray()]);
+            $complexContentElement = XMLAttributeHelper::forDOM($DOMDocument)->createElement('xsd:complexContent');
+            $restrictionElement = XMLAttributeHelper::forDOM($DOMDocument)
+                ->createElementWithAttributes('xsd:restriction', ['base' => 'soapenc:Array']);
+            $type = $node->isObject() ? 'ns:' . $node->getNameForObject() . '[]' : 'xsd:' . $node->getType() . '[]';
+            $attributeElement = XMLAttributeHelper::forDOM($DOMDocument)
+                ->createElementWithAttributes('xsd:attribute', [
+                    'ref' => 'soapenc:arrayType',
+                    $soapVersion . ':arrayType' => $type
+                ]);
+            $restrictionElement->appendChild($attributeElement);
+            $complexContentElement->appendChild($restrictionElement);
+            $complexTypeElement->appendChild($complexContentElement);
+            $result[] = $complexTypeElement;
+        }
+        if ($node->isObject()) {
+            $complexTypeElement = XMLAttributeHelper::forDOM($DOMDocument)
+                ->createElementWithAttributes('xsd:complexType', ['name' => $node->getNameForObject()]);
+            $sequenceElement = XMLAttributeHelper::forDOM($DOMDocument)->createElement('xsd:sequence');
+            $complexTypeElement->appendChild($sequenceElement);
+
+            $result[] = $complexTypeElement;
+            foreach ($node->getElements() as $nodeElement) {
+                $tmp = $this->generateComplexIfNeeded($DOMDocument, $nodeElement, $sequenceElement, $soapVersion);
+                $result = array_merge($result, $tmp);
+            }
+        }
+        return $result;
     }
 }

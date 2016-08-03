@@ -55,13 +55,13 @@ if (isset($_GET['wsdl'])) {
     echo $wsdl->create();
     exit;
 }
-$server = new SoapServer('http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php?wsdl', [
+$server = new SoapServer('http://localhost:7777/wsdl-creator/examples/document_literal/service.php?wsdl', [
     'uri' => $builder->getTargetNamespace(),
     'location' => $builder->getLocation(),
-    'style' => SOAP_RPC,
+    'style' => SOAP_DOCUMENT,
     'use' => SOAP_LITERAL
 ]);
-$server->setClass('RpcLiteralService');
+$server->setClass('DocumentLiteralService');
 $server->handle();
 
 class DocumentLiteralService
