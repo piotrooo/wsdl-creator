@@ -68,16 +68,10 @@ class XMLDocumentStyle implements XMLStyle
         $types = [];
         foreach ($parameters as $parameter) {
             $node = $parameter->getNode();
-            if ($node->isArray()) {
-                $attributes = ['name' => $node->getSanitizedName(), 'type' => 'ns:' . $node->getNameForArray()];
-            } elseif ($node->isObject()) {
-                $attributes = ['name' => $node->getSanitizedName(), 'type' => 'ns:' . $node->getNameForObject()];
-            } else {
-                $attributes = ['name' => $node->getSanitizedName(), 'type' => 'xsd:' . $node->getType()];
-            }
+            $attributes = $this->attributes($node);
             $element = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('xsd:element', $attributes);
             $types[] = $element;
-            $complexIfNeeded = $this->generateComplexIfNeeded($DOMDocument, $node, null, $soapVersion);
+            $complexIfNeeded = $this->generateParameters($DOMDocument, $node, null, $soapVersion);
             if ($complexIfNeeded) {
                 $types = array_merge($types, $complexIfNeeded);
             }
@@ -85,17 +79,18 @@ class XMLDocumentStyle implements XMLStyle
         return $types;
     }
 
-    private function generateComplexIfNeeded(DOMDocument $DOMDocument, Node $node, DOMElement $sequenceElement = null, $soapVersion)
+    /**
+     * @param DOMDocument $DOMDocument
+     * @param Node $node
+     * @param DOMElement|null $sequenceElement
+     * @param string $soapVersion
+     * @return DOMElement[]
+     */
+    private function generateParameters(DOMDocument $DOMDocument, Node $node, DOMElement $sequenceElement = null, $soapVersion)
     {
         $result = [];
         if ($sequenceElement) {
-            if ($node->isArray()) {
-                $attributes = ['name' => $node->getSanitizedName(), 'type' => 'ns:' . $node->getNameForArray()];
-            } elseif ($node->isObject()) {
-                $attributes = ['name' => $node->getSanitizedName(), 'type' => 'ns:' . $node->getNameForObject()];
-            } else {
-                $attributes = ['name' => $node->getSanitizedName(), 'type' => 'xsd:' . $node->getType()];
-            }
+            $attributes = $this->attributes($node);
             $elementPartElement = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('xsd:element', $attributes);
             $sequenceElement->appendChild($elementPartElement);
         }
@@ -124,10 +119,26 @@ class XMLDocumentStyle implements XMLStyle
 
             $result[] = $complexTypeElement;
             foreach ($node->getElements() as $nodeElement) {
-                $tmp = $this->generateComplexIfNeeded($DOMDocument, $nodeElement, $sequenceElement, $soapVersion);
+                $tmp = $this->generateParameters($DOMDocument, $nodeElement, $sequenceElement, $soapVersion);
                 $result = array_merge($result, $tmp);
             }
         }
         return $result;
+    }
+
+    /**
+     * @param Node $node
+     * @return array
+     */
+    private function attributes(Node $node)
+    {
+        if ($node->isArray()) {
+            $attributes = ['name' => $node->getSanitizedName(), 'type' => 'ns:' . $node->getNameForArray()];
+        } elseif ($node->isObject()) {
+            $attributes = ['name' => $node->getSanitizedName(), 'type' => 'ns:' . $node->getNameForObject()];
+        } else {
+            $attributes = ['name' => $node->getSanitizedName(), 'type' => 'xsd:' . $node->getType()];
+        }
+        return $attributes;
     }
 }

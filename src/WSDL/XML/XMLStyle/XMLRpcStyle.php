@@ -53,7 +53,7 @@ class XMLRpcStyle implements XMLStyle
     {
         $parts = [];
         foreach ($nodes as $node) {
-            $attributes = $this->attributes($node, $node->getSanitizedName());
+            $attributes = $this->attributes($node);
             $parts[] = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('part', $attributes);
         }
         return $parts;
@@ -67,7 +67,7 @@ class XMLRpcStyle implements XMLStyle
         $types = [];
         foreach ($parameters as $parameter) {
             $node = $parameter->getNode();
-            $nodeGen = $this->parameterGenerate($DOMDocument, $node, null, $soapVersion);
+            $nodeGen = $this->generateParameters($DOMDocument, $node, null, $soapVersion);
             $types = array_merge($types, $nodeGen);
         }
         return $types;
@@ -80,11 +80,11 @@ class XMLRpcStyle implements XMLStyle
      * @param string $soapVersion
      * @return DOMElement[]
      */
-    private function parameterGenerate(DOMDocument $DOMDocument, Node $node, DOMElement $sequenceElement = null, $soapVersion)
+    private function generateParameters(DOMDocument $DOMDocument, Node $node, DOMElement $sequenceElement = null, $soapVersion)
     {
         $result = [];
         if ($sequenceElement) {
-            $attributes = $this->attributes($node, $node->getNameForObject());
+            $attributes = $this->attributes($node);
             $elementPartElement = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('xsd:element', $attributes);
             $sequenceElement->appendChild($elementPartElement);
         }
@@ -119,7 +119,7 @@ class XMLRpcStyle implements XMLStyle
 
             $result[] = $complexTypeElement;
             foreach ($node->getElements() as $nodeElement) {
-                $tmp = $this->parameterGenerate($DOMDocument, $nodeElement, $sequenceElement, $soapVersion);
+                $tmp = $this->generateParameters($DOMDocument, $nodeElement, $sequenceElement, $soapVersion);
                 $result = array_merge($result, $tmp);
             }
         }
@@ -128,15 +128,14 @@ class XMLRpcStyle implements XMLStyle
 
     /**
      * @param Node $node
-     * @param string $nameForObject
      * @return array
      */
-    private function attributes(Node $node, $nameForObject)
+    private function attributes(Node $node)
     {
         if ($node->isArray()) {
             $attributes = ['name' => $node->getSanitizedName(), 'type' => 'ns:' . $node->getNameForArray()];
         } elseif ($node->isObject()) {
-            $attributes = ['name' => $nameForObject, 'element' => 'ns:' . $node->getNameForObject()];
+            $attributes = ['name' => $node->getSanitizedName(), 'element' => 'ns:' . $node->getNameForObject()];
         } else {
             $attributes = ['name' => $node->getSanitizedName(), 'type' => 'xsd:' . $node->getType()];
         }
