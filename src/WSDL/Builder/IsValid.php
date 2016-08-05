@@ -56,9 +56,7 @@ class IsValid
     public static function style($style)
     {
         $styles = [SoapBinding::RPC, SoapBinding::DOCUMENT];
-        if (!in_array($style, $styles)) {
-            throw new InvalidArgumentException('Invalid style [' . $style . '] available styles: [' . implode(', ', $styles) . ']');
-        }
+        self::checkInList($style, $styles, 'Invalid style [' . $style . '] available styles: [' . implode(', ', $styles) . ']');
     }
 
     /**
@@ -69,9 +67,7 @@ class IsValid
     public static function useStyle($use)
     {
         $uses = [SoapBinding::LITERAL, SoapBinding::ENCODED];
-        if (!in_array($use, $uses)) {
-            throw new InvalidArgumentException('Invalid use [' . $use . '] available uses: [' . implode(', ', $uses) . ']');
-        }
+        self::checkInList($use, $uses, 'Invalid use [' . $use . '] available uses: [' . implode(', ', $uses) . ']');
     }
 
     /**
@@ -82,8 +78,20 @@ class IsValid
     public static function soapVersion($version)
     {
         $bindingTypes = [BindingType::SOAP_11, BindingType::SOAP_12];
-        if (!in_array($version, $bindingTypes)) {
-            throw new InvalidArgumentException('Invalid binding type [' . $version . '] available types: [' . implode(', ', $bindingTypes) . ']');
+        self::checkInList($version, $bindingTypes, 'Invalid binding type [' . $version . '] available types: [' . implode(', ', $bindingTypes) . ']');
+    }
+
+    /**
+     * @param string $value
+     * @param array $list
+     * @param string $errorMessage
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public static function checkInList($value, $list, $errorMessage)
+    {
+        if (!in_array($value, $list)) {
+            throw new InvalidArgumentException($errorMessage);
         }
     }
 }
