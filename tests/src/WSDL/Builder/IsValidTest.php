@@ -26,6 +26,7 @@ namespace Tests\WSDL\Builder;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
 use WSDL\Annotation\BindingType;
+use WSDL\Annotation\SoapBinding;
 use WSDL\Builder\IsValid;
 
 /**
@@ -37,10 +38,82 @@ class IsValidTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test
+     * @dataProvider validStyles
+     * @param string $style
+     */
+    public function shouldNotThrowExceptionWhenStyleIsValid($style)
+    {
+        //when
+        IsValid::style($style);
+
+        //then no exception
+    }
+
+    public function validStyles()
+    {
+        return [
+            [SoapBinding::RPC],
+            [SoapBinding::DOCUMENT]
+        ];
+    }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenStyleIsInValid()
+    {
+        //when
+        try {
+            IsValid::style('INVALID_STYLE');
+            $this->assertFalse(true, 'Triggered when exception is not throw');
+        } catch (InvalidArgumentException $e) {//then
+            $this->assertEquals('Invalid style [INVALID_STYLE] available styles: [RPC, DOCUMENT]', $e->getMessage());
+            $this->assertInstanceOf('\InvalidArgumentException', $e);
+        }
+    }
+
+    /**
+     * @test
+     * @dataProvider validUses
+     * @param string $use
+     */
+    public function shouldNotThrowExceptionWhenUseIsValid($use)
+    {
+        //when
+        IsValid::useStyle($use);
+
+        //then no exception
+    }
+
+    public function validUses()
+    {
+        return [
+            [SoapBinding::LITERAL],
+            [SoapBinding::ENCODED]
+        ];
+    }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenUseIsInValid()
+    {
+        //when
+        try {
+            IsValid::useStyle('INVALID_USE');
+            $this->assertFalse(true, 'Triggered when exception is not throw');
+        } catch (InvalidArgumentException $e) {//then
+            $this->assertEquals('Invalid use [INVALID_USE] available uses: [LITERAL, ENCODED]', $e->getMessage());
+            $this->assertInstanceOf('\InvalidArgumentException', $e);
+        }
+    }
+
+    /**
+     * @test
      * @dataProvider validSoapVersions
      * @param string $soapVersion
      */
-    public function shouldReturnVoidWhenSoapVersionIsValid($soapVersion)
+    public function shouldNotThrowExceptionWhenSoapVersionIsValid($soapVersion)
     {
         //when
         IsValid::soapVersion($soapVersion);
@@ -64,9 +137,64 @@ class IsValidTest extends PHPUnit_Framework_TestCase
         //when
         try {
             IsValid::soapVersion('INVALID_SOAP_VERSION');
+            $this->assertFalse(true, 'Triggered when exception is not throw');
         } catch (InvalidArgumentException $e) {//then
             $this->assertEquals('Invalid binding type [INVALID_SOAP_VERSION] available types: [SOAP_11, SOAP_12]', $e->getMessage());
             $this->assertInstanceOf('\InvalidArgumentException', $e);
         }
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotThrowExceptionWhenValueIsNotEmpty()
+    {
+        //when
+        IsValid::notEmpty('some value');
+
+        //then no exception
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyValues
+     * @param mixed $value
+     */
+    public function shouldThrowExceptionWhenValueIsEmpty($value)
+    {
+        //when
+        try {
+            IsValid::notEmpty($value);
+            $this->assertFalse(true, 'Triggered when exception is not throw');
+        } catch (InvalidArgumentException $e) {//then
+            $this->assertEquals('Value cannot be empty', $e->getMessage());
+            $this->assertInstanceOf('\InvalidArgumentException', $e);
+        }
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyValues
+     * @param mixed $value
+     * @param string $customMessage
+     */
+    public function shouldThrowExceptionWithCustomMessageWhenValueIsEmpty($value, $customMessage)
+    {
+        //when
+        try {
+            IsValid::notEmpty($value, $customMessage);
+            $this->assertFalse(true, 'Triggered when exception is not throw');
+        } catch (InvalidArgumentException $e) {//then
+            $this->assertEquals($customMessage, $e->getMessage());
+            $this->assertInstanceOf('\InvalidArgumentException', $e);
+        }
+    }
+
+    public function emptyValues()
+    {
+        return [
+            ['', 'First empty value'],
+            [null, 'Second empty value']
+        ];
     }
 }

@@ -23,6 +23,10 @@
  */
 namespace WSDL\Builder;
 
+use InvalidArgumentException;
+use WSDL\Annotation\BindingType;
+use WSDL\Annotation\SoapBinding;
+
 /**
  * WSDLBuilder
  *
@@ -49,15 +53,15 @@ class WSDLBuilder
     /**
      * @var string
      */
-    private $style;
+    private $style = SoapBinding::RPC;
     /**
      * @var string
      */
-    private $use;
+    private $use = SoapBinding::LITERAL;
     /**
      * @var string
      */
-    private $soapVersion;
+    private $soapVersion = BindingType::SOAP_11;
     /**
      * @var Method[]
      */
@@ -82,9 +86,11 @@ class WSDLBuilder
     /**
      * @param string $name
      * @return $this
+     * @throws InvalidArgumentException
      */
     public function setName($name)
     {
+        IsValid::notEmpty($name, 'Name cannot be empty');
         $this->name = $name;
         return $this;
     }
@@ -100,9 +106,11 @@ class WSDLBuilder
     /**
      * @param string $targetNamespace
      * @return $this
+     * @throws InvalidArgumentException
      */
     public function setTargetNamespace($targetNamespace)
     {
+        IsValid::notEmpty($targetNamespace, 'Target namespace cannot be empty');
         $this->targetNamespace = $targetNamespace;
         return $this;
     }
@@ -118,9 +126,11 @@ class WSDLBuilder
     /**
      * @param string $ns
      * @return $this
+     * @throws InvalidArgumentException
      */
     public function setNs($ns)
     {
+        IsValid::notEmpty($ns, 'NS cannot be empty');
         $this->ns = $ns;
         return $this;
     }
@@ -136,9 +146,11 @@ class WSDLBuilder
     /**
      * @param string $location
      * @return $this
+     * @throws InvalidArgumentException
      */
     public function setLocation($location)
     {
+        IsValid::notEmpty($location, 'Location cannot be empty');
         $this->location = $location;
         return $this;
     }
@@ -154,9 +166,11 @@ class WSDLBuilder
     /**
      * @param string $style
      * @return $this
+     * @throws InvalidArgumentException
      */
     public function setStyle($style)
     {
+        IsValid::style($style);
         $this->style = $style;
         return $this;
     }
@@ -175,6 +189,7 @@ class WSDLBuilder
      */
     public function setUse($use)
     {
+        IsValid::useStyle($use);
         $this->use = $use;
         return $this;
     }
@@ -190,9 +205,11 @@ class WSDLBuilder
     /**
      * @param string $soapVersion
      * @return $this
+     * @throws InvalidArgumentException
      */
     public function setSoapVersion($soapVersion)
     {
+        IsValid::soapVersion($soapVersion);
         $this->soapVersion = $soapVersion;
         return $this;
     }

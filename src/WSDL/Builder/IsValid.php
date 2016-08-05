@@ -25,6 +25,7 @@ namespace WSDL\Builder;
 
 use InvalidArgumentException;
 use WSDL\Annotation\BindingType;
+use WSDL\Annotation\SoapBinding;
 
 /**
  * IsValid
@@ -34,7 +35,48 @@ use WSDL\Annotation\BindingType;
 class IsValid
 {
     /**
+     * @param mixed $value
+     * @param string|null $customMessage
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public static function notEmpty($value, $customMessage = null)
+    {
+        if (empty($value)) {
+            $message = $customMessage ?: 'Value cannot be empty';
+            throw new InvalidArgumentException($message);
+        }
+    }
+
+    /**
+     * @param string $style
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public static function style($style)
+    {
+        $styles = [SoapBinding::RPC, SoapBinding::DOCUMENT];
+        if (!in_array($style, $styles)) {
+            throw new InvalidArgumentException('Invalid style [' . $style . '] available styles: [' . implode(', ', $styles) . ']');
+        }
+    }
+
+    /**
+     * @param string $use
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public static function useStyle($use)
+    {
+        $uses = [SoapBinding::LITERAL, SoapBinding::ENCODED];
+        if (!in_array($use, $uses)) {
+            throw new InvalidArgumentException('Invalid use [' . $use . '] available uses: [' . implode(', ', $uses) . ']');
+        }
+    }
+
+    /**
      * @param string $version
+     * @return void
      * @throws InvalidArgumentException
      */
     public static function soapVersion($version)

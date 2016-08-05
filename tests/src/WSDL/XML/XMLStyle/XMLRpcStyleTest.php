@@ -282,7 +282,7 @@ class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('xsd:string', $DOMElements1Nodes->getAttribute('type'));
         $DOMElements2Nodes = $DOMElementsNodes->item(1);
         $this->assertEquals('xsd:element', $DOMElements2Nodes->tagName);
-        $this->assertEquals('Agent', $DOMElements2Nodes->getAttribute('name'));
+        $this->assertEquals('agent', $DOMElements2Nodes->getAttribute('name'));
         $this->assertEquals('ns:Agent', $DOMElements2Nodes->getAttribute('element'));
 
         //<xsd:element name="Agent" nillable="true" type="ns:Agent"/>
