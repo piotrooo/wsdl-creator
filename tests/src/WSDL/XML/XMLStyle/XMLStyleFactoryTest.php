@@ -61,7 +61,8 @@ class XMLStyleFactoryTest extends PHPUnit_Framework_TestCase
         //when
         try {
             XMLStyleFactory::create($style);
-        } catch (Exception $e) {//then
+        } catch (Exception $e) {
+            //then
             $this->assertEquals('Unsupported soap binding style [UNSUPPORTED_STYLE]', $e->getMessage());
         }
     }

@@ -45,7 +45,8 @@ class XMLUseFactoryTest extends PHPUnit_Framework_TestCase
         //when
         try {
             XMLUseFactory::create($use);
-        } catch (Exception $e) {//then
+        } catch (Exception $e) {
+            //then
             $this->assertEquals('Unsupported soap binding use [UNSUPPORTED_USE]', $e->getMessage());
         }
     }

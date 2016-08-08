@@ -66,7 +66,8 @@ class IsValidTest extends PHPUnit_Framework_TestCase
         try {
             IsValid::style('INVALID_STYLE');
             $this->assertFalse(true, 'Triggered when exception is not throw');
-        } catch (InvalidArgumentException $e) {//then
+        } catch (InvalidArgumentException $e) {
+            //then
             $this->assertEquals('Invalid style [INVALID_STYLE] available styles: [RPC, DOCUMENT]', $e->getMessage());
             $this->assertInstanceOf('\InvalidArgumentException', $e);
         }
@@ -102,7 +103,8 @@ class IsValidTest extends PHPUnit_Framework_TestCase
         try {
             IsValid::useStyle('INVALID_USE');
             $this->assertFalse(true, 'Triggered when exception is not throw');
-        } catch (InvalidArgumentException $e) {//then
+        } catch (InvalidArgumentException $e) {
+            //then
             $this->assertEquals('Invalid use [INVALID_USE] available uses: [LITERAL, ENCODED]', $e->getMessage());
             $this->assertInstanceOf('\InvalidArgumentException', $e);
         }
@@ -138,7 +140,8 @@ class IsValidTest extends PHPUnit_Framework_TestCase
         try {
             IsValid::soapVersion('INVALID_SOAP_VERSION');
             $this->assertFalse(true, 'Triggered when exception is not throw');
-        } catch (InvalidArgumentException $e) {//then
+        } catch (InvalidArgumentException $e) {
+            //then
             $this->assertEquals('Invalid binding type [INVALID_SOAP_VERSION] available types: [SOAP_11, SOAP_12]', $e->getMessage());
             $this->assertInstanceOf('\InvalidArgumentException', $e);
         }
@@ -166,7 +169,8 @@ class IsValidTest extends PHPUnit_Framework_TestCase
         try {
             IsValid::notEmpty($value);
             $this->assertFalse(true, 'Triggered when exception is not throw');
-        } catch (InvalidArgumentException $e) {//then
+        } catch (InvalidArgumentException $e) {
+            //then
             $this->assertEquals('Value cannot be empty', $e->getMessage());
             $this->assertInstanceOf('\InvalidArgumentException', $e);
         }
@@ -184,7 +188,8 @@ class IsValidTest extends PHPUnit_Framework_TestCase
         try {
             IsValid::notEmpty($value, $customMessage);
             $this->assertFalse(true, 'Triggered when exception is not throw');
-        } catch (InvalidArgumentException $e) {//then
+        } catch (InvalidArgumentException $e) {
+            //then
             $this->assertEquals($customMessage, $e->getMessage());
             $this->assertInstanceOf('\InvalidArgumentException', $e);
         }

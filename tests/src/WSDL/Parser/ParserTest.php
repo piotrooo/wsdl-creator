@@ -433,6 +433,5 @@ class ParserTest extends PHPUnit_Framework_TestCase
         $tokenizer = new Tokenizer();
         $tokens = $tokenizer->lex($string);
         return new Parser($tokens);
-
     }
 }

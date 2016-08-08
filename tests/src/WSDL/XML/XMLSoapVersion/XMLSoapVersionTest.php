@@ -70,7 +70,8 @@ class XMLSoapVersionTest extends PHPUnit_Framework_TestCase
         //when
         try {
             XMLSoapVersion::getTagFor($version);
-        } catch (Exception $e) {//then
+        } catch (Exception $e) {
+            //then
             $this->assertEquals('Unsupported soap version [UNSUPPORTED_SOAP]', $e->getMessage());
         }
     }
