@@ -23,8 +23,14 @@
  */
 namespace Fixtures;
 
+use Ouzo\Utilities\Arrays;
+use Ouzo\Utilities\Functions;
+use stdClass;
 use WSDL\Annotation\BindingType;
 use WSDL\Annotation\SoapBinding;
+use WSDL\Annotation\WebMethod;
+use WSDL\Annotation\WebParam;
+use WSDL\Annotation\WebResult;
 use WSDL\Annotation\WebService;
 
 /**
@@ -43,4 +49,41 @@ use WSDL\Annotation\WebService;
  */
 class WebServiceAllAnnotations
 {
+    /**
+     * @WebMethod()
+     * @WebParam(param="string $userName")
+     * @WebResult(param="string $uppercasedUserName")
+     */
+    public function uppercaseUserName($userName)
+    {
+        return strtoupper($userName);
+    }
+
+    /**
+     * @WebMethod()
+     * @WebParam(param="int[] $numbers")
+     * @WebParam(param="string $prefix")
+     * @WebResult(param="string[] $numbersWithPrefix")
+     */
+    public function appendPrefixToNumbers($numbers, $prefix)
+    {
+        return Arrays::map($numbers, Functions::prepend($prefix));
+    }
+
+    /**
+     * @WebMethod()
+     * @WebParam(param="string $token", header=true)
+     * @WebParam(param="object $user { string $name int $age }")
+     * @WebResult(param="object $userContext { string $token int $id object $userInfo { string $name int $age } }")
+     */
+    public function getUserContext($token, $user)
+    {
+        $userContext = new stdClass();
+        $userContext->token = $token;
+        $userContext->id = time();
+        $userContext->UserInfo = new stdClass();
+        $userContext->UserInfo->name = $user->name;
+        $userContext->UserInfo->age = $user->age;
+        return $userContext;
+    }
 }

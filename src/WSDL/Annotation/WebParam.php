@@ -41,5 +41,5 @@ final class WebParam
     /**
      * @var boolean
      */
-    public $header;
+    public $header = false;
 }
