@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 namespace WSDL\Annotation;
+
+use ReflectionClass;
 use WSDL\Builder\WSDLBuilder;
 
 /**
@@ -32,7 +34,7 @@ use WSDL\Builder\WSDLBuilder;
  * @Annotation
  * @Target("CLASS")
  */
-final class SoapBinding implements AnnotationBuilder
+final class SoapBinding implements ClassAnnotationBuilder
 {
     const RPC = 'RPC';
     const DOCUMENT = 'DOCUMENT';
@@ -63,7 +65,7 @@ final class SoapBinding implements AnnotationBuilder
     /**
      * @inheritdoc
      */
-    public function build(WSDLBuilder $builder)
+    public function build(WSDLBuilder $builder, ReflectionClass $class)
     {
         $builder
             ->setStyle($this->style)

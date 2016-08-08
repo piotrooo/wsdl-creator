@@ -21,20 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-namespace WSDL\Annotation;
+namespace Fixtures;
 
-use WSDL\Builder\WSDLBuilder;
+use WSDL\Annotation\WebService;
 
 /**
- * AnnotationBuilder
+ * WebServiceClassAnnotations
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
+ *
+ * @WebService(
+ *     targetNamespace="http://foo.bar/webserviceannotations",
+ *     location="http://localhost/wsdl-creator/service.php",
+ *     ns="http://foo.bar/webserviceannotations/types"
+ * )
  */
-interface AnnotationBuilder
+class WebServiceClassAnnotations
 {
-    /**
-     * @param WSDLBuilder $builder
-     * @return void
-     */
-    public function build(WSDLBuilder $builder);
 }

@@ -27,42 +27,16 @@ use ReflectionClass;
 use WSDL\Builder\WSDLBuilder;
 
 /**
- * WebService
+ * AnnotationBuilder
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
- *
- * @Annotation
- * @Target("CLASS")
  */
-final class WebService implements ClassAnnotationBuilder
+interface ClassAnnotationBuilder
 {
     /**
-     * @var string
+     * @param WSDLBuilder $builder
+     * @param ReflectionClass $class
+     * @return void
      */
-    public $name;
-    /**
-     * @var string
-     */
-    public $targetNamespace;
-    /**
-     * @var string
-     */
-    public $ns;
-    /**
-     * @var string
-     */
-    public $location;
-
-    /**
-     * @inheritdoc
-     */
-    public function build(WSDLBuilder $builder, ReflectionClass $class)
-    {
-        $name = $this->name ?: $class->getShortName();
-        $builder
-            ->setName($name)
-            ->setTargetNamespace($this->targetNamespace)
-            ->setNs($this->ns)
-            ->setLocation($this->location);
-    }
+    public function build(WSDLBuilder $builder, ReflectionClass $class);
 }
