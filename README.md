@@ -6,6 +6,7 @@ PHP WSDL Creator
 [![Code Coverage](https://scrutinizer-ci.com/g/piotrooo/wsdl-creator/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/piotrooo/wsdl-creator/?branch=master)
 [![Total Downloads](https://poser.pugx.org/piotrooo/wsdl-creator/downloads)](https://packagist.org/packages/piotrooo/wsdl-creator)
 [![License](https://poser.pugx.org/piotrooo/wsdl-creator/license)](https://packagist.org/packages/piotrooo/wsdl-creator)
+[![Gitter](https://badges.gitter.im/wsdl-creator/Lobby.svg)](https://gitter.im/wsdl-creator/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 Warning
 =======
