@@ -21,33 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-namespace WSDL\Builder;
+namespace Tests\WSDL\Builder;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
-use Ouzo\Utilities\Path;
-use ReflectionClass;
+use PHPUnit_Framework_TestCase;
+use WSDL\Builder\AnnotationWSDLBuilder;
 
 /**
- * AnnotationWSDLBuilder
+ * AnnotationWSDLBuilderTest
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class AnnotationWSDLBuilder
+class AnnotationWSDLBuilderTest extends PHPUnit_Framework_TestCase
 {
-    private $class;
-
-    public function __construct($class)
+    /**
+     * @test
+     */
+    public function shouldCreateBuilderForWebServiceAnnotation()
     {
-        AnnotationRegistry::registerAutoloadNamespace('WSDL\Annotation', Path::join(__DIR__, '..', '..'));
-        $this->class = $class;
-        $annotationReader = new AnnotationReader();
-        $classAnnotations = $annotationReader->getClassAnnotations($this->reflectionClass());
-        print_r($classAnnotations);
-    }
+        //given
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\WebServiceAnnotations');
 
-    private function reflectionClass()
-    {
-        return new ReflectionClass($this->class);
+        //when
+        //then
     }
 }

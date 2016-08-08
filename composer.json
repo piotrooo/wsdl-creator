@@ -30,7 +30,8 @@
   "autoload": {
     "psr-0": {
       "WSDL\\": "src/",
-      "Tests\\": "tests/src/"
+      "Tests\\": "tests/src/",
+      "Fixtures\\": "tests/"
     }
   }
 }

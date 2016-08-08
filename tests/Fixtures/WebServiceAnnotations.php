@@ -21,33 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-namespace WSDL\Builder;
+namespace Fixtures;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
-use Ouzo\Utilities\Path;
-use ReflectionClass;
+use WSDL\Annotation\WebService;
 
 /**
- * AnnotationWSDLBuilder
+ * WebServiceAnnotations
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
+ *
+ * @WebService(name="n", targetNamespace="tn", location="l")
  */
-class AnnotationWSDLBuilder
+class WebServiceAnnotations
 {
-    private $class;
 
-    public function __construct($class)
-    {
-        AnnotationRegistry::registerAutoloadNamespace('WSDL\Annotation', Path::join(__DIR__, '..', '..'));
-        $this->class = $class;
-        $annotationReader = new AnnotationReader();
-        $classAnnotations = $annotationReader->getClassAnnotations($this->reflectionClass());
-        print_r($classAnnotations);
-    }
-
-    private function reflectionClass()
-    {
-        return new ReflectionClass($this->class);
-    }
 }
