@@ -44,5 +44,9 @@ final class WebService
     /**
      * @var string
      */
+    public $ns;
+    /**
+     * @var string
+     */
     public $location;
 }

@@ -27,6 +27,9 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Ouzo\Utilities\Path;
 use ReflectionClass;
+use WSDL\Annotation\BindingType;
+use WSDL\Annotation\SoapBinding;
+use WSDL\Annotation\WebService;
 
 /**
  * AnnotationWSDLBuilder
@@ -35,19 +38,70 @@ use ReflectionClass;
  */
 class AnnotationWSDLBuilder
 {
+    /**
+     * @var string
+     */
     private $class;
+    /**
+     * @var WSDLBuilder
+     */
+    private $builder;
+    /**
+     * @var AnnotationReader
+     */
+    private $annotationReader;
 
+    /**
+     * @param string $class
+     */
     public function __construct($class)
     {
         AnnotationRegistry::registerAutoloadNamespace('WSDL\Annotation', Path::join(__DIR__, '..', '..'));
         $this->class = $class;
-        $annotationReader = new AnnotationReader();
-        $classAnnotations = $annotationReader->getClassAnnotations($this->reflectionClass());
-        print_r($classAnnotations);
+        $this->builder = WSDLBuilder::instance();
+        $this->annotationReader = new AnnotationReader();
     }
 
+    /**
+     * @return ReflectionClass
+     */
     private function reflectionClass()
     {
         return new ReflectionClass($this->class);
+    }
+
+    /**
+     * @return $this
+     */
+    public function build()
+    {
+        $classAnnotations = $this->annotationReader->getClassAnnotations($this->reflectionClass());
+        foreach ($classAnnotations as $classAnnotation) {
+            if ($classAnnotation instanceof WebService) {
+                $this->builder
+                    ->setName($classAnnotation->name)
+                    ->setTargetNamespace($classAnnotation->targetNamespace)
+                    ->setNs($classAnnotation->ns)
+                    ->setLocation($classAnnotation->location);
+            }
+            if ($classAnnotation instanceof BindingType) {
+                $this->builder->setSoapVersion($classAnnotation->value);
+            }
+            if ($classAnnotation instanceof SoapBinding) {
+                $this->builder
+                    ->setStyle($classAnnotation->style)
+                    ->setUse($classAnnotation->use)
+                    ->setParameterStyle($classAnnotation->parameterStyle);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @return WSDLBuilder
+     */
+    public function getBuilder()
+    {
+        return $this->builder;
     }
 }

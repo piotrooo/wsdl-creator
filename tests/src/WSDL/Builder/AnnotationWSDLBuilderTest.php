@@ -24,6 +24,8 @@
 namespace Tests\WSDL\Builder;
 
 use PHPUnit_Framework_TestCase;
+use WSDL\Annotation\BindingType;
+use WSDL\Annotation\SoapBinding;
 use WSDL\Builder\AnnotationWSDLBuilder;
 
 /**
@@ -39,9 +41,50 @@ class AnnotationWSDLBuilderTest extends PHPUnit_Framework_TestCase
     public function shouldCreateBuilderForWebServiceAnnotation()
     {
         //given
-        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\WebServiceAnnotations');
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\WebServiceAllAnnotations');
 
         //when
+        $annotationWSDLBuilder->build();
+
         //then
+        $WSDLBuilder = $annotationWSDLBuilder->getBuilder();
+        $this->assertEquals('WebServiceAnnotations', $WSDLBuilder->getName());
+        $this->assertEquals('http://foo.bar/webserviceannotations', $WSDLBuilder->getTargetNamespace());
+        $this->assertEquals('http://foo.bar/webserviceannotations/types', $WSDLBuilder->getNs());
+        $this->assertEquals('http://localhost/wsdl-creator/service.php', $WSDLBuilder->getLocation());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCreateBuilderForBindingTypeAnnotation()
+    {
+        //given
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\WebServiceAllAnnotations');
+
+        //when
+        $annotationWSDLBuilder->build();
+
+        //then
+        $WSDLBuilder = $annotationWSDLBuilder->getBuilder();
+        $this->assertEquals(BindingType::SOAP_12, $WSDLBuilder->getSoapVersion());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCreateBuilderForSoapBindingAnnotation()
+    {
+        //given
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\WebServiceAllAnnotations');
+
+        //when
+        $annotationWSDLBuilder->build();
+
+        //then
+        $WSDLBuilder = $annotationWSDLBuilder->getBuilder();
+        $this->assertEquals(SoapBinding::DOCUMENT, $WSDLBuilder->getStyle());
+        $this->assertEquals(SoapBinding::LITERAL, $WSDLBuilder->getUse());
+        $this->assertEquals(SoapBinding::WRAPPED, $WSDLBuilder->getParameterStyle());
     }
 }

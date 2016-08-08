@@ -61,6 +61,10 @@ class WSDLBuilder
     /**
      * @var string
      */
+    private $parameterStyle = SoapBinding::BARE;
+    /**
+     * @var string
+     */
     private $soapVersion = BindingType::SOAP_11;
     /**
      * @var Method[]
@@ -191,6 +195,24 @@ class WSDLBuilder
     {
         IsValid::useStyle($use);
         $this->use = $use;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getParameterStyle()
+    {
+        return $this->parameterStyle;
+    }
+
+    /**
+     * @param string $parameterStyle
+     * @return $this
+     */
+    public function setParameterStyle($parameterStyle)
+    {
+        $this->parameterStyle = $parameterStyle;
         return $this;
     }
 
