@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 namespace WSDL\Annotation;
+use WSDL\Builder\WSDLBuilder;
 
 /**
  * BindingType
@@ -31,7 +32,7 @@ namespace WSDL\Annotation;
  * @Annotation
  * @Target("CLASS")
  */
-final class BindingType
+final class BindingType implements AnnotationBuilder
 {
     const SOAP_11 = 'SOAP_11';
     const SOAP_12 = 'SOAP_12';
@@ -42,4 +43,12 @@ final class BindingType
      * @Enum({"SOAP_11", "SOAP_12"})
      */
     public $value = self::SOAP_11;
+
+    /**
+     * @inheritdoc
+     */
+    public function build(WSDLBuilder $builder)
+    {
+        $builder->setSoapVersion($this->value);
+    }
 }

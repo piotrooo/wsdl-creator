@@ -27,9 +27,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Ouzo\Utilities\Path;
 use ReflectionClass;
-use WSDL\Annotation\BindingType;
-use WSDL\Annotation\SoapBinding;
-use WSDL\Annotation\WebService;
+use WSDL\Annotation\AnnotationBuilder;
 
 /**
  * AnnotationWSDLBuilder
@@ -75,26 +73,20 @@ class AnnotationWSDLBuilder
      */
     public function build()
     {
+        $this->buildForClass();
+        return $this;
+    }
+
+    /**
+     * @return void
+     */
+    private function buildForClass()
+    {
+        /** @var AnnotationBuilder[] $classAnnotations */
         $classAnnotations = $this->annotationReader->getClassAnnotations($this->reflectionClass());
         foreach ($classAnnotations as $classAnnotation) {
-            if ($classAnnotation instanceof WebService) {
-                $this->builder
-                    ->setName($classAnnotation->name)
-                    ->setTargetNamespace($classAnnotation->targetNamespace)
-                    ->setNs($classAnnotation->ns)
-                    ->setLocation($classAnnotation->location);
-            }
-            if ($classAnnotation instanceof BindingType) {
-                $this->builder->setSoapVersion($classAnnotation->value);
-            }
-            if ($classAnnotation instanceof SoapBinding) {
-                $this->builder
-                    ->setStyle($classAnnotation->style)
-                    ->setUse($classAnnotation->use)
-                    ->setParameterStyle($classAnnotation->parameterStyle);
-            }
+            $classAnnotation->build($this->builder);
         }
-        return $this;
     }
 
     /**

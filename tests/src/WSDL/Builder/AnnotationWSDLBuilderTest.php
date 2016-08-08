@@ -84,7 +84,7 @@ class AnnotationWSDLBuilderTest extends PHPUnit_Framework_TestCase
         //then
         $WSDLBuilder = $annotationWSDLBuilder->getBuilder();
         $this->assertEquals(SoapBinding::DOCUMENT, $WSDLBuilder->getStyle());
-        $this->assertEquals(SoapBinding::LITERAL, $WSDLBuilder->getUse());
+        $this->assertEquals(SoapBinding::ENCODED, $WSDLBuilder->getUse());
         $this->assertEquals(SoapBinding::WRAPPED, $WSDLBuilder->getParameterStyle());
     }
 }

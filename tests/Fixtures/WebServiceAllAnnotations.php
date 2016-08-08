@@ -45,7 +45,7 @@ use WSDL\Annotation\WebService;
  *     ns="http://foo.bar/webserviceannotations/types"
  * )
  * @BindingType(value="SOAP_12")
- * @SoapBinding(style="DOCUMENT", use="LITERAL", parameterStyle="WRAPPED")
+ * @SoapBinding(style="DOCUMENT", use="ENCODED", parameterStyle="WRAPPED")
  */
 class WebServiceAllAnnotations
 {

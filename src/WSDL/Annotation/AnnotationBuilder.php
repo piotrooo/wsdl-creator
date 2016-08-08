@@ -22,52 +22,19 @@
  * SOFTWARE.
  */
 namespace WSDL\Annotation;
+
 use WSDL\Builder\WSDLBuilder;
 
 /**
- * SoapBinding
+ * AnnotationBuilder
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
- *
- * @Annotation
- * @Target("CLASS")
  */
-final class SoapBinding implements AnnotationBuilder
+interface AnnotationBuilder
 {
-    const RPC = 'RPC';
-    const DOCUMENT = 'DOCUMENT';
-    const LITERAL = 'LITERAL';
-    const ENCODED = 'ENCODED';
-    const BARE = 'BARE';
-    const WRAPPED = 'WRAPPED';
-
     /**
-     * @var string
-     *
-     * @Enum({"RPC", "DOCUMENT"})
+     * @param WSDLBuilder $builder
+     * @return void
      */
-    public $style = self::RPC;
-    /**
-     * @var string
-     *
-     * @Enum({"LITERAL", "ENCODED"})
-     */
-    public $use = self::LITERAL;
-    /**
-     * @var string
-     *
-     * @Enum({"BARE", "WRAPPED"})
-     */
-    public $parameterStyle = self::BARE;
-
-    /**
-     * @inheritdoc
-     */
-    public function build(WSDLBuilder $builder)
-    {
-        $builder
-            ->setStyle($this->style)
-            ->setUse($this->use)
-            ->setParameterStyle($this->parameterStyle);
-    }
+    public function build(WSDLBuilder $builder);
 }

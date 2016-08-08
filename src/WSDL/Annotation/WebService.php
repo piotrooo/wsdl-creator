@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 namespace WSDL\Annotation;
+use WSDL\Builder\WSDLBuilder;
 
 /**
  * WebService
@@ -31,7 +32,7 @@ namespace WSDL\Annotation;
  * @Annotation
  * @Target("CLASS")
  */
-final class WebService
+final class WebService implements AnnotationBuilder
 {
     /**
      * @var string
@@ -49,4 +50,16 @@ final class WebService
      * @var string
      */
     public $location;
+
+    /**
+     * @inheritdoc
+     */
+    public function build(WSDLBuilder $builder)
+    {
+        $builder
+            ->setName($this->name)
+            ->setTargetNamespace($this->targetNamespace)
+            ->setNs($this->ns)
+            ->setLocation($this->location);
+    }
 }
