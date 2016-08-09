@@ -75,19 +75,7 @@ class AnnotationWSDLBuilder
     public function build()
     {
         $this->buildForClass();
-
-        $classMethods = $this->reflectionClass()->getMethods();
-        $methods = [];
-        foreach ($classMethods as $classMethod) {
-            $methodBuilder = MethodBuilder::instance();
-            /** @var MethodAnnotationBuilder[] $methodAnnotations */
-            $methodAnnotations = $this->annotationReader->getMethodAnnotations($classMethod);
-            foreach ($methodAnnotations as $methodAnnotation) {
-                $methodAnnotation->build($methodBuilder, $classMethod);
-            }
-            $methods[] = $methodBuilder->build();
-        }
-        $this->builder->setMethods($methods);
+        $this->buildForMethods();
         return $this;
     }
 
@@ -102,6 +90,25 @@ class AnnotationWSDLBuilder
         foreach ($classAnnotations as $classAnnotation) {
             $classAnnotation->build($this->builder, $class);
         }
+    }
+
+    /**
+     * @return void
+     */
+    private function buildForMethods()
+    {
+        $classMethods = $this->reflectionClass()->getMethods();
+        $methods = [];
+        foreach ($classMethods as $classMethod) {
+            $methodBuilder = MethodBuilder::instance();
+            /** @var MethodAnnotationBuilder[] $methodAnnotations */
+            $methodAnnotations = $this->annotationReader->getMethodAnnotations($classMethod);
+            foreach ($methodAnnotations as $methodAnnotation) {
+                $methodAnnotation->build($methodBuilder, $classMethod);
+            }
+            $methods[] = $methodBuilder->build();
+        }
+        $this->builder->setMethods($methods);
     }
 
     /**
