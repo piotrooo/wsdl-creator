@@ -53,6 +53,21 @@ class XMLStyleFactoryTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldCreateXmlDocumentStyleObject()
+    {
+        //given
+        $style = SoapBinding::DOCUMENT;
+
+        //when
+        $XMLStyle = XMLStyleFactory::create($style);
+
+        //then
+        $this->assertInstanceOf('\WSDL\XML\XMLStyle\XMLDocumentStyle', $XMLStyle);
+    }
+
+    /**
+     * @test
+     */
     public function shouldThrowExceptionWhenStyleIsUnsupported()
     {
         //given
