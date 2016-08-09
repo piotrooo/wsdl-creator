@@ -23,6 +23,7 @@
  */
 namespace Tests\WSDL\Builder;
 
+use Ouzo\Tests\Assert;
 use PHPUnit_Framework_TestCase;
 use WSDL\Annotation\BindingType;
 use WSDL\Annotation\SoapBinding;
@@ -102,5 +103,23 @@ class AnnotationWSDLBuilderTest extends PHPUnit_Framework_TestCase
         //then
         $WSDLBuilder = $annotationWSDLBuilder->getBuilder();
         $this->assertEquals('WebServiceClassAnnotations', $WSDLBuilder->getName());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCreateBuilderWithMethods()
+    {
+        //given
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\WebServiceAllAnnotations');
+
+        //when
+        $annotationWSDLBuilder->build();
+
+        //then
+        $WSDLBuilder = $annotationWSDLBuilder->getBuilder();
+        Assert::thatArray($WSDLBuilder->getMethods())
+            ->extracting('name')
+            ->containsOnly('uppercaseUserName', 'appendPrefixToNumbers', 'getUserContext');
     }
 }

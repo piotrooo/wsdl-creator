@@ -28,6 +28,7 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Ouzo\Utilities\Path;
 use ReflectionClass;
 use WSDL\Annotation\ClassAnnotationBuilder;
+use WSDL\Annotation\MethodAnnotationBuilder;
 
 /**
  * AnnotationWSDLBuilder
@@ -74,6 +75,19 @@ class AnnotationWSDLBuilder
     public function build()
     {
         $this->buildForClass();
+
+        $classMethods = $this->reflectionClass()->getMethods();
+        $methods = [];
+        foreach ($classMethods as $classMethod) {
+            $methodBuilder = MethodBuilder::instance();
+            /** @var MethodAnnotationBuilder[] $methodAnnotations */
+            $methodAnnotations = $this->annotationReader->getMethodAnnotations($classMethod);
+            foreach ($methodAnnotations as $methodAnnotation) {
+                $methodAnnotation->build($methodBuilder, $classMethod);
+            }
+            $methods[] = $methodBuilder->build();
+        }
+        $this->builder->setMethods($methods);
         return $this;
     }
 

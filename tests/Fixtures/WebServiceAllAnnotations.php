@@ -50,7 +50,7 @@ use WSDL\Annotation\WebService;
 class WebServiceAllAnnotations
 {
     /**
-     * @WebMethod()
+     * @WebMethod
      * @WebParam(param="string $userName")
      * @WebResult(param="string $uppercasedUserName")
      */
@@ -60,7 +60,7 @@ class WebServiceAllAnnotations
     }
 
     /**
-     * @WebMethod()
+     * @WebMethod
      * @WebParam(param="int[] $numbers")
      * @WebParam(param="string $prefix")
      * @WebResult(param="string[] $numbersWithPrefix")
@@ -71,7 +71,7 @@ class WebServiceAllAnnotations
     }
 
     /**
-     * @WebMethod()
+     * @WebMethod
      * @WebParam(param="string $token", header=true)
      * @WebParam(param="object $user { string $name int $age }")
      * @WebResult(param="object $userContext { string $token int $id object $userInfo { string $name int $age } }")

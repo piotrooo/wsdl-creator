@@ -23,6 +23,12 @@
  */
 namespace WSDL\Annotation;
 
+use Doctrine\Common\Annotations\Annotation\Required;
+use ReflectionMethod;
+use WSDL\Builder\MethodBuilder;
+use WSDL\Builder\Parameter;
+use WSDL\Lexer\Tokenizer;
+
 /**
  * WebResult
  *
@@ -31,11 +37,20 @@ namespace WSDL\Annotation;
  * @Annotation
  * @Target("METHOD")
  */
-class WebResult
+class WebResult implements MethodAnnotationBuilder
 {
     /**
      * @var string
      * @Required
      */
     public $param;
+
+    /**
+     * @inheritdoc
+     */
+    public function build(MethodBuilder $builder, ReflectionMethod $method)
+    {
+        $tokenizer = new Tokenizer();
+        $builder->setReturn(Parameter::fromTokens($tokenizer->lex($this->param)));
+    }
 }

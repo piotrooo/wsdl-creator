@@ -253,4 +253,16 @@ class WSDLBuilder
         $this->methods[] = $method;
         return $this;
     }
+
+    /**
+     * @param Method[] $methods
+     * @return $this
+     */
+    public function setMethods(array $methods)
+    {
+        foreach ($methods as $method) {
+            $this->setMethod($method);
+        }
+        return $this;
+    }
 }

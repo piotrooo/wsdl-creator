@@ -27,20 +27,16 @@ use ReflectionMethod;
 use WSDL\Builder\MethodBuilder;
 
 /**
- * WebMethod
+ * MethodAnnotationBuilder
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
- *
- * @Annotation
- * @Target("METHOD")
  */
-final class WebMethod implements MethodAnnotationBuilder
+interface MethodAnnotationBuilder
 {
     /**
-     * @inheritdoc
+     * @param MethodBuilder $builder
+     * @param ReflectionMethod $method
+     * @return void
      */
-    public function build(MethodBuilder $builder, ReflectionMethod $method)
-    {
-        $builder->setName($method->getShortName());
-    }
+    public function build(MethodBuilder $builder, ReflectionMethod $method);
 }

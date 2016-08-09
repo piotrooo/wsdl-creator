@@ -21,26 +21,71 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-namespace WSDL\Annotation;
-
-use ReflectionMethod;
-use WSDL\Builder\MethodBuilder;
+namespace WSDL\Builder;
 
 /**
- * WebMethod
+ * MethodBuilder
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
- *
- * @Annotation
- * @Target("METHOD")
  */
-final class WebMethod implements MethodAnnotationBuilder
+class MethodBuilder
 {
     /**
-     * @inheritdoc
+     * @var string
      */
-    public function build(MethodBuilder $builder, ReflectionMethod $method)
+    private $name;
+    /**
+     * @var Parameter[]
+     */
+    private $parameters = [];
+    /**
+     * @var Parameter
+     */
+    private $return;
+
+    /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name)
     {
-        $builder->setName($method->getShortName());
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @param Parameter $parameter
+     * @return $this
+     */
+    public function setParameter(Parameter $parameter)
+    {
+        $this->parameters[] = $parameter;
+        return $this;
+    }
+
+    /**
+     * @param Parameter $parameter
+     * @return $this
+     */
+    public function setReturn(Parameter $parameter)
+    {
+        $this->return = $parameter;
+        return $this;
+    }
+
+    /**
+     * @return Method
+     */
+    public function build()
+    {
+        return new Method($this->name, $this->parameters, $this->return);
+    }
+
+    /**
+     * @return MethodBuilder
+     */
+    public static function instance()
+    {
+        return new self();
     }
 }

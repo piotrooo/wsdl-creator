@@ -23,6 +23,12 @@
  */
 namespace WSDL\Annotation;
 
+use Doctrine\Common\Annotations\Annotation\Required;
+use ReflectionMethod;
+use WSDL\Builder\MethodBuilder;
+use WSDL\Builder\Parameter;
+use WSDL\Lexer\Tokenizer;
+
 /**
  * WebParam
  *
@@ -31,7 +37,7 @@ namespace WSDL\Annotation;
  * @Annotation
  * @Target("METHOD")
  */
-final class WebParam
+final class WebParam implements MethodAnnotationBuilder
 {
     /**
      * @var string
@@ -42,4 +48,13 @@ final class WebParam
      * @var boolean
      */
     public $header = false;
+
+    /**
+     * @inheritdoc
+     */
+    public function build(MethodBuilder $builder, ReflectionMethod $method)
+    {
+        $tokenizer = new Tokenizer();
+        $builder->setParameter(Parameter::fromTokens($tokenizer->lex($this->param), $this->header));
+    }
 }
