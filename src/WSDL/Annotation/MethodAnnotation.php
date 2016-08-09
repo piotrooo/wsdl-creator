@@ -27,11 +27,11 @@ use ReflectionMethod;
 use WSDL\Builder\MethodBuilder;
 
 /**
- * MethodAnnotationBuilder
+ * MethodAnnotation
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-interface MethodAnnotationBuilder
+interface MethodAnnotation
 {
     /**
      * @param MethodBuilder $builder

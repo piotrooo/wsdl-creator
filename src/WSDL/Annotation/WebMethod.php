@@ -34,7 +34,7 @@ use WSDL\Builder\MethodBuilder;
  * @Annotation
  * @Target("METHOD")
  */
-final class WebMethod implements MethodAnnotationBuilder
+final class WebMethod implements MethodAnnotation
 {
     /**
      * @inheritdoc

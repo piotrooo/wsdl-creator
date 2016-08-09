@@ -37,7 +37,7 @@ use WSDL\Lexer\Tokenizer;
  * @Annotation
  * @Target("METHOD")
  */
-final class WebParam implements MethodAnnotationBuilder
+final class WebParam implements MethodAnnotation
 {
     /**
      * @var string

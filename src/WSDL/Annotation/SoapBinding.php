@@ -34,7 +34,7 @@ use WSDL\Builder\WSDLBuilder;
  * @Annotation
  * @Target("CLASS")
  */
-final class SoapBinding implements ClassAnnotationBuilder
+final class SoapBinding implements ClassAnnotation
 {
     const RPC = 'RPC';
     const DOCUMENT = 'DOCUMENT';

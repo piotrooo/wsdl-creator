@@ -34,7 +34,7 @@ use WSDL\Builder\WSDLBuilder;
  * @Annotation
  * @Target("CLASS")
  */
-final class BindingType implements ClassAnnotationBuilder
+final class BindingType implements ClassAnnotation
 {
     const SOAP_11 = 'SOAP_11';
     const SOAP_12 = 'SOAP_12';

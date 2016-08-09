@@ -34,7 +34,7 @@ use WSDL\Builder\WSDLBuilder;
  * @Annotation
  * @Target("CLASS")
  */
-final class WebService implements ClassAnnotationBuilder
+final class WebService implements ClassAnnotation
 {
     /**
      * @var string

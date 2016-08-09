@@ -27,11 +27,11 @@ use ReflectionClass;
 use WSDL\Builder\WSDLBuilder;
 
 /**
- * AnnotationBuilder
+ * ClassAnnotation
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-interface ClassAnnotationBuilder
+interface ClassAnnotation
 {
     /**
      * @param WSDLBuilder $builder
