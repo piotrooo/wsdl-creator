@@ -34,7 +34,7 @@ use WSDL\Annotation\WebResult;
 use WSDL\Annotation\WebService;
 
 /**
- * WebServiceAnnotations
+ * ServiceAllAnnotations
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  *
@@ -47,7 +47,7 @@ use WSDL\Annotation\WebService;
  * @BindingType(value="SOAP_12")
  * @SoapBinding(style="DOCUMENT", use="ENCODED", parameterStyle="WRAPPED")
  */
-class WebServiceAllAnnotations
+class ServiceAllAnnotations
 {
     /**
      * @WebMethod

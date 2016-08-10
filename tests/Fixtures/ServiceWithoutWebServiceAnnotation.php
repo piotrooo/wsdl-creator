@@ -23,19 +23,15 @@
  */
 namespace Fixtures;
 
-use WSDL\Annotation\WebService;
+use WSDL\Annotation\SoapBinding;
 
 /**
- * WebServiceClassAnnotations
+ * ServiceWithoutWebServiceAnnotation
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  *
- * @WebService(
- *     targetNamespace="http://foo.bar/webserviceannotations",
- *     location="http://localhost/wsdl-creator/service.php",
- *     ns="http://foo.bar/webserviceannotations/types"
- * )
+ * @SoapBinding(style="DOCUMENT", use="ENCODED", parameterStyle="WRAPPED")
  */
-class WebServiceClassAnnotations
+class ServiceWithoutWebServiceAnnotation
 {
 }

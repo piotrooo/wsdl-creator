@@ -24,6 +24,7 @@
 namespace Tests\WSDL\Builder;
 
 use Ouzo\Tests\Assert;
+use Ouzo\Tests\CatchException;
 use PHPUnit_Framework_TestCase;
 use WSDL\Annotation\BindingType;
 use WSDL\Annotation\SoapBinding;
@@ -42,7 +43,7 @@ class AnnotationWSDLBuilderTest extends PHPUnit_Framework_TestCase
     public function shouldCreateBuilderForWebServiceAnnotation()
     {
         //given
-        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\WebServiceAllAnnotations');
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\ServiceAllAnnotations');
 
         //when
         $annotationWSDLBuilder->build();
@@ -61,7 +62,7 @@ class AnnotationWSDLBuilderTest extends PHPUnit_Framework_TestCase
     public function shouldCreateBuilderForBindingTypeAnnotation()
     {
         //given
-        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\WebServiceAllAnnotations');
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\ServiceAllAnnotations');
 
         //when
         $annotationWSDLBuilder->build();
@@ -77,7 +78,7 @@ class AnnotationWSDLBuilderTest extends PHPUnit_Framework_TestCase
     public function shouldCreateBuilderForSoapBindingAnnotation()
     {
         //given
-        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\WebServiceAllAnnotations');
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\ServiceAllAnnotations');
 
         //when
         $annotationWSDLBuilder->build();
@@ -95,14 +96,14 @@ class AnnotationWSDLBuilderTest extends PHPUnit_Framework_TestCase
     public function shouldCreateBuilderWithClassNameWhenNameIsNotPass()
     {
         //given
-        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\WebServiceClassAnnotations');
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\ServiceClassAnnotations');
 
         //when
         $annotationWSDLBuilder->build();
 
         //then
         $WSDLBuilder = $annotationWSDLBuilder->getBuilder();
-        $this->assertEquals('WebServiceClassAnnotations', $WSDLBuilder->getName());
+        $this->assertEquals('ServiceClassAnnotations', $WSDLBuilder->getName());
     }
 
     /**
@@ -111,7 +112,7 @@ class AnnotationWSDLBuilderTest extends PHPUnit_Framework_TestCase
     public function shouldCreateBuilderWithMethods()
     {
         //given
-        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\WebServiceAllAnnotations');
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\ServiceAllAnnotations');
 
         //when
         $annotationWSDLBuilder->build();
@@ -121,5 +122,22 @@ class AnnotationWSDLBuilderTest extends PHPUnit_Framework_TestCase
         Assert::thatArray($WSDLBuilder->getMethods())
             ->extracting('name')
             ->containsOnly('uppercaseUserName', 'appendPrefixToNumbers', 'getUserContext');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenWebServiceAnnotationIsNotSet()
+    {
+        //given
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\ServiceWithoutWebServiceAnnotation');
+
+        //when
+        CatchException::when($annotationWSDLBuilder)->build();
+
+        //then
+        CatchException::assertThat()
+            ->isInstanceOf('\WSDL\Builder\AnnotationBuilderException')
+            ->hasMessage('Class must have @WebService annotation');
     }
 }
