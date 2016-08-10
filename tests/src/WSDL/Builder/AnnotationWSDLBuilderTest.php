@@ -96,14 +96,14 @@ class AnnotationWSDLBuilderTest extends PHPUnit_Framework_TestCase
     public function shouldCreateBuilderWithClassNameWhenNameIsNotPass()
     {
         //given
-        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\ServiceClassAnnotations');
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\ServiceClassNameAnnotations');
 
         //when
         $annotationWSDLBuilder->build();
 
         //then
         $WSDLBuilder = $annotationWSDLBuilder->getBuilder();
-        $this->assertEquals('ServiceClassAnnotations', $WSDLBuilder->getName());
+        $this->assertEquals('ServiceClassNameAnnotations', $WSDLBuilder->getName());
     }
 
     /**

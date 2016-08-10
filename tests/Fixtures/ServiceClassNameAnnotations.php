@@ -26,7 +26,7 @@ namespace Fixtures;
 use WSDL\Annotation\WebService;
 
 /**
- * ServiceClassAnnotations
+ * ServiceClassNameAnnotations
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  *
@@ -36,6 +36,6 @@ use WSDL\Annotation\WebService;
  *     ns="http://foo.bar/webserviceannotations/types"
  * )
  */
-class ServiceClassAnnotations
+class ServiceClassNameAnnotations
 {
 }
