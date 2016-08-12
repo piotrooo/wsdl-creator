@@ -25,6 +25,7 @@ namespace WSDL\Builder;
 
 use Ouzo\Utilities\Arrays;
 use Ouzo\Utilities\Functions;
+use Ouzo\Utilities\Optional;
 use WSDL\Parser\Node;
 
 /**
@@ -116,17 +117,17 @@ class Method
      */
     public function getHeaderReturn()
     {
-        if ($this->return->isHeader()) {
+        if (Optional::fromNullable($this->return)->isHeader()->or(false)) {
             return $this->return;
         }
         return null;
     }
 
     /**
-     * @return Node
+     * @return Node|null
      */
     public function getReturnNode()
     {
-        return $this->return->getNode();
+        return Optional::fromNullable($this->return)->getNode()->or(null);
     }
 }

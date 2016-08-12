@@ -160,6 +160,10 @@
   <message name="authorizedMethodResponse">
     <part name="nameWithSurname" type="xsd:string"/>
   </message>
+  <message name="methodWithoutReturnRequest">
+    <part name="userToken" type="xsd:string"/>
+  </message>
+  <message name="methodWithoutReturnResponse"/>
   <portType name="RpcLiteralServicePortType">
     <operation name="uppercaseUserName">
       <input message="tns:uppercaseUserNameRequest"/>
@@ -184,6 +188,10 @@
     <operation name="authorizedMethod">
       <input message="tns:authorizedMethodRequest"/>
       <output message="tns:authorizedMethodResponse"/>
+    </operation>
+    <operation name="methodWithoutReturn">
+      <input message="tns:methodWithoutReturnRequest"/>
+      <output message="tns:methodWithoutReturnResponse"/>
     </operation>
   </portType>
   <binding name="RpcLiteralServiceBinding" type="tns:RpcLiteralServicePortType">
@@ -243,6 +251,15 @@
         <soap:body use="literal" namespace="http://foo.bar/rpcliteralservice"/>
       </output>
     </operation>
+    <operation name="methodWithoutReturn">
+      <soap:operation soapAction="http://foo.bar/rpcliteralservice/#methodWithoutReturn"/>
+      <input>
+        <soap:body use="literal" namespace="http://foo.bar/rpcliteralservice"/>
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://foo.bar/rpcliteralservice"/>
+      </output>
+    </operation>
   </binding>
   <service name="RpcLiteralServiceService">
     <port name="RpcLiteralServicePort" binding="tns:RpcLiteralServiceBinding">
@@ -288,7 +305,7 @@
          <errors soapenc:arrayType="?" soapenc:offset="?" id="?" href="?"/>
       </rpc:wrapErrors>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#wrapErrors"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="654e53df-9988-4e08-a482-0a939f970fb0" isOneWay="false" action="http://foo.bar/rpcliteralservice/#authorizedMethod" name="authorizedMethod" bindingOperationName="authorizedMethod" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="738e45cc-278b-4e57-a2eb-d551dc257276" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:typ="http://foo.bar/rpcliteralservice/types" xmlns:rpc="http://foo.bar/rpcliteralservice">
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#wrapErrors"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="654e53df-9988-4e08-a482-0a939f970fb0" isOneWay="false" action="http://foo.bar/rpcliteralservice/#authorizedMethod" name="authorizedMethod" bindingOperationName="authorizedMethod" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="738e45cc-278b-4e57-a2eb-d551dc257276" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:typ="http://foo.bar/rpcliteralservice/types" xmlns:rpc="http://foo.bar/rpcliteralservice">
    <soapenv:Header>
       <typ:ServiceAuth>
          <token>?</token>
@@ -301,4 +318,11 @@
          <surname>?</surname>
       </rpc:authorizedMethod>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#authorizedMethod"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/></con:soapui-project>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#authorizedMethod"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="d803c409-cb08-4161-a224-4ad155423bd9" isOneWay="false" action="http://foo.bar/rpcliteralservice/#methodWithoutReturn" name="methodWithoutReturn" bindingOperationName="methodWithoutReturn" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="3d510c61-68b2-45e8-ada8-94fa4b9383f7" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:rpc="http://foo.bar/rpcliteralservice">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <rpc:methodWithoutReturn>
+         <userToken>user-toke-dfsdfsdf21fsdfb</userToken>
+      </rpc:methodWithoutReturn>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#methodWithoutReturn"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/></con:soapui-project>

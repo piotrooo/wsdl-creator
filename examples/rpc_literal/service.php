@@ -40,6 +40,8 @@ $parameters6 = [
 ];
 $return6 = Parameter::fromTokens($tokenizer->lex('string $nameWithSurname'));
 
+$parameters7 = [Parameter::fromTokens($tokenizer->lex('string $userToken'))];
+
 $builder = WSDLBuilder::instance()
     ->setName('RpcLiteralService')
     ->setTargetNamespace('http://foo.bar/rpcliteralservice')
@@ -53,7 +55,8 @@ $builder = WSDLBuilder::instance()
     ->setMethod(new Method('getUserContext', $parameters3, $return3))
     ->setMethod(new Method('extractCompaniesNames', $parameters4, $return4))
     ->setMethod(new Method('wrapErrors', $parameters5, $return5))
-    ->setMethod(new Method('authorizedMethod', $parameters6, $return6));
+    ->setMethod(new Method('authorizedMethod', $parameters6, $return6))
+    ->setMethod(new Method('methodWithoutReturn', $parameters7, null));
 
 $wsdl = WSDL::fromBuilder($builder);
 
@@ -120,5 +123,10 @@ class RpcLiteralService
     public function authorizedMethod($name, $surname)
     {
         return 'clientId [' . $this->clientId . '] name [' . $name . '] surname [' . $surname . ']';
+    }
+
+    public function methodWithoutReturn($userToken)
+    {
+        file_put_contents('/tmp/wsdl-creator-example-log', $userToken . PHP_EOL, FILE_APPEND);
     }
 }

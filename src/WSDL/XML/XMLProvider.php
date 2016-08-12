@@ -112,7 +112,7 @@ class XMLProvider
     private function definitions()
     {
         $targetNamespace = $this->builder->getTargetNamespace();
-        $definitionsElement = $this->createElementWithAttributes('definitions', array(
+        $definitionsElement = $this->createElementWithAttributes('definitions', [
             'name' => $this->builder->getName(),
             'targetNamespace' => $targetNamespace,
             'xmlns:tns' => $targetNamespace,
@@ -121,7 +121,7 @@ class XMLProvider
             'xmlns:soapenc' => "http://schemas.xmlsoap.org/soap/encoding/",
             'xmlns' => 'http://schemas.xmlsoap.org/wsdl/',
             'xmlns:ns' => $this->builder->getNs()
-        ));
+        ]);
         $this->DOMDocument->appendChild($definitionsElement);
         $this->definitionsRootNode = $definitionsElement;
         return $this;
@@ -133,12 +133,12 @@ class XMLProvider
     private function service()
     {
         $name = $this->builder->getName();
-        $serviceElement = $this->createElementWithAttributes('service', array('name' => $name . 'Service'));
+        $serviceElement = $this->createElementWithAttributes('service', ['name' => $name . 'Service']);
 
-        $portElement = $this->createElementWithAttributes('port', array('name' => $name . 'Port', 'binding' => 'tns:' . $name . 'Binding'));
+        $portElement = $this->createElementWithAttributes('port', ['name' => $name . 'Port', 'binding' => 'tns:' . $name . 'Binding']);
 
         $soapAddressElement = $this
-            ->createElementWithAttributes($this->XMLSoapVersion . ':address', array('location' => $this->builder->getLocation()));
+            ->createElementWithAttributes($this->XMLSoapVersion . ':address', ['location' => $this->builder->getLocation()]);
         $portElement->appendChild($soapAddressElement);
 
         $serviceElement->appendChild($portElement);
@@ -153,17 +153,17 @@ class XMLProvider
     {
         $name = $this->builder->getName();
         $targetNamespace = $this->builder->getTargetNamespace();
-        $bindingElement = $this->createElementWithAttributes('binding', array('name' => $name . 'Binding', 'type' => 'tns:' . $name . 'PortType'));
+        $bindingElement = $this->createElementWithAttributes('binding', ['name' => $name . 'Binding', 'type' => 'tns:' . $name . 'PortType']);
 
         $soapBindingElement = $this->XMLStyle->generateBinding($this->DOMDocument, $this->XMLSoapVersion);
         $bindingElement->appendChild($soapBindingElement);
 
         foreach ($this->builder->getMethods() as $method) {
             $methodName = $method->getName();
-            $operationElement = $this->createElementWithAttributes('operation', array('name' => $methodName));
-            $soapOperationElement = $this->createElementWithAttributes($this->XMLSoapVersion . ':operation', array(
+            $operationElement = $this->createElementWithAttributes('operation', ['name' => $methodName]);
+            $soapOperationElement = $this->createElementWithAttributes($this->XMLSoapVersion . ':operation', [
                 'soapAction' => $targetNamespace . '/#' . $methodName
-            ));
+            ]);
             $operationElement->appendChild($soapOperationElement);
 
             $soapBodyElement = $this->XMLUse->generateSoapBody($this->DOMDocument, $targetNamespace, $this->XMLSoapVersion);
@@ -207,16 +207,16 @@ class XMLProvider
     private function portType()
     {
         $name = $this->builder->getName();
-        $portTypeElement = $this->createElementWithAttributes('portType', array('name' => $name . 'PortType'));
+        $portTypeElement = $this->createElementWithAttributes('portType', ['name' => $name . 'PortType']);
 
         foreach ($this->builder->getMethods() as $method) {
             $methodName = $method->getName();
-            $operationElement = $this->createElementWithAttributes('operation', array('name' => $methodName));
+            $operationElement = $this->createElementWithAttributes('operation', ['name' => $methodName]);
 
-            $inputElement = $this->createElementWithAttributes('input', array('message' => 'tns:' . $methodName . 'Request'));
+            $inputElement = $this->createElementWithAttributes('input', ['message' => 'tns:' . $methodName . 'Request']);
             $operationElement->appendChild($inputElement);
 
-            $outputElement = $this->createElementWithAttributes('output', array('message' => 'tns:' . $methodName . 'Response'));
+            $outputElement = $this->createElementWithAttributes('output', ['message' => 'tns:' . $methodName . 'Response']);
             $operationElement->appendChild($outputElement);
 
             $portTypeElement->appendChild($operationElement);
@@ -265,11 +265,13 @@ class XMLProvider
      */
     private function messageParts($methodName, $nodes)
     {
-        $nodes = Arrays::toArray($nodes);
-        $messageElement = $this->createElementWithAttributes('message', array('name' => $methodName));
-        $parts = $this->XMLStyle->generateMessagePart($this->DOMDocument, $nodes);
-        foreach ($parts as $part) {
-            $messageElement->appendChild($part);
+        $messageElement = $this->createElementWithAttributes('message', ['name' => $methodName]);
+        if ($nodes !== null) {
+            $nodes = Arrays::toArray($nodes);
+            $parts = $this->XMLStyle->generateMessagePart($this->DOMDocument, $nodes);
+            foreach ($parts as $part) {
+                $messageElement->appendChild($part);
+            }
         }
         return $messageElement;
     }
@@ -282,7 +284,7 @@ class XMLProvider
         $ns = $this->builder->getNs();
         $typesElement = $this->createElement('types');
 
-        $schemaElement = $this->createElementWithAttributes('xsd:schema', array('targetNamespace' => $ns, 'xmlns' => $ns));
+        $schemaElement = $this->createElementWithAttributes('xsd:schema', ['targetNamespace' => $ns, 'xmlns' => $ns]);
         foreach ($this->builder->getMethods() as $method) {
             $typesForParameters = $this->XMLStyle->generateTypes($this->DOMDocument, $method->getParameters(), $this->XMLSoapVersion);
             $typesForReturn = $this->XMLStyle->generateTypes($this->DOMDocument, Arrays::toArray($method->getReturn()), $this->XMLSoapVersion);
