@@ -111,7 +111,7 @@ class RpcLiteralService
     public function serviceAuth($object)
     {
         if ($object->token != 'test_token') {
-            throw new Exception('Wrong token');
+            throw new SoapFault('WT', 'Wrong token');
         } else {
             $this->clientId = $object->id;
         }
