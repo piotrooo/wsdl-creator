@@ -42,6 +42,8 @@ $return6 = Parameter::fromTokens($tokenizer->lex('string $nameWithSurname'));
 
 $parameters7 = [Parameter::fromTokens($tokenizer->lex('string $userToken'))];
 
+$return8 = Parameter::fromTokens($tokenizer->lex('string $responseForMethodWithoutParameters'));
+
 $builder = WSDLBuilder::instance()
     ->setName('RpcLiteralService')
     ->setTargetNamespace('http://foo.bar/rpcliteralservice')
@@ -56,7 +58,8 @@ $builder = WSDLBuilder::instance()
     ->setMethod(new Method('extractCompaniesNames', $parameters4, $return4))
     ->setMethod(new Method('wrapErrors', $parameters5, $return5))
     ->setMethod(new Method('authorizedMethod', $parameters6, $return6))
-    ->setMethod(new Method('methodWithoutReturn', $parameters7, null));
+    ->setMethod(new Method('methodWithoutReturn', $parameters7, null))
+    ->setMethod(new Method('methodWithoutParameters', [], $return8));
 
 $wsdl = WSDL::fromBuilder($builder);
 
@@ -128,5 +131,10 @@ class RpcLiteralService
     public function methodWithoutReturn($userToken)
     {
         file_put_contents('/tmp/wsdl-creator-example-log', $userToken . PHP_EOL, FILE_APPEND);
+    }
+
+    public function methodWithoutParameters()
+    {
+        return 'method without parameters';
     }
 }

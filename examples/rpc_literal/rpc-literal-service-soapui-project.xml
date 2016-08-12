@@ -164,6 +164,10 @@
     <part name="userToken" type="xsd:string"/>
   </message>
   <message name="methodWithoutReturnResponse"/>
+  <message name="methodWithoutParametersRequest"/>
+  <message name="methodWithoutParametersResponse">
+    <part name="responseForMethodWithoutParameters" type="xsd:string"/>
+  </message>
   <portType name="RpcLiteralServicePortType">
     <operation name="uppercaseUserName">
       <input message="tns:uppercaseUserNameRequest"/>
@@ -192,6 +196,10 @@
     <operation name="methodWithoutReturn">
       <input message="tns:methodWithoutReturnRequest"/>
       <output message="tns:methodWithoutReturnResponse"/>
+    </operation>
+    <operation name="methodWithoutParameters">
+      <input message="tns:methodWithoutParametersRequest"/>
+      <output message="tns:methodWithoutParametersResponse"/>
     </operation>
   </portType>
   <binding name="RpcLiteralServiceBinding" type="tns:RpcLiteralServicePortType">
@@ -253,6 +261,15 @@
     </operation>
     <operation name="methodWithoutReturn">
       <soap:operation soapAction="http://foo.bar/rpcliteralservice/#methodWithoutReturn"/>
+      <input>
+        <soap:body use="literal" namespace="http://foo.bar/rpcliteralservice"/>
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://foo.bar/rpcliteralservice"/>
+      </output>
+    </operation>
+    <operation name="methodWithoutParameters">
+      <soap:operation soapAction="http://foo.bar/rpcliteralservice/#methodWithoutParameters"/>
       <input>
         <soap:body use="literal" namespace="http://foo.bar/rpcliteralservice"/>
       </input>
@@ -325,4 +342,9 @@
          <userToken>user-toke-dfsdfsdf21fsdfb</userToken>
       </rpc:methodWithoutReturn>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#methodWithoutReturn"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/></con:soapui-project>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#methodWithoutReturn"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="7c789a2e-89e9-4086-bee3-a166214fc75a" isOneWay="false" action="http://foo.bar/rpcliteralservice/#methodWithoutParameters" name="methodWithoutParameters" bindingOperationName="methodWithoutParameters" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="7696f310-164f-4acd-ac2c-0c605a669b02" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:rpc="http://foo.bar/rpcliteralservice">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <rpc:methodWithoutParameters/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#methodWithoutParameters"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
