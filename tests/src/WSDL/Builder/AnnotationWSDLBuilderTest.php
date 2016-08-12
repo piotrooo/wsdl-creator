@@ -147,7 +147,7 @@ class AnnotationWSDLBuilderTest extends PHPUnit_Framework_TestCase
     public function shouldCreateBuilderWithWebMethodsOnly()
     {
         //given
-        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\ServiceWithNotWebMethods');
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\ServiceWebMethods');
 
         //when
         $annotationWSDLBuilder->build();
@@ -156,6 +156,6 @@ class AnnotationWSDLBuilderTest extends PHPUnit_Framework_TestCase
         $WSDLBuilder = $annotationWSDLBuilder->getBuilder();
         Assert::thatArray($WSDLBuilder->getMethods())
             ->extracting('name')
-            ->containsOnly('uppercaseUserName');
+            ->containsOnly('uppercaseUserName', 'methodWithoutParameters', 'methodWithoutResult');
     }
 }

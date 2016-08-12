@@ -29,7 +29,7 @@ use WSDL\Annotation\WebResult;
 use WSDL\Annotation\WebService;
 
 /**
- * ServiceWithNotWebMethods
+ * ServiceWebMethods
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  *
@@ -39,7 +39,7 @@ use WSDL\Annotation\WebService;
  *     ns="http://foo.bar/servicewithnotwebmethods/types"
  * )
  */
-class ServiceWithNotWebMethods
+class ServiceWebMethods
 {
     /**
      * @WebMethod
@@ -52,6 +52,22 @@ class ServiceWithNotWebMethods
     }
 
     public function toLog($message)
+    {
+    }
+
+    /**
+     * @WebMethod
+     * @WebResult(param="string $uniqueId")
+     */
+    public function methodWithoutParameters()
+    {
+        return uniqid();
+    }
+
+    /**
+     * @WebMethod
+     */
+    public function methodWithoutResult()
     {
     }
 }

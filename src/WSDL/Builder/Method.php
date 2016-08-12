@@ -52,7 +52,7 @@ class Method
      * @param Parameter[] $parameters
      * @param Parameter $return
      */
-    public function __construct($name, array $parameters, Parameter $return)
+    public function __construct($name, array $parameters, Parameter $return = null)
     {
         $this->name = $name;
         $this->parameters = $parameters;
