@@ -140,4 +140,22 @@ class AnnotationWSDLBuilderTest extends PHPUnit_Framework_TestCase
             ->isInstanceOf('\WSDL\Builder\AnnotationBuilderException')
             ->hasMessage('Class must have @WebService annotation');
     }
+
+    /**
+     * @test
+     */
+    public function shouldCreateBuilderWithWebMethodsOnly()
+    {
+        //given
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\ServiceWithNotWebMethods');
+
+        //when
+        $annotationWSDLBuilder->build();
+
+        //then
+        $WSDLBuilder = $annotationWSDLBuilder->getBuilder();
+        Assert::thatArray($WSDLBuilder->getMethods())
+            ->extracting('name')
+            ->containsOnly('uppercaseUserName');
+    }
 }

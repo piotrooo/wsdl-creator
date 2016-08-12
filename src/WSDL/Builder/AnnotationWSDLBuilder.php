@@ -86,12 +86,12 @@ class AnnotationWSDLBuilder
     private function buildForClass()
     {
         $class = $this->reflectionClass();
-        /** @var ClassAnnotation[] $classAnnotations */
-        $classAnnotations = $this->annotationReader->getClassAnnotations($class);
         $webServiceAnnotation = $this->annotationReader->getClassAnnotation($class, '\WSDL\Annotation\WebService');
         if ($webServiceAnnotation === null) {
             throw new AnnotationBuilderException('Class must have @WebService annotation');
         }
+        /** @var ClassAnnotation[] $classAnnotations */
+        $classAnnotations = $this->annotationReader->getClassAnnotations($class);
         foreach ($classAnnotations as $classAnnotation) {
             $classAnnotation->build($this->builder, $class);
         }
@@ -105,6 +105,10 @@ class AnnotationWSDLBuilder
         $classMethods = $this->reflectionClass()->getMethods();
         $methods = [];
         foreach ($classMethods as $classMethod) {
+            $webMethodAnnotation = $this->annotationReader->getMethodAnnotation($classMethod, '\WSDL\Annotation\WebMethod');
+            if ($webMethodAnnotation === null) {
+                continue;
+            }
             $methodBuilder = MethodBuilder::instance();
             /** @var MethodAnnotation[] $methodAnnotations */
             $methodAnnotations = $this->annotationReader->getMethodAnnotations($classMethod);
