@@ -33,6 +33,13 @@ $return4 = Parameter::fromTokens($tokenizer->lex('string[] $companiesNames'));
 $parameters5 = [Parameter::fromTokens($tokenizer->lex('string[] $errors'))];
 $return5 = Parameter::fromTokens($tokenizer->lex('object $result { boolean $result string[] $errors }'));
 
+$parameters6 = [
+    Parameter::fromTokens($tokenizer->lex('object $serviceAuth { string $token int $id }'), true),
+    Parameter::fromTokens($tokenizer->lex('string $name')),
+    Parameter::fromTokens($tokenizer->lex('string $surname'))
+];
+$return6 = Parameter::fromTokens($tokenizer->lex('string $nameWithSurname'));
+
 $builder = WSDLBuilder::instance()
     ->setName('RpcLiteralService')
     ->setTargetNamespace('http://foo.bar/rpcliteralservice')
@@ -45,7 +52,8 @@ $builder = WSDLBuilder::instance()
     ->setMethod(new Method('appendPrefixToNumbers', $parameters2, $return2))
     ->setMethod(new Method('getUserContext', $parameters3, $return3))
     ->setMethod(new Method('extractCompaniesNames', $parameters4, $return4))
-    ->setMethod(new Method('wrapErrors', $parameters5, $return5));
+    ->setMethod(new Method('wrapErrors', $parameters5, $return5))
+    ->setMethod(new Method('authorizedMethod', $parameters6, $return6));
 
 $wsdl = WSDL::fromBuilder($builder);
 
@@ -65,6 +73,8 @@ $server->handle();
 
 class RpcLiteralService
 {
+    private $clientId = null;
+
     public function uppercaseUserName($userName)
     {
         return strtoupper($userName);
@@ -96,5 +106,19 @@ class RpcLiteralService
         $result->result = false;
         $result->errors = $errors;
         return $result;
+    }
+
+    public function serviceAuth($object)
+    {
+        if ($object->token != 'test_token') {
+            throw new Exception('Wrong token');
+        } else {
+            $this->clientId = $object->id;
+        }
+    }
+
+    public function authorizedMethod($name, $surname)
+    {
+        return 'clientId [' . $this->clientId . '] name [' . $name . '] surname [' . $surname . ']';
     }
 }

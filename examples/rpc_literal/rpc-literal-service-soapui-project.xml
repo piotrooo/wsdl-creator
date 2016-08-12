@@ -58,7 +58,7 @@
       <xsd:complexType name="UserContext">
         <xsd:sequence>
           <xsd:element name="id" type="xsd:int"/>
-          <xsd:element name="UserInfo" element="ns:UserInfo"/>
+          <xsd:element name="userInfo" element="ns:UserInfo"/>
         </xsd:sequence>
       </xsd:complexType>
       <xsd:element name="UserInfo" nillable="true" type="ns:UserInfo"/>
@@ -110,6 +110,13 @@
           </xsd:restriction>
         </xsd:complexContent>
       </xsd:complexType>
+      <xsd:element name="ServiceAuth" nillable="true" type="ns:ServiceAuth"/>
+      <xsd:complexType name="ServiceAuth">
+        <xsd:sequence>
+          <xsd:element name="token" type="xsd:string"/>
+          <xsd:element name="id" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
     </xsd:schema>
   </types>
   <message name="uppercaseUserNameRequest">
@@ -143,6 +150,16 @@
   <message name="wrapErrorsResponse">
     <part name="result" element="ns:Result"/>
   </message>
+  <message name="authorizedMethodRequestHeader">
+    <part name="serviceAuth" element="ns:ServiceAuth"/>
+  </message>
+  <message name="authorizedMethodRequest">
+    <part name="name" type="xsd:string"/>
+    <part name="surname" type="xsd:string"/>
+  </message>
+  <message name="authorizedMethodResponse">
+    <part name="nameWithSurname" type="xsd:string"/>
+  </message>
   <portType name="RpcLiteralServicePortType">
     <operation name="uppercaseUserName">
       <input message="tns:uppercaseUserNameRequest"/>
@@ -163,6 +180,10 @@
     <operation name="wrapErrors">
       <input message="tns:wrapErrorsRequest"/>
       <output message="tns:wrapErrorsResponse"/>
+    </operation>
+    <operation name="authorizedMethod">
+      <input message="tns:authorizedMethodRequest"/>
+      <output message="tns:authorizedMethodResponse"/>
     </operation>
   </portType>
   <binding name="RpcLiteralServiceBinding" type="tns:RpcLiteralServicePortType">
@@ -207,6 +228,16 @@
       <soap:operation soapAction="http://foo.bar/rpcliteralservice/#wrapErrors"/>
       <input>
         <soap:body use="literal" namespace="http://foo.bar/rpcliteralservice"/>
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://foo.bar/rpcliteralservice"/>
+      </output>
+    </operation>
+    <operation name="authorizedMethod">
+      <soap:operation soapAction="http://foo.bar/rpcliteralservice/#authorizedMethod"/>
+      <input>
+        <soap:body use="literal" namespace="http://foo.bar/rpcliteralservice"/>
+        <soap:header use="literal" namespace="http://foo.bar/rpcliteralservice" part="serviceAuth" message="tns:authorizedMethodRequestHeader"/>
       </input>
       <output>
         <soap:body use="literal" namespace="http://foo.bar/rpcliteralservice"/>
@@ -257,4 +288,17 @@
          <errors soapenc:arrayType="?" soapenc:offset="?" id="?" href="?"/>
       </rpc:wrapErrors>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#wrapErrors"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/></con:soapui-project>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#wrapErrors"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="654e53df-9988-4e08-a482-0a939f970fb0" isOneWay="false" action="http://foo.bar/rpcliteralservice/#authorizedMethod" name="authorizedMethod" bindingOperationName="authorizedMethod" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="738e45cc-278b-4e57-a2eb-d551dc257276" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:typ="http://foo.bar/rpcliteralservice/types" xmlns:rpc="http://foo.bar/rpcliteralservice">
+   <soapenv:Header>
+      <typ:ServiceAuth>
+         <token>?</token>
+         <id>?</id>
+      </typ:ServiceAuth>
+   </soapenv:Header>
+   <soapenv:Body>
+      <rpc:authorizedMethod>
+         <name>?</name>
+         <surname>?</surname>
+      </rpc:authorizedMethod>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#authorizedMethod"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/></con:soapui-project>
