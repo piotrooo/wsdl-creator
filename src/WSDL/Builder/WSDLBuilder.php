@@ -213,7 +213,7 @@ class WSDLBuilder
      */
     public function setParameterStyle($parameterStyle)
     {
-        IsValid::parameterStyle($parameterStyle);
+        IsValid::parameterStyle($parameterStyle, $this->style);
         $this->parameterStyle = $parameterStyle;
         return $this;
     }

@@ -70,10 +70,19 @@ class IsValid
         self::checkInList($use, $uses, 'Invalid use [' . $use . '] available uses: [' . implode(', ', $uses) . ']');
     }
 
-    public static function parameterStyle($parameterStyle)
+    /**
+     * @param string $parameterStyle
+     * @param string $style
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public static function parameterStyle($parameterStyle, $style)
     {
         $parameterStyles = [SoapBinding::BARE, SoapBinding::WRAPPED];
         self::checkInList($parameterStyle, $parameterStyles, 'Invalid parameter style [' . $parameterStyle . '] available parameter styles: [' . implode(', ', $parameterStyles) . ']');
+        if ($style === SoapBinding::RPC && $parameterStyle === SoapBinding::WRAPPED) {
+            throw new InvalidArgumentException('For RPC style parameters cannot be wrapped');
+        }
     }
 
     /**

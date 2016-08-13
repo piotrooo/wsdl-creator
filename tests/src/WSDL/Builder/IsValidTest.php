@@ -211,7 +211,7 @@ class IsValidTest extends PHPUnit_Framework_TestCase
     public function shouldNotThrowExceptionWhenParameterStyleIsValid($parameterStyle)
     {
         //when
-        IsValid::parameterStyle($parameterStyle);
+        IsValid::parameterStyle($parameterStyle, SoapBinding::DOCUMENT);
 
         //then no exception
     }
@@ -231,11 +231,27 @@ class IsValidTest extends PHPUnit_Framework_TestCase
     {
         //when
         try {
-            IsValid::parameterStyle('INVALID_PARAMETER_STYLE');
+            IsValid::parameterStyle('INVALID_PARAMETER_STYLE', SoapBinding::RPC);
             $this->assertFalse(true, 'Triggered when exception is not throw');
         } catch (InvalidArgumentException $e) {
             //then
             $this->assertEquals('Invalid parameter style [INVALID_PARAMETER_STYLE] available parameter styles: [BARE, WRAPPED]', $e->getMessage());
+            $this->assertInstanceOf('\InvalidArgumentException', $e);
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenSetParameterStyleWrappedForRpc()
+    {
+        //when
+        try {
+            IsValid::parameterStyle(SoapBinding::WRAPPED, SoapBinding::RPC);
+            $this->assertFalse(true, 'Triggered when exception is not throw');
+        } catch (InvalidArgumentException $e) {
+            //then
+            $this->assertEquals('For RPC style parameters cannot be wrapped', $e->getMessage());
             $this->assertInstanceOf('\InvalidArgumentException', $e);
         }
     }
