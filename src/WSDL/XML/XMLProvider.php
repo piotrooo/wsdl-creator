@@ -260,7 +260,7 @@ class XMLProvider
 
     /**
      * @param string $methodName
-     * @param Node|Node[] $nodes
+     * @param Node|Node[]|null $nodes
      * @return DOMElement
      */
     private function messageParts($methodName, $nodes)
