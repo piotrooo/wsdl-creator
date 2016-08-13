@@ -202,4 +202,41 @@ class IsValidTest extends PHPUnit_Framework_TestCase
             [null, 'Second empty value']
         ];
     }
+
+    /**
+     * @test
+     * @dataProvider validParameterStyles
+     * @param string $parameterStyle
+     */
+    public function shouldNotThrowExceptionWhenParameterStyleIsValid($parameterStyle)
+    {
+        //when
+        IsValid::parameterStyle($parameterStyle);
+
+        //then no exception
+    }
+
+    public function validParameterStyles()
+    {
+        return [
+            [SoapBinding::BARE],
+            [SoapBinding::WRAPPED]
+        ];
+    }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenParameterStyleIsInValid()
+    {
+        //when
+        try {
+            IsValid::parameterStyle('INVALID_PARAMETER_STYLE');
+            $this->assertFalse(true, 'Triggered when exception is not throw');
+        } catch (InvalidArgumentException $e) {
+            //then
+            $this->assertEquals('Invalid parameter style [INVALID_PARAMETER_STYLE] available parameter styles: [BARE, WRAPPED]', $e->getMessage());
+            $this->assertInstanceOf('\InvalidArgumentException', $e);
+        }
+    }
 }

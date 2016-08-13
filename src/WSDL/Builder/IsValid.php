@@ -70,6 +70,12 @@ class IsValid
         self::checkInList($use, $uses, 'Invalid use [' . $use . '] available uses: [' . implode(', ', $uses) . ']');
     }
 
+    public static function parameterStyle($parameterStyle)
+    {
+        $parameterStyles = [SoapBinding::BARE, SoapBinding::WRAPPED];
+        self::checkInList($parameterStyle, $parameterStyles, 'Invalid parameter style [' . $parameterStyle . '] available parameter styles: [' . implode(', ', $parameterStyles) . ']');
+    }
+
     /**
      * @param string $version
      * @return void

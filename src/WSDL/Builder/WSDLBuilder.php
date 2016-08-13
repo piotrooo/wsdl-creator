@@ -209,9 +209,11 @@ class WSDLBuilder
     /**
      * @param string $parameterStyle
      * @return $this
+     * @throws InvalidArgumentException
      */
     public function setParameterStyle($parameterStyle)
     {
+        IsValid::parameterStyle($parameterStyle);
         $this->parameterStyle = $parameterStyle;
         return $this;
     }

@@ -145,4 +145,20 @@ class WSDLBuilderTest extends PHPUnit_Framework_TestCase
         CatchException::assertThat()
             ->hasMessage('Invalid binding type [INVALID] available types: [SOAP_11, SOAP_12]');
     }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenParameterStyleIsInValid()
+    {
+        //given
+        $WSDLBuilder = WSDLBuilder::instance();
+
+        //when
+        CatchException::when($WSDLBuilder)->setParameterStyle('INVALID');
+
+        //then
+        CatchException::assertThat()
+            ->hasMessage('Invalid parameter style [INVALID] available parameter styles: [BARE, WRAPPED]');
+    }
 }
