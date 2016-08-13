@@ -158,4 +158,19 @@ class AnnotationWSDLBuilderTest extends PHPUnit_Framework_TestCase
             ->extracting('name')
             ->containsOnly('uppercaseUserName', 'methodWithoutParameters', 'methodWithoutResult');
     }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenClassNotExists()
+    {
+        //given
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Non\Exists\Class');
+
+        //when
+        CatchException::when($annotationWSDLBuilder)->build();
+
+        //then
+        CatchException::assertThat()->hasMessage('Class [\Non\Exists\Class] not exists');
+    }
 }

@@ -25,6 +25,7 @@ namespace WSDL\Builder;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Exception;
 use Ouzo\Utilities\Path;
 use ReflectionClass;
 use WSDL\Annotation\ClassAnnotation;
@@ -71,9 +72,14 @@ class AnnotationWSDLBuilder
 
     /**
      * @return $this
+     * @throws AnnotationBuilderException
+     * @throws Exception
      */
     public function build()
     {
+        if (!class_exists($this->class)) {
+            throw new Exception('Class [' . $this->class . '] not exists');
+        }
         $this->buildForClass();
         $this->buildForMethods();
         return $this;
