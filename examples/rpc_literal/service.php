@@ -95,9 +95,9 @@ class RpcLiteralService
     {
         $userContext = new stdClass();
         $userContext->id = time();
-        $userContext->UserInfo = new stdClass();
-        $userContext->UserInfo->name = $user->name;
-        $userContext->UserInfo->age = $user->age;
+        $userContext->userInfo = new stdClass();
+        $userContext->userInfo->name = $user->name;
+        $userContext->userInfo->age = $user->age;
         return $userContext;
     }
 

@@ -283,63 +283,84 @@
       <soap:address location="http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php"/>
     </port>
   </service>
-</definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:endpoint>http://piotrooo:8088/mockRpcLiteralServiceBinding</con:endpoint></con:endpoints><con:operation id="a0a77db0-49c5-4b16-8166-9f2c7fd74887" isOneWay="false" action="http://foo.bar/rpcliteralservice/#uppercaseUserName" name="uppercaseUserName" bindingOperationName="uppercaseUserName" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="3fe7db5a-f1d3-48ea-a10e-c861ec33ca73" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:rpc="http://foo.bar/rpcliteralservice">
+</definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:endpoint>http://piotrooo:8088/mockRpcLiteralServiceBinding</con:endpoint></con:endpoints><con:operation id="a0a77db0-49c5-4b16-8166-9f2c7fd74887" isOneWay="false" action="http://foo.bar/rpcliteralservice/#uppercaseUserName" name="uppercaseUserName" bindingOperationName="uppercaseUserName" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="3fe7db5a-f1d3-48ea-a10e-c861ec33ca73" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:rpc="http://foo.bar/rpcliteralservice">
    <soapenv:Header/>
    <soapenv:Body>
       <rpc:uppercaseUserName>
-         <userName>?</userName>
+         <userName>Piotr</userName>
       </rpc:uppercaseUserName>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#uppercaseUserName"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="6ba0fdc9-4057-4704-ae31-6a8cbb58deeb" isOneWay="false" action="http://foo.bar/rpcliteralservice/#appendPrefixToNumbers" name="appendPrefixToNumbers" bindingOperationName="appendPrefixToNumbers" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="780c70a9-6f91-407d-9bb2-e448a00cdc5b" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:rpc="http://foo.bar/rpcliteralservice" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#uppercaseUserName"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="6ba0fdc9-4057-4704-ae31-6a8cbb58deeb" isOneWay="false" action="http://foo.bar/rpcliteralservice/#appendPrefixToNumbers" name="appendPrefixToNumbers" bindingOperationName="appendPrefixToNumbers" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="780c70a9-6f91-407d-9bb2-e448a00cdc5b" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:rpc="http://foo.bar/rpcliteralservice" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
    <soapenv:Header/>
    <soapenv:Body>
       <rpc:appendPrefixToNumbers>
-         <numbers soapenc:arrayType="?" soapenc:offset="?" id="?" href="?"/>
-         <prefix>?</prefix>
+         <numbers soapenc:arrayType="xsd:int[]">
+         	<n>1</n>
+         	<n>2</n>
+         	<n>3</n>
+         </numbers>
+         <prefix>PREF</prefix>
       </rpc:appendPrefixToNumbers>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#appendPrefixToNumbers"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="22d01d84-52c2-4609-8364-1927e7c0bb7f" isOneWay="false" action="http://foo.bar/rpcliteralservice/#getUserContext" name="getUserContext" bindingOperationName="getUserContext" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="b0c455e1-6d01-4500-bf43-d3c00fd8b8f9" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:rpc="http://foo.bar/rpcliteralservice" xmlns:typ="http://foo.bar/rpcliteralservice/types">
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#appendPrefixToNumbers"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="22d01d84-52c2-4609-8364-1927e7c0bb7f" isOneWay="false" action="http://foo.bar/rpcliteralservice/#getUserContext" name="getUserContext" bindingOperationName="getUserContext" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="b0c455e1-6d01-4500-bf43-d3c00fd8b8f9" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:rpc="http://foo.bar/rpcliteralservice" xmlns:typ="http://foo.bar/rpcliteralservice/types">
    <soapenv:Header/>
    <soapenv:Body>
       <rpc:getUserContext>
          <typ:User>
-            <name>?</name>
-            <age>?</age>
+            <name>Piotr</name>
+            <age>27</age>
          </typ:User>
       </rpc:getUserContext>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#getUserContext"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="59b78ac4-187c-4e39-8006-6779777c9225" isOneWay="false" action="http://foo.bar/rpcliteralservice/#extractCompaniesNames" name="extractCompaniesNames" bindingOperationName="extractCompaniesNames" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="eeab614b-ed20-4af1-baa2-4d964581d453" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:rpc="http://foo.bar/rpcliteralservice" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#getUserContext"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="59b78ac4-187c-4e39-8006-6779777c9225" isOneWay="false" action="http://foo.bar/rpcliteralservice/#extractCompaniesNames" name="extractCompaniesNames" bindingOperationName="extractCompaniesNames" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="eeab614b-ed20-4af1-baa2-4d964581d453" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:rpc="http://foo.bar/rpcliteralservice" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
    <soapenv:Header/>
    <soapenv:Body>
       <rpc:extractCompaniesNames>
-         <companies soapenc:arrayType="?" soapenc:offset="?" id="?" href="?"/>
+         <companies soapenc:arrayType="ns:Companies[]">
+         	<c>
+         		<name>Company1</name>
+         		<postcode>11-111</postcode>
+         	</c>
+         	<c>
+         		<name>Company2</name>
+         		<postcode>22-222</postcode>
+         	</c>
+         	<c>
+         		<name>Company3</name>
+         		<postcode>33-333</postcode>
+         	</c>
+         </companies>
       </rpc:extractCompaniesNames>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#extractCompaniesNames"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="5370bc7e-329b-4934-acbc-b2fab92581b3" isOneWay="false" action="http://foo.bar/rpcliteralservice/#wrapErrors" name="wrapErrors" bindingOperationName="wrapErrors" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="00b2d8af-4bca-4614-8938-f454c4961821" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:rpc="http://foo.bar/rpcliteralservice" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#extractCompaniesNames"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="5370bc7e-329b-4934-acbc-b2fab92581b3" isOneWay="false" action="http://foo.bar/rpcliteralservice/#wrapErrors" name="wrapErrors" bindingOperationName="wrapErrors" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="00b2d8af-4bca-4614-8938-f454c4961821" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:rpc="http://foo.bar/rpcliteralservice" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
    <soapenv:Header/>
    <soapenv:Body>
       <rpc:wrapErrors>
-         <errors soapenc:arrayType="?" soapenc:offset="?" id="?" href="?"/>
+         <errors soapenc:arrayType="xsd:string[]">
+         	<e>Error no. 1</e>
+         	<e>Error no. 2</e>
+         	<e>Error no. 3</e>
+         </errors>
       </rpc:wrapErrors>
    </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#wrapErrors"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="654e53df-9988-4e08-a482-0a939f970fb0" isOneWay="false" action="http://foo.bar/rpcliteralservice/#authorizedMethod" name="authorizedMethod" bindingOperationName="authorizedMethod" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="738e45cc-278b-4e57-a2eb-d551dc257276" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:typ="http://foo.bar/rpcliteralservice/types" xmlns:rpc="http://foo.bar/rpcliteralservice">
    <soapenv:Header>
       <typ:ServiceAuth>
-         <token>?</token>
-         <id>?</id>
+         <token>test_token</token>
+         <id>1234234</id>
       </typ:ServiceAuth>
    </soapenv:Header>
    <soapenv:Body>
       <rpc:authorizedMethod>
-         <name>?</name>
-         <surname>?</surname>
+         <name>Piotr</name>
+         <surname>Olaszewski</surname>
       </rpc:authorizedMethod>
    </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#authorizedMethod"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="d803c409-cb08-4161-a224-4ad155423bd9" isOneWay="false" action="http://foo.bar/rpcliteralservice/#methodWithoutReturn" name="methodWithoutReturn" bindingOperationName="methodWithoutReturn" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="3d510c61-68b2-45e8-ada8-94fa4b9383f7" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:rpc="http://foo.bar/rpcliteralservice">
    <soapenv:Header/>
    <soapenv:Body>
       <rpc:methodWithoutReturn>
-         <userToken>user-toke-dfsdfsdf21fsdfb</userToken>
+         <userToken>user-token-dfsdfsdf21fsdfb</userToken>
       </rpc:methodWithoutReturn>
    </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://foo.bar/rpcliteralservice/#methodWithoutReturn"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="7c789a2e-89e9-4086-bee3-a166214fc75a" isOneWay="false" action="http://foo.bar/rpcliteralservice/#methodWithoutParameters" name="methodWithoutParameters" bindingOperationName="methodWithoutParameters" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="7696f310-164f-4acd-ac2c-0c605a669b02" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:rpc="http://foo.bar/rpcliteralservice">
