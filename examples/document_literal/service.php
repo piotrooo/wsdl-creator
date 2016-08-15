@@ -1,38 +1,36 @@
 <?php
-use Ouzo\Utilities\Arrays;
-use Ouzo\Utilities\Functions;
+/**
+ * Copyright (C) 2013-2016
+ * Piotr Olaszewski <piotroo89@gmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 use WSDL\Annotation\BindingType;
 use WSDL\Annotation\SoapBinding;
-use WSDL\Builder\Method;
-use WSDL\Builder\Parameter;
 use WSDL\Builder\WSDLBuilder;
-use WSDL\Lexer\Tokenizer;
 use WSDL\WSDL;
 
 require_once '../../vendor/autoload.php';
+require_once '../ExampleService.php';
+require_once '../MethodsProvider.php';
 
 ini_set("soap.wsdl_cache_enabled", 0);
-
-$tokenizer = new Tokenizer();
-
-$parameters1 = [Parameter::fromTokens($tokenizer->lex('string $userName'))];
-$return1 = Parameter::fromTokens($tokenizer->lex('string $uppercasedUserName'));
-
-$parameters2 = [
-    Parameter::fromTokens($tokenizer->lex('int[] $numbers')),
-    Parameter::fromTokens($tokenizer->lex('string $prefix'))
-];
-$return2 = Parameter::fromTokens($tokenizer->lex('string[] $numbersWithPrefix'));
-
-$parameters3 = [Parameter::fromTokens($tokenizer->lex('object $user { string $name int $age }'))];
-$return3 = Parameter::fromTokens($tokenizer->lex('object $userContext { int $id object $userInfo { string $name int $age } }'));
-
-$parameters4 = [Parameter::fromTokens($tokenizer->lex('object[] $companies { string $name int $postcode }'))];
-$return4 = Parameter::fromTokens($tokenizer->lex('string[] $companiesNames'));
-
-$parameters5 = [Parameter::fromTokens($tokenizer->lex('string[] $errors'))];
-$return5 = Parameter::fromTokens($tokenizer->lex('object $result { boolean $result string[] $errors }'));
-
 
 $builder = WSDLBuilder::instance()
     ->setName('DocumentLiteralService')
@@ -42,11 +40,7 @@ $builder = WSDLBuilder::instance()
     ->setStyle(SoapBinding::DOCUMENT)
     ->setUse(SoapBinding::LITERAL)
     ->setSoapVersion(BindingType::SOAP_11)
-    ->setMethod(new Method('uppercaseUserName', $parameters1, $return1))
-    ->setMethod(new Method('appendPrefixToNumbers', $parameters2, $return2))
-    ->setMethod(new Method('getUserContext', $parameters3, $return3))
-    ->setMethod(new Method('extractCompaniesNames', $parameters4, $return4))
-    ->setMethod(new Method('wrapErrors', $parameters5, $return5));
+    ->setMethods(MethodsProvider::get());
 
 $wsdl = WSDL::fromBuilder($builder);
 
@@ -61,42 +55,5 @@ $server = new SoapServer('http://localhost:7777/wsdl-creator/examples/document_l
     'style' => SOAP_DOCUMENT,
     'use' => SOAP_LITERAL
 ]);
-$server->setClass('DocumentLiteralService');
+$server->setClass('ExampleService');
 $server->handle();
-
-class DocumentLiteralService
-{
-    public function uppercaseUserName($userName)
-    {
-        return strtoupper($userName);
-    }
-
-    public function appendPrefixToNumbers($numbers, $prefix)
-    {
-        return Arrays::map($numbers, Functions::prepend($prefix));
-    }
-
-    public function getUserContext($user)
-    {
-        $userContext = new stdClass();
-        $userContext->id = time();
-        $userContext->UserInfo = new stdClass();
-        $userContext->UserInfo->name = $user->name;
-        $userContext->UserInfo->age = $user->age;
-        return $userContext;
-    }
-
-    public function extractCompaniesNames($companies)
-    {
-        return Arrays::map($companies, Functions::extractField('name'));
-    }
-
-    public function wrapErrors($errors)
-    {
-        $result = new stdClass();
-        $result->result = false;
-        $result->errors = $errors;
-        return $result;
-    }
-}
-
