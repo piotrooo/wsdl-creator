@@ -31,7 +31,8 @@
     "psr-0": {
       "WSDL\\": "src/",
       "Tests\\": "tests/src/",
-      "Fixtures\\": "tests/"
+      "Fixtures\\": "tests/",
+      "Clients\\": "tests/"
     }
   }
 }
