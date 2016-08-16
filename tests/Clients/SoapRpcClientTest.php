@@ -152,4 +152,28 @@ class SoapRpcClientTest extends PHPUnit_Framework_TestCase
         //then
         $this->assertEquals('clientId [31242] name [Piotr] surname [Olaszewski]', $nameWithSurname);
     }
+
+    /**
+     * @test
+     */
+    public function shouldHandleMethodMethodWithoutReturn()
+    {
+        //when
+        $this->soapClient->methodWithoutReturn('user-token-342gdg453j');
+
+        //then
+        $this->assertXmlStringEqualsXmlString('<?xml version="1.0" encoding="UTF-8"?><SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://foo.bar/rpcliteralservice"><SOAP-ENV:Body><ns1:methodWithoutReturnResponse/></SOAP-ENV:Body></SOAP-ENV:Envelope>', $this->soapClient->__getLastResponse());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldHandleMethodMethodWithoutParameters()
+    {
+        //when
+        $responseForMethodWithoutParameters = $this->soapClient->methodWithoutParameters();
+
+        //then
+        $this->assertEquals('method without parameters', $responseForMethodWithoutParameters);
+    }
 }
