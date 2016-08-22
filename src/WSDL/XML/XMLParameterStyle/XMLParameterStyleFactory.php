@@ -21,35 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-namespace WSDL\XML\XMLStyle;
+namespace WSDL\XML\XMLParameterStyle;
 
 use Exception;
 use WSDL\Annotation\SoapBinding;
-use WSDL\XML\XMLParameterStyle\XMLParameterStyleFactory;
 
 /**
- * XMLStyleFactory
+ * XMLParameterStyleFactory
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class XMLStyleFactory
+class XMLParameterStyleFactory
 {
     /**
-     * @param string $style
+     * @var XMLParameterStyle
+     */
+    private $XMLParameterStyle;
+
+    private function __construct(XMLParameterStyle $XMLParameterStyle)
+    {
+        $this->XMLParameterStyle = $XMLParameterStyle;
+    }
+
+    /**
      * @param string $parameterStyle
-     * @return XMLStyle
+     * @return self
      * @throws Exception
      */
-    public static function create($style, $parameterStyle = SoapBinding::BARE)
+    public static function create($parameterStyle)
     {
-        $XMLParameterStyle = XMLParameterStyleFactory::create($parameterStyle);
-        switch ($style) {
-            case SoapBinding::RPC:
-                return new XMLRpcStyle($XMLParameterStyle);
-            case SoapBinding::DOCUMENT:
-                return new XMLDocumentStyle();
+        switch ($parameterStyle) {
+            case SoapBinding::WRAPPED:
+                return new self(new XMLBareParameterStyle());
+            case SoapBinding::BARE:
+                return new self(new XMLBareParameterStyle());
             default:
-                throw new Exception('Unsupported soap binding style [' . $style . ']');
+                throw new Exception('Unsupported parameter style [' . $parameterStyle . ']');
         }
     }
 }

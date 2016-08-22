@@ -77,7 +77,7 @@ class XMLProvider
     public function __construct(WSDLBuilder $builder)
     {
         $this->builder = $builder;
-        $this->XMLStyle = XMLStyleFactory::create($builder->getStyle());
+        $this->XMLStyle = XMLStyleFactory::create($builder->getStyle(), $builder->getParameterStyle());
         $this->XMLUse = XMLUseFactory::create($builder->getUse());
         $this->XMLSoapVersion = XMLSoapVersion::getTagFor($builder->getSoapVersion());
         $this->DOMDocument = new DOMDocument("1.0", "UTF-8");
