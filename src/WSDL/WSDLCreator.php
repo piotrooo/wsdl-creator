@@ -69,14 +69,18 @@ class WSDLCreator
         $this->_classParser->parse();
     }
 
-    public function renderWSDL()
+    public function renderWSDL($sendOut = true)
     {
-        header("Content-Type: text/xml");
         $xml = new XMLGenerator($this->_class, $this->_namespace, $this->_location);
         $xml
             ->setWSDLMethods($this->_classParser->getMethods())
             ->setBindingStyle($this->_bindingStyle)
             ->generate();
+        
+        if (!$sendOut)
+            return $xml->getGeneratedXML();
+        
+        header("Content-Type: text/xml");
         $xml->render();
     }
 
