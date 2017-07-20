@@ -53,6 +53,7 @@ class WSDLCreator
      * @var string
      */
     private $_locationSuffix;
+    private $_useMethodNamespace = true;
 
     public function __construct($class, $location, $locationSuffix = 'wsdl')
     {
@@ -74,7 +75,8 @@ class WSDLCreator
         header("Content-Type: text/xml");
         $xml = new XMLGenerator($this->_class, $this->_namespace, $this->_location);
         $xml
-            ->setWSDLMethods($this->_classParser->getMethods())
+            ->setWSDLMethods($this->_classParser->gtMethods())
+            ->useMethodNamespace($this->_useMethodNamespace)
             ->setBindingStyle($this->_bindingStyle)
             ->generate();
         $xml->render();
@@ -84,6 +86,12 @@ class WSDLCreator
     {
         $namespace = $this->_addSlashAtEndIfNotExists($namespace);
         $this->_namespace = $namespace;
+        return $this;
+    }
+
+    public function useMethodNamespace($useMethodNamespace)
+    {
+        $this->_useMethodNamespace = $useMethodNamespace;
         return $this;
     }
 
