@@ -75,7 +75,7 @@ class WSDLCreator
         header("Content-Type: text/xml");
         $xml = new XMLGenerator($this->_class, $this->_namespace, $this->_location);
         $xml
-            ->setWSDLMethods($this->_classParser->gtMethods())
+            ->setWSDLMethods($this->_classParser->getMethods())
             ->useMethodNamespace($this->_useMethodNamespace)
             ->setBindingStyle($this->_bindingStyle)
             ->generate();
