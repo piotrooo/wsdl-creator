@@ -44,6 +44,7 @@ class XMLGenerator
     private $_location;
     private $_targetNamespace;
     private $_targetNamespaceTypes;
+    private $_useMethodNamespace = true;
     /**
      * @var DOMDocument
      */
@@ -103,6 +104,12 @@ class XMLGenerator
         return $this;
     }
 
+    public function useMethodNamespace($useMethodNamespace)
+    {
+        $this->_useMethodNamespace = $useMethodNamespace;
+        return $this;
+    }
+    
     public function generate()
     {
         $this->_definitions()
@@ -372,11 +379,14 @@ class XMLGenerator
         ));
         $bindingElement->appendChild($soapBindingElement);
 
+        $elementOptions = array(
+            'use' => $this->_bindingStyle->bindingUse(),
+        );
+        if ($this->_useMethodNamespace === true) {
+            $elementOptions['namespace'] = $this->_targetNamespace;
+        }
         foreach ($this->_WSDLMethods as $method) {
-            $soapBodyElement = $this->createElementWithAttributes('soap:body', array(
-                'use' => $this->_bindingStyle->bindingUse(),
-                'namespace' => $this->_targetNamespace
-            ));
+            $soapBodyElement = $this->createElementWithAttributes('soap:body', $elementOptions);
 
             if ($this->_bindingStyle instanceof \WSDL\XML\Styles\RpcEncoded) {
                 $encodingUri = $this->_createAttributeWithValue('encodingStyle', 'http://schemas.xmlsoap.org/soap/encoding/');
