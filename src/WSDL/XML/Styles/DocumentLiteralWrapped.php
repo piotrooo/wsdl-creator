@@ -80,7 +80,9 @@ class DocumentLiteralWrapped extends Style
         $element = new TypesElement();
         $element->setName($method->getName() . 'Response');
         $returning = $method->returning();
-        $this->_generateElements($returning, $element);
+        if ($returning->getType() !== 'void') {
+            $this->_generateElements($returning, $element);
+        }
         return $element;
     }
 
