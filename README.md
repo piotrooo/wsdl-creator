@@ -8,10 +8,57 @@ PHP WSDL Creator
 [![License](https://poser.pugx.org/piotrooo/wsdl-creator/license)](https://packagist.org/packages/piotrooo/wsdl-creator)
 [![Gitter](https://badges.gitter.im/wsdl-creator/Lobby.svg)](https://gitter.im/wsdl-creator/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-Warning
-=======
+Class annotations
+=================
 
-Currently dev-master is unstable, because of big parser refactor.
+@WebService
+-----------
 
-Please use 1.4.2
-================
+Parameters:
+
+* `name` (`string "WebServiceAnnotations"`)
+* `targetNamespace` (`string "http://foo.bar/webserviceannotations"`)
+* `location` (`string "http://localhost/wsdl-creator/service.php"`)
+* `ns` (`string "http://foo.bar/webserviceannotations/types"`)
+
+@BindingType
+------------
+
+Parameters:
+
+* `value` (`enum {"SOAP_11", "SOAP_12"}`)
+
+@SoapBinding
+------------
+
+Parameters:
+
+* `style` (`enum {"RPC", "DOCUMENT"}`)
+* `use` (`enum {"LITERAL", "ENCODED"}`)
+* `parameterStyle` (`enum {"BARE", "WRAPPED"}`)
+
+Method annotations
+==================
+
+@WebMethod
+----------
+
+No parameters - mark method as a Web Service method
+
+@WebParam
+---------
+
+* `param` (`string "string $userName"`) [look at the param examples section](#param-examples)
+* `header` (`bool true|false`)
+
+@WebResult
+----------
+
+* `param` (`string "string $uppercasedUserName"`) [look at the param examples section](#param-examples)
+
+Param examples
+==============
+
+* `string $userName` - simple type
+* `object $user { string $name int $age }` - complex type
+* `int[] $numbers` - array of simple or complex types
