@@ -24,7 +24,7 @@
 namespace Tests\WSDL\XML\XMLUse;
 
 use DOMDocument;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use WSDL\Annotation\BindingType;
 use WSDL\XML\XMLSoapVersion\XMLSoapVersion;
 use WSDL\XML\XMLUse\XMLUse;
@@ -35,7 +35,7 @@ use WSDL\XML\XMLUse\XMLUseFactory;
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-abstract class XMLBaseUseTest extends PHPUnit_Framework_TestCase
+abstract class XMLBaseUseTest extends TestCase
 {
     /**
      * @var DOMDocument

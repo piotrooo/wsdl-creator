@@ -19,15 +19,12 @@
     }
   ],
   "require": {
-    "php": ">=5.6",
-    "letsdrink/ouzo-goodies": "1.6.0",
-    "doctrine/annotations": "1.2.7"
+    "php": ">=7.1",
+    "letsdrink/ouzo-goodies": "dev-master"
   },
   "require-dev": {
-    "phpunit/phpunit": "4.8.36",
-    "scrutinizer/ocular": "1.3.0",
-    "doctrine/instantiator": "1.0.5",
-    "phpdocumentor/reflection-common": "0.3"
+    "phpunit/phpunit": "~7.1.1",
+    "scrutinizer/ocular": "1.3.0"
   },
   "autoload": {
     "psr-0": {

@@ -24,7 +24,7 @@
 namespace Tests\WSDL\XML\XMLUse;
 
 use Exception;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use WSDL\XML\XMLUse\XMLUseFactory;
 
 /**
@@ -32,7 +32,7 @@ use WSDL\XML\XMLUse\XMLUseFactory;
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class XMLUseFactoryTest extends PHPUnit_Framework_TestCase
+class XMLUseFactoryTest extends TestCase
 {
     /**
      * @test

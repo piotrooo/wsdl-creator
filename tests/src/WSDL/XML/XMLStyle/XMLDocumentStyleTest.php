@@ -25,7 +25,7 @@ namespace Tests\WSDL\XML\XMLStyle;
 
 use DOMDocument;
 use Ouzo\Tests\Assert;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use WSDL\Parser\Node;
 use WSDL\XML\XMLStyle\XMLDocumentStyle;
 
@@ -34,7 +34,7 @@ use WSDL\XML\XMLStyle\XMLDocumentStyle;
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class XMLDocumentStyleTest extends PHPUnit_Framework_TestCase
+class XMLDocumentStyleTest extends TestCase
 {
     /**
      * @var DOMDocument

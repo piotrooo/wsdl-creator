@@ -23,11 +23,11 @@
  */
 namespace Tests\WSDL\Builder;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use WSDL\Builder\Parameter;
 use WSDL\Lexer\Tokenizer;
 
-class ParameterTest extends PHPUnit_Framework_TestCase
+class ParameterTest extends TestCase
 {
     /**
      * @test

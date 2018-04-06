@@ -24,7 +24,7 @@
 namespace Tests\WSDL\Builder;
 
 use Ouzo\Tests\CatchException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use WSDL\Builder\WSDLBuilder;
 
 /**
@@ -32,7 +32,7 @@ use WSDL\Builder\WSDLBuilder;
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class WSDLBuilderTest extends PHPUnit_Framework_TestCase
+class WSDLBuilderTest extends TestCase
 {
     /**
      * @test

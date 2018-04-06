@@ -24,7 +24,7 @@
 namespace Tests\WSDL\XML\XMLSoapVersion;
 
 use Exception;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use WSDL\Annotation\BindingType;
 use WSDL\XML\XMLSoapVersion\XMLSoapVersion;
 
@@ -33,7 +33,7 @@ use WSDL\XML\XMLSoapVersion\XMLSoapVersion;
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class XMLSoapVersionTest extends PHPUnit_Framework_TestCase
+class XMLSoapVersionTest extends TestCase
 {
     /**
      * @test

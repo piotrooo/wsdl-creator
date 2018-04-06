@@ -23,7 +23,7 @@
  */
 namespace Tests\WSDL\Parser;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use WSDL\Parser\Node;
 
 /**
@@ -31,7 +31,7 @@ use WSDL\Parser\Node;
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class NodeTest extends PHPUnit_Framework_TestCase
+class NodeTest extends TestCase
 {
     /**
      * @test

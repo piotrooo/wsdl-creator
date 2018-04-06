@@ -25,7 +25,7 @@ namespace Tests\WSDL\Builder;
 
 use Ouzo\Tests\Assert;
 use Ouzo\Tests\CatchException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use WSDL\Annotation\BindingType;
 use WSDL\Annotation\SoapBinding;
 use WSDL\Builder\AnnotationWSDLBuilder;
@@ -35,7 +35,7 @@ use WSDL\Builder\AnnotationWSDLBuilder;
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class AnnotationWSDLBuilderTest extends PHPUnit_Framework_TestCase
+class AnnotationWSDLBuilderTest extends TestCase
 {
     /**
      * @test

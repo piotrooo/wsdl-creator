@@ -24,7 +24,7 @@
 namespace Tests\WSDL\Builder;
 
 use InvalidArgumentException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use WSDL\Annotation\BindingType;
 use WSDL\Annotation\SoapBinding;
 use WSDL\Builder\IsValid;
@@ -34,7 +34,7 @@ use WSDL\Builder\IsValid;
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class IsValidTest extends PHPUnit_Framework_TestCase
+class IsValidTest extends TestCase
 {
     /**
      * @test
@@ -47,6 +47,7 @@ class IsValidTest extends PHPUnit_Framework_TestCase
         IsValid::style($style);
 
         //then no exception
+        $this->assertTrue(true);
     }
 
     public function validStyles()
@@ -84,6 +85,7 @@ class IsValidTest extends PHPUnit_Framework_TestCase
         IsValid::useStyle($use);
 
         //then no exception
+        $this->assertTrue(true);
     }
 
     public function validUses()
@@ -121,6 +123,7 @@ class IsValidTest extends PHPUnit_Framework_TestCase
         IsValid::soapVersion($soapVersion);
 
         //then no exception
+        $this->assertTrue(true);
     }
 
     public function validSoapVersions()
@@ -156,6 +159,7 @@ class IsValidTest extends PHPUnit_Framework_TestCase
         IsValid::notEmpty('some value');
 
         //then no exception
+        $this->assertTrue(true);
     }
 
     /**
@@ -214,6 +218,7 @@ class IsValidTest extends PHPUnit_Framework_TestCase
         IsValid::parameterStyle($parameterStyle, SoapBinding::DOCUMENT);
 
         //then no exception
+        $this->assertTrue(true);
     }
 
     public function validParameterStyles()

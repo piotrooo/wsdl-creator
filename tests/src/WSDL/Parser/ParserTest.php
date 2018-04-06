@@ -26,7 +26,7 @@ namespace Tests\WSDL\Lexer;
 use Ouzo\Tests\Assert;
 use Ouzo\Tests\CatchException;
 use Ouzo\Utilities\Arrays;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use WSDL\Lexer\Tokenizer;
 use WSDL\Parser\Node;
 use WSDL\Parser\Parser;
@@ -36,7 +36,7 @@ use WSDL\Parser\Parser;
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class ParserTest extends PHPUnit_Framework_TestCase
+class ParserTest extends TestCase
 {
     /**
      * @test
@@ -52,12 +52,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
         //then
         Assert::thatArray($nodes)
             ->extracting('type', 'name', 'isArray', 'elements')
-            ->containsExactly(
-                array('int'),
-                array('$age'),
-                array(false),
-                array(array())
-            );
+            ->containsExactly(['int', '$age', false, []]);
     }
 
     /**
@@ -74,12 +69,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
         //then
         Assert::thatArray($nodes)
             ->extracting('type', 'name', 'isArray', 'elements')
-            ->containsExactly(
-                array('int'),
-                array('$age'),
-                array(true),
-                array(array())
-            );
+            ->containsExactly(['int', '$age', true, []]);
     }
 
     /**
@@ -96,21 +86,15 @@ class ParserTest extends PHPUnit_Framework_TestCase
         //then
         Assert::thatArray($nodes)
             ->extracting('type', 'name', 'isArray')
-            ->containsExactly(
-                array('object'),
-                array('$user'),
-                array(false)
-            );
+            ->containsExactly(['object', '$user', false]);
 
         /** @var Node $node */
         $node = Arrays::first($nodes);
         Assert::thatArray($node->getElements())
             ->extracting('type', 'name', 'isArray', 'elements')
             ->containsExactly(
-                array('string', 'bool'),
-                array('$name', '$isActive'),
-                array(false, false),
-                array(array(), array())
+                ['string', '$name', false, []],
+                ['bool', '$isActive', false, []]
             );
     }
 
@@ -128,21 +112,15 @@ class ParserTest extends PHPUnit_Framework_TestCase
         //then
         Assert::thatArray($nodes)
             ->extracting('type', 'name', 'isArray')
-            ->containsExactly(
-                array('object'),
-                array('$user'),
-                array(true)
-            );
+            ->containsExactly(['object', '$user', true]);
 
         /** @var Node $node */
         $node = Arrays::first($nodes);
         Assert::thatArray($node->getElements())
             ->extracting('type', 'name', 'isArray', 'elements')
             ->containsExactly(
-                array('string', 'bool'),
-                array('$name', '$isActive'),
-                array(false, false),
-                array(array(), array())
+                ['string', '$name', false, []],
+                ['bool', '$isActive', false, []]
             );
     }
 
@@ -162,9 +140,8 @@ class ParserTest extends PHPUnit_Framework_TestCase
         Assert::thatArray($nodes)
             ->extracting('type', 'name', 'isArray')
             ->containsExactly(
-                array('int', 'object'),
-                array('$age', '$user'),
-                array(false, false)
+                ['int', '$age', false],
+                ['object', '$user', false]
             );
 
         /** @var Node $node */
@@ -176,10 +153,8 @@ class ParserTest extends PHPUnit_Framework_TestCase
         Assert::thatArray($node->getElements())
             ->extracting('type', 'name', 'isArray', 'elements')
             ->containsExactly(
-                array('string', 'bool'),
-                array('$name', '$isActive'),
-                array(false, false),
-                array(array(), array())
+                ['string', '$name', false, []],
+                ['bool', '$isActive', false, []]
             );
     }
 
@@ -197,21 +172,15 @@ class ParserTest extends PHPUnit_Framework_TestCase
         //then
         Assert::thatArray($nodes)
             ->extracting('type', 'name', 'isArray')
-            ->containsExactly(
-                array('object'),
-                array('$user'),
-                array(false)
-            );
+            ->containsExactly(['object', '$user', false]);
 
         /** @var Node $node */
         $node = Arrays::first($nodes);
         Assert::thatArray($node->getElements())
             ->extracting('type', 'name', 'isArray', 'elements')
             ->containsExactly(
-                array('string', 'bool'),
-                array('$name', '$isActive'),
-                array(true, false),
-                array(array(), array())
+                ['string', '$name', true, []],
+                ['bool', '$isActive', false, []]
             );
     }
 
@@ -229,22 +198,13 @@ class ParserTest extends PHPUnit_Framework_TestCase
         //then
         Assert::thatArray($nodes)
             ->extracting('type', 'name', 'isArray')
-            ->containsExactly(
-                array('object'),
-                array('$user'),
-                array(false)
-            );
+            ->containsExactly(['object', '$user', false]);
 
         /** @var Node $node */
         $node = Arrays::first($nodes);
         Assert::thatArray($node->getElements())
             ->extracting('type', 'name', 'isArray', 'elements')
-            ->containsExactly(
-                array('className'),
-                array('\Foo\Bar\Baz'),
-                array(false),
-                array(array())
-            );
+            ->containsExactly(['className', '\Foo\Bar\Baz', false, []]);
     }
 
     /**

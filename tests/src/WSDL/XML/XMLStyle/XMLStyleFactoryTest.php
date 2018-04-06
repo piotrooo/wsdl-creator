@@ -24,7 +24,7 @@
 namespace Tests\WSDL\XML\XMLStyle;
 
 use Exception;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use WSDL\Annotation\SoapBinding;
 use WSDL\XML\XMLStyle\XMLStyleFactory;
 
@@ -33,7 +33,7 @@ use WSDL\XML\XMLStyle\XMLStyleFactory;
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class XMLStyleFactoryTest extends PHPUnit_Framework_TestCase
+class XMLStyleFactoryTest extends TestCase
 {
     /**
      * @test

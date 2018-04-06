@@ -24,7 +24,7 @@
 namespace Tests\WSDL\XML;
 
 use Ouzo\Utilities\Path;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use WSDL\Annotation\BindingType;
 use WSDL\Annotation\SoapBinding;
 use WSDL\Builder\Method;
@@ -38,7 +38,7 @@ use WSDL\XML\XMLProvider;
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class XMLProviderTest extends PHPUnit_Framework_TestCase
+class XMLProviderTest extends TestCase
 {
     /**
      * @test

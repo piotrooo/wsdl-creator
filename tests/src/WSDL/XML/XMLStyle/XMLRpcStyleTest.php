@@ -25,7 +25,7 @@ namespace Tests\WSDL\XML\XMLStyle;
 
 use DOMDocument;
 use Ouzo\Tests\Assert;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use WSDL\Builder\Parameter;
 use WSDL\Parser\Node;
 use WSDL\XML\XMLStyle\XMLRpcStyle;
@@ -35,7 +35,7 @@ use WSDL\XML\XMLStyle\XMLRpcStyle;
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class XMLRpcStyleTest extends PHPUnit_Framework_TestCase
+class XMLRpcStyleTest extends TestCase
 {
     /**
      * @var DOMDocument

@@ -25,7 +25,7 @@ namespace Clients;
 
 use Fixtures\WsdlProvider;
 use Ouzo\Tests\Assert;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use SoapClient;
 use SoapHeader;
 use stdClass;
@@ -35,7 +35,7 @@ use stdClass;
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class SoapRpcClientTest extends PHPUnit_Framework_TestCase
+class SoapRpcClientTest extends TestCase
 {
     /**
      * @var SoapClient
