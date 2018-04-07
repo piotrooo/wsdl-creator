@@ -35,23 +35,18 @@ class Tokenizer
     /**
      * @var array
      */
-    private static $tokenMap = array(
+    private static $tokenMap = [
         '/\s*((?:[\\\]{1,2}\w+|\w+[\\\]{1,2})(?:\w+[\\\]{0,2})+)\s*/Am' => Token::CLASS_NAME,
         '/\s*\w+\s*/Am' => Token::TYPE,
         '/\s*\$\w+\s*/Am' => Token::NAME,
         '/\s*\[\]\s*/Am' => Token::ARRAYS,
         '/\s*\{\s*/Am' => Token::OPEN_OBJECT,
         '/\s*\}\s*/Am' => Token::CLOSE_OBJECT
-    );
+    ];
 
-    /**
-     * @param string $string
-     * @return array
-     * @throws Exception
-     */
-    public function lex($string)
+    public function lex(string $string): array
     {
-        $tokens = array();
+        $tokens = [];
         $offset = 0;
         while (isset($string[$offset])) {
             foreach (self::$tokenMap as $regex => $token) {

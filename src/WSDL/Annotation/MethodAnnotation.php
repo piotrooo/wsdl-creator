@@ -33,10 +33,5 @@ use WSDL\Builder\MethodBuilder;
  */
 interface MethodAnnotation
 {
-    /**
-     * @param MethodBuilder $builder
-     * @param ReflectionMethod $method
-     * @return void
-     */
-    public function build(MethodBuilder $builder, ReflectionMethod $method);
+    public function build(MethodBuilder $builder, ReflectionMethod $method): void;
 }

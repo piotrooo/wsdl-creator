@@ -33,12 +33,7 @@ use WSDL\Annotation\BindingType;
  */
 class XMLSoapVersion
 {
-    /**
-     * @param string $version
-     * @return string
-     * @throws Exception
-     */
-    public static function getTagFor($version)
+    public static function getTagFor(string $version): string
     {
         switch ($version) {
             case BindingType::SOAP_11:

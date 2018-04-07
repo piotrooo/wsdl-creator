@@ -61,7 +61,7 @@ class Parser
     /**
      * @param TokenObject[] $tokens
      */
-    public function __construct($tokens)
+    public function __construct(array $tokens)
     {
         $this->tokens = $tokens;
         $this->position = 0;
@@ -70,12 +70,15 @@ class Parser
     /**
      * @return Node[]
      */
-    public function S()
+    public function S(): array
     {
         return $this->P();
     }
 
-    private function P()
+    /**
+     * @return Node[]
+     */
+    private function P(): array
     {
         $type = $this->T();
         list($isArray, $name, $elements) = $this->R();
@@ -85,7 +88,7 @@ class Parser
         return $nodes;
     }
 
-    private function T()
+    private function T(): string
     {
         $token = $this->shift();
         if ($token->getName() == Token::TYPE) {
@@ -94,7 +97,7 @@ class Parser
         throw new ParserException('Wrong type');
     }
 
-    private function R()
+    private function R(): array
     {
         if ($this->lookahead()->getName() == Token::ARRAYS) {
             $this->shift();
@@ -106,27 +109,33 @@ class Parser
             $elements = $this->O();
             $isArray = false;
         }
-        return array($isArray, $name, $elements);
+        return [$isArray, $name, $elements];
     }
 
-    private function I()
+    /**
+     * @return Node[]
+     */
+    private function I(): array
     {
         if ($this->lookahead()->getName() != Token::EOF && $this->lookahead()->getName() != Token::CLOSE_OBJECT) {
             return $this->P();
         }
-        return array();
+        return [];
     }
 
-    private function N()
+    private function N(): string
     {
         $token = $this->shift();
-        if (in_array($token->getName(), array(Token::NAME, Token::CLASS_NAME))) {
+        if (in_array($token->getName(), [Token::NAME, Token::CLASS_NAME])) {
             return $token->getValue();
         }
         throw new ParserException('Wrong name');
     }
 
-    private function O()
+    /**
+     * @return Node[]
+     */
+    private function O(): array
     {
         $token = $this->lookahead();
         $this->checkObjectHasOpenBracket($token);
@@ -136,10 +145,10 @@ class Parser
             $this->checkObjectHasCloseBracket();
             return $node;
         }
-        return array();
+        return [];
     }
 
-    private function checkObjectHasOpenBracket(TokenObject $token)
+    private function checkObjectHasOpenBracket(TokenObject $token): void
     {
         $tokenObject = $this->lookAt(($this->position - 2));
         if ($tokenObject && Strings::equalsIgnoreCase($tokenObject->getValue(), self::OBJECT_TYPE) && $token->getName() != Token::OPEN_OBJECT) {
@@ -147,7 +156,7 @@ class Parser
         }
     }
 
-    private function checkObjectHasCloseBracket()
+    private function checkObjectHasCloseBracket(): void
     {
         $token = $this->shift();
         if ($token->getName() != Token::CLOSE_OBJECT) {
@@ -155,17 +164,17 @@ class Parser
         }
     }
 
-    private function lookahead()
+    private function lookahead(): TokenObject
     {
         return $this->tokens[$this->position];
     }
 
-    private function lookAt($position)
+    private function lookAt($position): TokenObject
     {
         return $this->tokens[$position];
     }
 
-    private function shift()
+    private function shift(): TokenObject
     {
         $token = $this->lookahead();
         $this->position++;

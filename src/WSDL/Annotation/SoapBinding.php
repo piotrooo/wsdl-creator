@@ -62,10 +62,7 @@ final class SoapBinding implements ClassAnnotation
      */
     public $parameterStyle = self::BARE;
 
-    /**
-     * @inheritdoc
-     */
-    public function build(WSDLBuilder $builder, ReflectionClass $class)
+    public function build(WSDLBuilder $builder, ReflectionClass $class): void
     {
         $builder
             ->setStyle($this->style)

@@ -33,12 +33,7 @@ use WSDL\Annotation\SoapBinding;
  */
 class XMLUseFactory
 {
-    /**
-     * @param string $use
-     * @return XMLUse
-     * @throws Exception
-     */
-    public static function create($use)
+    public static function create(string $use): XMLUse
     {
         switch ($use) {
             case SoapBinding::LITERAL:

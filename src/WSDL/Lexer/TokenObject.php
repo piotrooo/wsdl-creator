@@ -39,38 +39,23 @@ class TokenObject
      */
     private $value;
 
-    /**
-     * @param string $name
-     * @param string $value
-     */
-    private function __construct($name, $value)
+    private function __construct(string $name, string $value)
     {
         $this->name = $name;
         $this->value = $value;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
-    public function getValue()
+    public function getValue(): string
     {
         return $this->value;
     }
 
-    /**
-     * @param string $name
-     * @param string $value
-     * @return TokenObject
-     */
-    public static function create($name, $value)
+    public static function create(string $name, string $value): TokenObject
     {
         return new self($name, $value);
     }

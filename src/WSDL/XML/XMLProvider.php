@@ -71,9 +71,6 @@ class XMLProvider
      */
     private $definitionsRootNode;
 
-    /**
-     * @param WSDLBuilder $builder
-     */
     public function __construct(WSDLBuilder $builder)
     {
         $this->builder = $builder;
@@ -84,19 +81,13 @@ class XMLProvider
         $this->DOMDocument->formatOutput = true;
     }
 
-    /**
-     * @return string
-     */
-    public function getXml()
+    public function getXml(): string
     {
         $this->xml = $this->DOMDocument->saveXML();
         return $this->xml;
     }
 
-    /**
-     * @return void
-     */
-    public function generate()
+    public function generate(): void
     {
         $this->definitions()
             ->types()
@@ -106,10 +97,7 @@ class XMLProvider
             ->service();
     }
 
-    /**
-     * @return $this
-     */
-    private function definitions()
+    private function definitions(): XMLProvider
     {
         $targetNamespace = $this->builder->getTargetNamespace();
         $definitionsElement = $this->createElementWithAttributes('definitions', [
@@ -127,10 +115,7 @@ class XMLProvider
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    private function service()
+    private function service(): XMLProvider
     {
         $name = $this->builder->getName();
         $serviceElement = $this->createElementWithAttributes('service', ['name' => $name . 'Service']);
@@ -146,10 +131,7 @@ class XMLProvider
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    private function binding()
+    private function binding(): XMLProvider
     {
         $name = $this->builder->getName();
         $targetNamespace = $this->builder->getTargetNamespace();
@@ -177,15 +159,7 @@ class XMLProvider
         return $this;
     }
 
-    /**
-     * @param string $methodName
-     * @param DOMElement $soapBodyElement
-     * @param DOMElement $element
-     * @param string $elementName
-     * @param string $headerName
-     * @param Parameter|null $header
-     */
-    private function bindingElement($methodName, DOMElement $soapBodyElement, DOMElement $element, $elementName, $headerName, Parameter $header = null)
+    private function bindingElement(string $methodName, DOMElement $soapBodyElement, DOMElement $element, string $elementName, string $headerName, Parameter $header = null): void
     {
         $targetNamespace = $this->builder->getTargetNamespace();
         $inputElement = $this->createElement($elementName);
@@ -201,10 +175,7 @@ class XMLProvider
         $element->appendChild($inputElement);
     }
 
-    /**
-     * @return $this
-     */
-    private function portType()
+    private function portType(): XMLProvider
     {
         $name = $this->builder->getName();
         $portTypeElement = $this->createElementWithAttributes('portType', ['name' => $name . 'PortType']);
@@ -226,10 +197,7 @@ class XMLProvider
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    private function message()
+    private function message(): XMLProvider
     {
         foreach ($this->builder->getMethods() as $method) {
             $name = $method->getName();
@@ -245,12 +213,7 @@ class XMLProvider
         return $this;
     }
 
-    /**
-     * @param string $methodName
-     * @param string $headerSuffix
-     * @param Parameter|null $parameter
-     */
-    private function messageHeaderIfNeeded($methodName, $headerSuffix, Parameter $parameter = null)
+    private function messageHeaderIfNeeded(string $methodName, string $headerSuffix, Parameter $parameter = null): void
     {
         if ($parameter) {
             $messageHeaderElement = $this->messageParts($methodName . $headerSuffix, $parameter->getNode());
@@ -263,7 +226,7 @@ class XMLProvider
      * @param Node|Node[]|null $nodes
      * @return DOMElement
      */
-    private function messageParts($methodName, $nodes)
+    private function messageParts(string $methodName, $nodes): DOMElement
     {
         $messageElement = $this->createElementWithAttributes('message', ['name' => $methodName]);
         if ($nodes !== null) {
@@ -276,10 +239,7 @@ class XMLProvider
         return $messageElement;
     }
 
-    /**
-     * @return $this
-     */
-    private function types()
+    private function types(): XMLProvider
     {
         $ns = $this->builder->getNs();
         $typesElement = $this->createElement('types');
@@ -299,23 +259,12 @@ class XMLProvider
         return $this;
     }
 
-    /**
-     * @param string $elementName
-     * @param array $attributes
-     * @param string $value
-     * @return DOMElement
-     */
-    private function createElementWithAttributes($elementName, $attributes, $value = '')
+    private function createElementWithAttributes(string $elementName, array $attributes, string $value = ''): DOMElement
     {
         return XMLAttributeHelper::forDOM($this->DOMDocument)->createElementWithAttributes($elementName, $attributes, $value);
     }
 
-    /**
-     * @param string $elementName
-     * @param string $value
-     * @return DOMElement
-     */
-    private function createElement($elementName, $value = '')
+    private function createElement(string $elementName, string $value = ''): DOMElement
     {
         return XMLAttributeHelper::forDOM($this->DOMDocument)->createElement($elementName, $value);
     }

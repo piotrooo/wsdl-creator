@@ -49,10 +49,7 @@ final class WebParam implements MethodAnnotation
      */
     public $header = false;
 
-    /**
-     * @inheritdoc
-     */
-    public function build(MethodBuilder $builder, ReflectionMethod $method)
+    public function build(MethodBuilder $builder, ReflectionMethod $method): void
     {
         $tokenizer = new Tokenizer();
         $builder->setParameter(Parameter::fromTokens($tokenizer->lex($this->param), $this->header));

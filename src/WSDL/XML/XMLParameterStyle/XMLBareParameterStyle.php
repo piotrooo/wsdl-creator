@@ -30,5 +30,4 @@ namespace WSDL\XML\XMLParameterStyle;
  */
 class XMLBareParameterStyle implements XMLParameterStyle
 {
-
 }

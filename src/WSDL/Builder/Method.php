@@ -51,19 +51,16 @@ class Method
     /**
      * @param string $name
      * @param Parameter[] $parameters
-     * @param Parameter $return
+     * @param Parameter|null $return
      */
-    public function __construct($name, array $parameters, Parameter $return = null)
+    public function __construct(string $name, array $parameters, Parameter $return = null)
     {
         $this->name = $name;
         $this->parameters = $parameters;
         $this->return = $return;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -71,15 +68,12 @@ class Method
     /**
      * @return Parameter[]
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         return $this->parameters;
     }
 
-    /**
-     * @return Parameter|null
-     */
-    public function getHeaderParameter()
+    public function getHeaderParameter(): ?Parameter
     {
         return Arrays::find($this->parameters, function (Parameter $parameter) {
             return $parameter->isHeader();
@@ -87,9 +81,9 @@ class Method
     }
 
     /**
-     * @return Parameter[]|array
+     * @return Parameter[]
      */
-    public function getNoHeaderParameters()
+    public function getNoHeaderParameters(): array
     {
         return Arrays::filter($this->parameters, function (Parameter $parameter) {
             return !$parameter->isHeader();
@@ -99,23 +93,17 @@ class Method
     /**
      * @return Node[]
      */
-    public function getNoHeaderParametersNodes()
+    public function getNoHeaderParametersNodes(): array
     {
         return Arrays::map($this->getNoHeaderParameters(), Functions::extractExpression('getNode()'));
     }
 
-    /**
-     * @return Parameter
-     */
-    public function getReturn()
+    public function getReturn(): ?Parameter
     {
         return $this->return;
     }
 
-    /**
-     * @return Parameter|null
-     */
-    public function getHeaderReturn()
+    public function getHeaderReturn(): ?Parameter
     {
         if (Optional::fromNullable($this->return)->isHeader()->or(false)) {
             return $this->return;
@@ -123,10 +111,7 @@ class Method
         return null;
     }
 
-    /**
-     * @return Node|null
-     */
-    public function getReturnNode()
+    public function getReturnNode(): ?Node
     {
         return Optional::fromNullable($this->return)->getNode()->or(null);
     }

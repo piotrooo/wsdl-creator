@@ -34,13 +34,7 @@ use WSDL\Annotation\SoapBinding;
  */
 class IsValid
 {
-    /**
-     * @param mixed $value
-     * @param string|null $customMessage
-     * @return void
-     * @throws InvalidArgumentException
-     */
-    public static function notEmpty($value, $customMessage = null)
+    public static function notEmpty($value, string $customMessage = null): void
     {
         if (empty($value)) {
             $message = $customMessage ?: 'Value cannot be empty';
@@ -48,35 +42,19 @@ class IsValid
         }
     }
 
-    /**
-     * @param string $style
-     * @return void
-     * @throws InvalidArgumentException
-     */
-    public static function style($style)
+    public static function style(string $style): void
     {
         $styles = [SoapBinding::RPC, SoapBinding::DOCUMENT];
         self::checkInList($style, $styles, 'Invalid style [' . $style . '] available styles: [' . implode(', ', $styles) . ']');
     }
 
-    /**
-     * @param string $use
-     * @return void
-     * @throws InvalidArgumentException
-     */
-    public static function useStyle($use)
+    public static function useStyle(string $use): void
     {
         $uses = [SoapBinding::LITERAL, SoapBinding::ENCODED];
         self::checkInList($use, $uses, 'Invalid use [' . $use . '] available uses: [' . implode(', ', $uses) . ']');
     }
 
-    /**
-     * @param string $parameterStyle
-     * @param string $style
-     * @return void
-     * @throws InvalidArgumentException
-     */
-    public static function parameterStyle($parameterStyle, $style)
+    public static function parameterStyle(string $parameterStyle, string $style): void
     {
         $parameterStyles = [SoapBinding::BARE, SoapBinding::WRAPPED];
         self::checkInList($parameterStyle, $parameterStyles, 'Invalid parameter style [' . $parameterStyle . '] available parameter styles: [' . implode(', ', $parameterStyles) . ']');
@@ -85,25 +63,13 @@ class IsValid
         }
     }
 
-    /**
-     * @param string $version
-     * @return void
-     * @throws InvalidArgumentException
-     */
-    public static function soapVersion($version)
+    public static function soapVersion(string $version): void
     {
         $bindingTypes = [BindingType::SOAP_11, BindingType::SOAP_12];
         self::checkInList($version, $bindingTypes, 'Invalid binding type [' . $version . '] available types: [' . implode(', ', $bindingTypes) . ']');
     }
 
-    /**
-     * @param string $value
-     * @param array $list
-     * @param string $errorMessage
-     * @return void
-     * @throws InvalidArgumentException
-     */
-    public static function checkInList($value, $list, $errorMessage)
+    public static function checkInList(string $value, array $list, string $errorMessage): void
     {
         if (!in_array($value, $list)) {
             throw new InvalidArgumentException($errorMessage);

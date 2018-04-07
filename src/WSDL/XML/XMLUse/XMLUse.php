@@ -34,21 +34,7 @@ use WSDL\Builder\Parameter;
  */
 interface XMLUse
 {
-    /**
-     * @param DOMDocument $DOMDocument
-     * @param string $targetNamespace
-     * @param string $soapVersion
-     * @return DOMElement
-     */
-    public function generateSoapBody(DOMDocument $DOMDocument, $targetNamespace, $soapVersion);
+    public function generateSoapBody(DOMDocument $DOMDocument, string $targetNamespace, string $soapVersion): DOMElement;
 
-    /**
-     * @param DOMDocument $DOMDocument
-     * @param string $targetNamespace
-     * @param string $soapHeaderMessage
-     * @param Parameter|null $header
-     * @param string $soapVersion
-     * @return DOMElement|null
-     */
-    public function generateSoapHeaderIfNeeded(DOMDocument $DOMDocument, $targetNamespace, $soapHeaderMessage = '', Parameter $header = null, $soapVersion);
+    public function generateSoapHeaderIfNeeded(DOMDocument $DOMDocument, string $targetNamespace, string $soapHeaderMessage = '', Parameter $header = null, string $soapVersion): ?DOMElement;
 }

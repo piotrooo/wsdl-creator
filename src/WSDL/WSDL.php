@@ -39,38 +39,24 @@ class WSDL
      */
     private $xml;
 
-    /**
-     * @param string $xml
-     */
-    private function __construct($xml)
+    private function __construct(string $xml)
     {
         $this->xml = $xml;
     }
 
-    /**
-     * @return string
-     */
-    public function create()
+    public function create(): string
     {
         return $this->xml;
     }
 
-    /**
-     * @param WSDLBuilder $builder
-     * @return WSDL
-     */
-    public static function fromBuilder(WSDLBuilder $builder)
+    public static function fromBuilder(WSDLBuilder $builder): WSDL
     {
         $xml = new XMLProvider($builder);
         $xml->generate();
         return new self($xml->getXml());
     }
 
-    /**
-     * @param string $class
-     * @return WSDL
-     */
-    public static function fromAnnotations($class)
+    public static function fromAnnotations(string $class): WSDL
     {
         $annotationWSDLBuilder = new AnnotationWSDLBuilder($class);
         $WSDLBuilder = $annotationWSDLBuilder->build()->getBuilder();

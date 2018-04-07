@@ -43,12 +43,7 @@ class XMLParameterStyleFactory
         $this->XMLParameterStyle = $XMLParameterStyle;
     }
 
-    /**
-     * @param string $parameterStyle
-     * @return self
-     * @throws Exception
-     */
-    public static function create($parameterStyle)
+    public static function create(string $parameterStyle): XMLParameterStyleFactory
     {
         switch ($parameterStyle) {
             case SoapBinding::WRAPPED:

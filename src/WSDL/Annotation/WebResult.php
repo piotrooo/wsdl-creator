@@ -45,10 +45,7 @@ class WebResult implements MethodAnnotation
      */
     public $param;
 
-    /**
-     * @inheritdoc
-     */
-    public function build(MethodBuilder $builder, ReflectionMethod $method)
+    public function build(MethodBuilder $builder, ReflectionMethod $method): void
     {
         $tokenizer = new Tokenizer();
         $builder->setReturn(Parameter::fromTokens($tokenizer->lex($this->param)));

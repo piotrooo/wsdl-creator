@@ -35,19 +35,14 @@ use WSDL\Parser\Node;
  */
 interface XMLStyle
 {
-    /**
-     * @param DOMDocument $DOMDocument
-     * @param string $soapVersion
-     * @return DOMElement
-     */
-    public function generateBinding(DOMDocument $DOMDocument, $soapVersion);
+    public function generateBinding(DOMDocument $DOMDocument, string $soapVersion): DOMElement;
 
     /**
      * @param DOMDocument $DOMDocument
      * @param Node[] $nodes
      * @return DOMElement[]
      */
-    public function generateMessagePart(DOMDocument $DOMDocument, $nodes);
+    public function generateMessagePart(DOMDocument $DOMDocument, array $nodes): array;
 
     /**
      * @param DOMDocument $DOMDocument
@@ -55,5 +50,5 @@ interface XMLStyle
      * @param string $soapVersion
      * @return DOMElement[]
      */
-    public function generateTypes(DOMDocument $DOMDocument, $parameters, $soapVersion);
+    public function generateTypes(DOMDocument $DOMDocument, array $parameters, string $soapVersion): array;
 }

@@ -53,10 +53,7 @@ final class WebService implements ClassAnnotation
      */
     public $location;
 
-    /**
-     * @inheritdoc
-     */
-    public function build(WSDLBuilder $builder, ReflectionClass $class)
+    public function build(WSDLBuilder $builder, ReflectionClass $class): void
     {
         $name = $this->name ?: $class->getShortName();
         $builder

@@ -36,10 +36,7 @@ use WSDL\Builder\MethodBuilder;
  */
 final class WebMethod implements MethodAnnotation
 {
-    /**
-     * @inheritdoc
-     */
-    public function build(MethodBuilder $builder, ReflectionMethod $method)
+    public function build(MethodBuilder $builder, ReflectionMethod $method): void
     {
         $builder->setName($method->getShortName());
     }

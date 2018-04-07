@@ -43,48 +43,30 @@ class MethodBuilder
      */
     private $return;
 
-    /**
-     * @param string $name
-     * @return $this
-     */
-    public function setName($name)
+    public function setName(string $name): MethodBuilder
     {
         $this->name = $name;
         return $this;
     }
 
-    /**
-     * @param Parameter $parameter
-     * @return $this
-     */
-    public function setParameter(Parameter $parameter)
+    public function setParameter(Parameter $parameter): MethodBuilder
     {
         $this->parameters[] = $parameter;
         return $this;
     }
 
-    /**
-     * @param Parameter $parameter
-     * @return $this
-     */
-    public function setReturn(Parameter $parameter)
+    public function setReturn(Parameter $parameter): MethodBuilder
     {
         $this->return = $parameter;
         return $this;
     }
 
-    /**
-     * @return Method
-     */
-    public function build()
+    public function build(): Method
     {
         return new Method($this->name, $this->parameters, $this->return);
     }
 
-    /**
-     * @return MethodBuilder
-     */
-    public static function instance()
+    public static function instance(): MethodBuilder
     {
         return new self();
     }

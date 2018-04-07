@@ -33,10 +33,5 @@ use WSDL\Builder\WSDLBuilder;
  */
 interface ClassAnnotation
 {
-    /**
-     * @param WSDLBuilder $builder
-     * @param ReflectionClass $class
-     * @return void
-     */
-    public function build(WSDLBuilder $builder, ReflectionClass $class);
+    public function build(WSDLBuilder $builder, ReflectionClass $class): void;
 }

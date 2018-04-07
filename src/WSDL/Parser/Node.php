@@ -52,10 +52,10 @@ class Node
     /**
      * @param string $type
      * @param string $name
-     * @param boolean $isArray
+     * @param bool $isArray
      * @param Node[] $elements
      */
-    public function __construct($type, $name, $isArray, array $elements = array())
+    public function __construct(string $type, string $name, bool $isArray, array $elements = [])
     {
         $this->type = $type;
         $this->name = $name;
@@ -63,58 +63,37 @@ class Node
         $this->elements = $elements;
     }
 
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
-    public function getNameForArray()
+    public function getNameForArray(): string
     {
         return 'ArrayOf' . ucfirst($this->getSanitizedName());
     }
 
-    /**
-     * @return string
-     */
-    public function getNameForObject()
+    public function getNameForObject(): string
     {
         return Inflector::singularize(ucfirst($this->getSanitizedName()));
     }
 
-    /**
-     * @return string
-     */
-    public function getSanitizedName()
+    public function getSanitizedName(): string
     {
         return str_replace('$', '', $this->name);
     }
 
-    /**
-     * @return boolean
-     */
-    public function isArray()
+    public function isArray(): bool
     {
         return $this->isArray;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isObject()
+    public function isObject(): bool
     {
         return $this->type == Parser::OBJECT_TYPE;
     }
@@ -122,7 +101,7 @@ class Node
     /**
      * @return Node[]
      */
-    public function getElements()
+    public function getElements(): array
     {
         return $this->elements;
     }

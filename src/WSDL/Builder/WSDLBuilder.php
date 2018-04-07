@@ -23,7 +23,6 @@
  */
 namespace WSDL\Builder;
 
-use InvalidArgumentException;
 use WSDL\Annotation\BindingType;
 use WSDL\Annotation\SoapBinding;
 
@@ -71,167 +70,101 @@ class WSDLBuilder
      */
     private $methods;
 
-    /**
-     * @return WSDLBuilder
-     */
-    public static function instance()
+    public static function instance(): WSDLBuilder
     {
         return new self();
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     * @return $this
-     * @throws InvalidArgumentException
-     */
-    public function setName($name)
+    public function setName(string $name): WSDLBuilder
     {
         IsValid::notEmpty($name, 'Name cannot be empty');
         $this->name = $name;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getTargetNamespace()
+    public function getTargetNamespace(): string
     {
         return $this->targetNamespace;
     }
 
-    /**
-     * @param string $targetNamespace
-     * @return $this
-     * @throws InvalidArgumentException
-     */
-    public function setTargetNamespace($targetNamespace)
+    public function setTargetNamespace(string $targetNamespace): WSDLBuilder
     {
         IsValid::notEmpty($targetNamespace, 'Target namespace cannot be empty');
         $this->targetNamespace = $targetNamespace;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getNs()
+    public function getNs(): string
     {
         return $this->ns;
     }
 
-    /**
-     * @param string $ns
-     * @return $this
-     * @throws InvalidArgumentException
-     */
-    public function setNs($ns)
+    public function setNs(string $ns): WSDLBuilder
     {
         IsValid::notEmpty($ns, 'NS cannot be empty');
         $this->ns = $ns;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getLocation()
+    public function getLocation(): string
     {
         return $this->location;
     }
 
-    /**
-     * @param string $location
-     * @return $this
-     * @throws InvalidArgumentException
-     */
-    public function setLocation($location)
+    public function setLocation(string $location): WSDLBuilder
     {
         IsValid::notEmpty($location, 'Location cannot be empty');
         $this->location = $location;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getStyle()
+    public function getStyle(): string
     {
         return $this->style;
     }
 
-    /**
-     * @param string $style
-     * @return $this
-     * @throws InvalidArgumentException
-     */
-    public function setStyle($style)
+    public function setStyle(string $style): WSDLBuilder
     {
         IsValid::style($style);
         $this->style = $style;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getUse()
+    public function getUse(): string
     {
         return $this->use;
     }
 
-    /**
-     * @param string $use
-     * @return $this
-     */
-    public function setUse($use)
+    public function setUse(string $use): WSDLBuilder
     {
         IsValid::useStyle($use);
         $this->use = $use;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getParameterStyle()
+    public function getParameterStyle(): string
     {
         return $this->parameterStyle;
     }
 
-    /**
-     * @param string $parameterStyle
-     * @return $this
-     * @throws InvalidArgumentException
-     */
-    public function setParameterStyle($parameterStyle)
+    public function setParameterStyle(string $parameterStyle): WSDLBuilder
     {
         IsValid::parameterStyle($parameterStyle, $this->style);
         $this->parameterStyle = $parameterStyle;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getSoapVersion()
+    public function getSoapVersion(): string
     {
         return $this->soapVersion;
     }
 
-    /**
-     * @param string $soapVersion
-     * @return $this
-     * @throws InvalidArgumentException
-     */
-    public function setSoapVersion($soapVersion)
+    public function setSoapVersion(string $soapVersion): WSDLBuilder
     {
         IsValid::soapVersion($soapVersion);
         $this->soapVersion = $soapVersion;
@@ -241,16 +174,12 @@ class WSDLBuilder
     /**
      * @return Method[]
      */
-    public function getMethods()
+    public function getMethods(): array
     {
         return $this->methods;
     }
 
-    /**
-     * @param Method $method
-     * @return $this
-     */
-    public function setMethod(Method $method)
+    public function setMethod(Method $method): WSDLBuilder
     {
         $this->methods[] = $method;
         return $this;
@@ -260,7 +189,7 @@ class WSDLBuilder
      * @param Method[] $methods
      * @return $this
      */
-    public function setMethods(array $methods)
+    public function setMethods(array $methods): WSDLBuilder
     {
         foreach ($methods as $method) {
             $this->setMethod($method);

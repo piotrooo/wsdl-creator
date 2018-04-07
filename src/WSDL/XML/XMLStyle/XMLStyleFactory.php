@@ -34,13 +34,7 @@ use WSDL\XML\XMLParameterStyle\XMLParameterStyleFactory;
  */
 class XMLStyleFactory
 {
-    /**
-     * @param string $style
-     * @param string $parameterStyle
-     * @return XMLStyle
-     * @throws Exception
-     */
-    public static function create($style, $parameterStyle = SoapBinding::BARE)
+    public static function create(string $style, string $parameterStyle = SoapBinding::BARE): XMLStyle
     {
         $XMLParameterStyle = XMLParameterStyleFactory::create($parameterStyle);
         switch ($style) {

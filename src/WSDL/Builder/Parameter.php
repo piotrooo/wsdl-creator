@@ -44,28 +44,18 @@ class Parameter
      */
     private $header;
 
-    /**
-     * @param Node $node
-     * @param boolean $header
-     */
-    public function __construct(Node $node, $header = false)
+    public function __construct(Node $node, bool $header = false)
     {
         $this->node = $node;
         $this->header = $header;
     }
 
-    /**
-     * @return Node
-     */
-    public function getNode()
+    public function getNode(): Node
     {
         return $this->node;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isHeader()
+    public function isHeader(): bool
     {
         return $this->header;
     }
@@ -75,7 +65,7 @@ class Parameter
      * @param boolean $header
      * @return Parameter
      */
-    public static function fromTokens($tokens, $header = false)
+    public static function fromTokens(array $tokens, bool $header = false): Parameter
     {
         $parser = new Parser($tokens);
         return new Parameter(Arrays::firstOrNull($parser->S()), $header);

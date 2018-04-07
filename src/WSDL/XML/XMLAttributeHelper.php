@@ -39,21 +39,12 @@ class XMLAttributeHelper
      */
     private $DOMDocument;
 
-    /**
-     * @param DOMDocument $DOMDocument
-     */
     public function __construct(DOMDocument $DOMDocument)
     {
         $this->DOMDocument = $DOMDocument;
     }
 
-    /**
-     * @param string $elementName
-     * @param array $attributes
-     * @param string $value
-     * @return DOMElement
-     */
-    public function createElementWithAttributes($elementName, array $attributes, $value = '')
+    public function createElementWithAttributes(string $elementName, array $attributes, string $value = ''): DOMElement
     {
         $element = $this->createElement($elementName, $value);
         foreach ($attributes as $attributeName => $attributeValue) {
@@ -63,33 +54,19 @@ class XMLAttributeHelper
         return $element;
     }
 
-    /**
-     * @param string $attributeName
-     * @param string $value
-     * @return DOMAttr
-     */
-    public function createAttributeWithValue($attributeName, $value)
+    public function createAttributeWithValue(string $attributeName, string $value): DOMAttr
     {
         $attribute = $this->DOMDocument->createAttribute($attributeName);
         $attribute->value = $value;
         return $attribute;
     }
 
-    /**
-     * @param string $elementName
-     * @param string $value
-     * @return DOMElement
-     */
-    public function createElement($elementName, $value = '')
+    public function createElement(string $elementName, string $value = ''): DOMElement
     {
         return $this->DOMDocument->createElement($elementName, $value);
     }
 
-    /**
-     * @param DOMDocument $DOMDocument
-     * @return XMLAttributeHelper
-     */
-    public static function forDOM(DOMDocument $DOMDocument)
+    public static function forDOM(DOMDocument $DOMDocument): XMLAttributeHelper
     {
         return new self($DOMDocument);
     }

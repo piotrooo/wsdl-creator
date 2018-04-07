@@ -51,10 +51,7 @@ class AnnotationWSDLBuilder
      */
     private $annotationReader;
 
-    /**
-     * @param string $class
-     */
-    public function __construct($class)
+    public function __construct(string $class)
     {
         AnnotationRegistry::registerAutoloadNamespace('WSDL\Annotation', Path::join(__DIR__, '..', '..'));
         $this->class = $class;
@@ -62,20 +59,12 @@ class AnnotationWSDLBuilder
         $this->annotationReader = new AnnotationReader();
     }
 
-    /**
-     * @return ReflectionClass
-     */
-    private function reflectionClass()
+    private function reflectionClass(): ReflectionClass
     {
         return new ReflectionClass($this->class);
     }
 
-    /**
-     * @return $this
-     * @throws AnnotationBuilderException
-     * @throws Exception
-     */
-    public function build()
+    public function build(): AnnotationWSDLBuilder
     {
         if (!class_exists($this->class)) {
             throw new Exception('Class [' . $this->class . '] not exists');
@@ -85,11 +74,7 @@ class AnnotationWSDLBuilder
         return $this;
     }
 
-    /**
-     * @return void
-     * @throws AnnotationBuilderException
-     */
-    private function buildForClass()
+    private function buildForClass(): void
     {
         $class = $this->reflectionClass();
         $webServiceAnnotation = $this->annotationReader->getClassAnnotation($class, '\WSDL\Annotation\WebService');
@@ -103,10 +88,7 @@ class AnnotationWSDLBuilder
         }
     }
 
-    /**
-     * @return void
-     */
-    private function buildForMethods()
+    private function buildForMethods(): void
     {
         $classMethods = $this->reflectionClass()->getMethods();
         $methods = [];
@@ -126,10 +108,7 @@ class AnnotationWSDLBuilder
         $this->builder->setMethods($methods);
     }
 
-    /**
-     * @return WSDLBuilder
-     */
-    public function getBuilder()
+    public function getBuilder(): WSDLBuilder
     {
         return $this->builder;
     }

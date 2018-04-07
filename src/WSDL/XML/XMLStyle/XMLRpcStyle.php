@@ -35,10 +35,7 @@ use WSDL\XML\XMLAttributeHelper;
  */
 class XMLRpcStyle implements XMLStyle
 {
-    /**
-     * @inheritdoc
-     */
-    public function generateBinding(DOMDocument $DOMDocument, $soapVersion)
+    public function generateBinding(DOMDocument $DOMDocument, string $soapVersion): DOMElement
     {
         return XMLAttributeHelper::forDOM($DOMDocument)
             ->createElementWithAttributes($soapVersion . ':binding', [
@@ -49,7 +46,7 @@ class XMLRpcStyle implements XMLStyle
     /**
      * @inheritdoc
      */
-    public function generateMessagePart(DOMDocument $DOMDocument, $nodes)
+    public function generateMessagePart(DOMDocument $DOMDocument, array $nodes): array
     {
         $parts = [];
         foreach ($nodes as $node) {
@@ -62,7 +59,7 @@ class XMLRpcStyle implements XMLStyle
     /**
      * @inheritdoc
      */
-    public function generateTypes(DOMDocument $DOMDocument, $parameters, $soapVersion)
+    public function generateTypes(DOMDocument $DOMDocument, array $parameters, string $soapVersion): array
     {
         $types = [];
         foreach ($parameters as $parameter) {
@@ -80,7 +77,7 @@ class XMLRpcStyle implements XMLStyle
      * @param string $soapVersion
      * @return DOMElement[]
      */
-    private function generateParameters(DOMDocument $DOMDocument, Node $node, DOMElement $sequenceElement = null, $soapVersion)
+    private function generateParameters(DOMDocument $DOMDocument, Node $node, DOMElement $sequenceElement = null, string $soapVersion): array
     {
         $result = [];
         if ($sequenceElement) {
@@ -126,11 +123,7 @@ class XMLRpcStyle implements XMLStyle
         return $result;
     }
 
-    /**
-     * @param Node $node
-     * @return array
-     */
-    private function attributes(Node $node)
+    private function attributes(Node $node): array
     {
         if ($node->isArray()) {
             $attributes = ['name' => $node->getSanitizedName(), 'type' => 'ns:' . $node->getNameForArray()];

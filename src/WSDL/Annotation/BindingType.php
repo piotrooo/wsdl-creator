@@ -46,10 +46,7 @@ final class BindingType implements ClassAnnotation
      */
     public $value = self::SOAP_11;
 
-    /**
-     * @inheritdoc
-     */
-    public function build(WSDLBuilder $builder, ReflectionClass $class)
+    public function build(WSDLBuilder $builder, ReflectionClass $class): void
     {
         $builder->setSoapVersion($this->value);
     }
