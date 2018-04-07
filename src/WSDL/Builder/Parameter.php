@@ -40,7 +40,7 @@ class Parameter
      */
     private $node;
     /**
-     * @var boolean
+     * @var bool
      */
     private $header;
 
@@ -62,7 +62,7 @@ class Parameter
 
     /**
      * @param TokenObject[] $tokens
-     * @param boolean $header
+     * @param bool $header
      * @return Parameter
      */
     public static function fromTokens(array $tokens, bool $header = false): Parameter

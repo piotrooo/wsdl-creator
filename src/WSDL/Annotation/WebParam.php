@@ -45,7 +45,7 @@ final class WebParam implements MethodAnnotation
      */
     public $param;
     /**
-     * @var boolean
+     * @var bool
      */
     public $header = false;
 
