@@ -44,6 +44,10 @@ class Tokenizer
         '/\s*\}\s*/Am' => Token::CLOSE_OBJECT
     ];
 
+    /**
+     * @param string $string
+     * @return TokenObject[]
+     */
     public function lex(string $string): array
     {
         $tokens = [];
