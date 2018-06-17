@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('') {
       steps {
-        echo 'test'
+        sh 'php -r "copy(\'https://getcomposer.org/installer\', \'composer-setup.php\');"'
       }
     }
   }
