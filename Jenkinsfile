@@ -5,7 +5,7 @@ pipeline {
       steps {
         script {
           withAnt(installation: 'ant') {
-            sh "ant tests"
+            sh "ant phpunit"
           }
         }
 
