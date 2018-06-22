@@ -3,7 +3,12 @@ pipeline {
   stages {
     stage('composer') {
       steps {
-        build 'ant'
+        script {
+          withEnv( ["ANT_HOME=ant"] ) {
+            sh '$ANT_HOME/bin/ant tests'
+          }
+        }
+
       }
     }
   }
