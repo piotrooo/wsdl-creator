@@ -6,5 +6,10 @@ pipeline {
         sh 'composer install'
       }
     }
+    stage('tests') {
+      steps {
+        sh 'ant phpunit'
+      }
+    }
   }
 }
