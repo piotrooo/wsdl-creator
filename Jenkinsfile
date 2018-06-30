@@ -20,6 +20,11 @@ pipeline {
   post {
     always {
       ciGame()
+      testing()
+    }
+    success {
+      ciGame()
+      testing()
     }
   }
 }
