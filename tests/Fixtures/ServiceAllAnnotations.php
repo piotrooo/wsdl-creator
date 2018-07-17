@@ -84,6 +84,7 @@ class ServiceAllAnnotations
         $userContext->UserInfo = new stdClass();
         $userContext->UserInfo->name = $user->name;
         $userContext->UserInfo->age = $user->age;
+
         return $userContext;
     }
 }

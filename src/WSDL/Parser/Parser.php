@@ -85,6 +85,7 @@ class Parser
         $nodes = $this->I();
         $node = new Node($type, $name, $isArray, $elements);
         array_unshift($nodes, $node);
+
         return $nodes;
     }
 
@@ -109,6 +110,7 @@ class Parser
             $elements = $this->O();
             $isArray = false;
         }
+
         return [$isArray, $name, $elements];
     }
 
@@ -120,6 +122,7 @@ class Parser
         if ($this->lookahead()->getName() != Token::EOF && $this->lookahead()->getName() != Token::CLOSE_OBJECT) {
             return $this->P();
         }
+
         return [];
     }
 
@@ -143,8 +146,10 @@ class Parser
             $this->shift();
             $node = $this->P();
             $this->checkObjectHasCloseBracket();
+
             return $node;
         }
+
         return [];
     }
 
@@ -178,6 +183,7 @@ class Parser
     {
         $token = $this->lookahead();
         $this->position++;
+
         return $token;
     }
 }

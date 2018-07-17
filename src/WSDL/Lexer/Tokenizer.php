@@ -63,6 +63,7 @@ class Tokenizer
             throw new Exception(sprintf('Unexpected character: >%s< offset >%d<', $string[$offset], $offset));
         }
         $tokens[] = TokenObject::create(Token::EOF, 'eof');
+
         return $tokens;
     }
 }

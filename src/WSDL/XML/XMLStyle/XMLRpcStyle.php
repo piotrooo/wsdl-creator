@@ -53,6 +53,7 @@ class XMLRpcStyle implements XMLStyle
             $attributes = $this->attributes($node);
             $parts[] = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('part', $attributes);
         }
+
         return $parts;
     }
 
@@ -67,6 +68,7 @@ class XMLRpcStyle implements XMLStyle
             $nodeGen = $this->generateParameters($DOMDocument, $node, null, $soapVersion);
             $types = array_merge($types, $nodeGen);
         }
+
         return $types;
     }
 
@@ -120,6 +122,7 @@ class XMLRpcStyle implements XMLStyle
                 $result = array_merge($result, $tmp);
             }
         }
+
         return $result;
     }
 
@@ -132,6 +135,7 @@ class XMLRpcStyle implements XMLStyle
         } else {
             $attributes = ['name' => $node->getSanitizedName(), 'type' => 'xsd:' . $node->getType()];
         }
+
         return $attributes;
     }
 }

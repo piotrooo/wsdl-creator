@@ -53,6 +53,7 @@ class WSDL
     {
         $xml = new XMLProvider($builder);
         $xml->generate();
+
         return new self($xml->getXml());
     }
 
@@ -60,6 +61,7 @@ class WSDL
     {
         $annotationWSDLBuilder = new AnnotationWSDLBuilder($class);
         $WSDLBuilder = $annotationWSDLBuilder->build()->getBuilder();
+
         return self::fromBuilder($WSDLBuilder);
     }
 }

@@ -71,6 +71,7 @@ class AnnotationWSDLBuilder
         }
         $this->buildForClass();
         $this->buildForMethods();
+
         return $this;
     }
 
@@ -90,8 +91,8 @@ class AnnotationWSDLBuilder
 
     private function buildForMethods(): void
     {
-        $classMethods = $this->reflectionClass()->getMethods();
         $methods = [];
+        $classMethods = $this->reflectionClass()->getMethods();
         foreach ($classMethods as $classMethod) {
             $webMethodAnnotation = $this->annotationReader->getMethodAnnotation($classMethod, '\WSDL\Annotation\WebMethod');
             if ($webMethodAnnotation === null) {
@@ -108,7 +109,7 @@ class AnnotationWSDLBuilder
         $this->builder->setMethods($methods);
     }
 
-    public function getBuilder(): WSDLBuilder
+    public function getBuilder(): ?WSDLBuilder
     {
         return $this->builder;
     }

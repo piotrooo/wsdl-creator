@@ -50,6 +50,7 @@ class ExampleService
         $userContext->userInfo = new stdClass();
         $userContext->userInfo->name = $user->name;
         $userContext->userInfo->age = $user->age;
+
         return $userContext;
     }
 
@@ -63,6 +64,7 @@ class ExampleService
         $result = new stdClass();
         $result->result = false;
         $result->errors = $errors;
+
         return $result;
     }
 

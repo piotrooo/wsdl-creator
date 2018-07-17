@@ -84,6 +84,7 @@ class XMLProvider
     public function getXml(): string
     {
         $this->xml = $this->DOMDocument->saveXML();
+
         return $this->xml;
     }
 
@@ -112,6 +113,7 @@ class XMLProvider
         ]);
         $this->DOMDocument->appendChild($definitionsElement);
         $this->definitionsRootNode = $definitionsElement;
+
         return $this;
     }
 
@@ -128,6 +130,7 @@ class XMLProvider
 
         $serviceElement->appendChild($portElement);
         $this->definitionsRootNode->appendChild($serviceElement);
+
         return $this;
     }
 
@@ -156,6 +159,7 @@ class XMLProvider
         }
 
         $this->definitionsRootNode->appendChild($bindingElement);
+
         return $this;
     }
 
@@ -194,6 +198,7 @@ class XMLProvider
         }
 
         $this->definitionsRootNode->appendChild($portTypeElement);
+
         return $this;
     }
 
@@ -210,6 +215,7 @@ class XMLProvider
             $messageOutputElement = $this->messageParts($name . 'Response', $method->getReturnNode());
             $this->definitionsRootNode->appendChild($messageOutputElement);
         }
+
         return $this;
     }
 
@@ -236,6 +242,7 @@ class XMLProvider
                 $messageElement->appendChild($part);
             }
         }
+
         return $messageElement;
     }
 
@@ -256,6 +263,7 @@ class XMLProvider
         $typesElement->appendChild($schemaElement);
 
         $this->definitionsRootNode->appendChild($typesElement);
+
         return $this;
     }
 

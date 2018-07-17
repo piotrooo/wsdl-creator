@@ -68,6 +68,7 @@ class Parameter
     public static function fromTokens(array $tokens, bool $header = false): Parameter
     {
         $parser = new Parser($tokens);
+
         return new Parameter(Arrays::firstOrNull($parser->S()), $header);
     }
 }

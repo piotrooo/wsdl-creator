@@ -392,6 +392,7 @@ class ParserTest extends TestCase
     {
         $tokenizer = new Tokenizer();
         $tokens = $tokenizer->lex($string);
+
         return new Parser($tokens);
     }
 }

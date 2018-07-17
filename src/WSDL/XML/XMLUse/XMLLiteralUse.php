@@ -38,23 +38,24 @@ class XMLLiteralUse implements XMLUse
     public function generateSoapBody(DOMDocument $DOMDocument, string $targetNamespace, string $soapVersion): DOMElement
     {
         return XMLAttributeHelper::forDOM($DOMDocument)
-            ->createElementWithAttributes($soapVersion . ':body', array(
+            ->createElementWithAttributes($soapVersion . ':body', [
                 'use' => 'literal',
                 'namespace' => $targetNamespace
-            ));
+            ]);
     }
 
     public function generateSoapHeaderIfNeeded(DOMDocument $DOMDocument, string $targetNamespace, string $soapHeaderMessage = '', Parameter $header = null, string $soapVersion): ?DOMElement
     {
         if ($header) {
             return XMLAttributeHelper::forDOM($DOMDocument)
-                ->createElementWithAttributes($soapVersion . ':header', array(
+                ->createElementWithAttributes($soapVersion . ':header', [
                     'use' => 'literal',
                     'namespace' => $targetNamespace,
                     'part' => $header->getNode()->getSanitizedName(),
                     'message' => $soapHeaderMessage
-                ));
+                ]);
         }
+
         return null;
     }
 }

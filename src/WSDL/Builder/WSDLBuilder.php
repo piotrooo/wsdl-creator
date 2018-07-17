@@ -84,6 +84,7 @@ class WSDLBuilder
     {
         IsValid::notEmpty($name, 'Name cannot be empty');
         $this->name = $name;
+
         return $this;
     }
 
@@ -96,6 +97,7 @@ class WSDLBuilder
     {
         IsValid::notEmpty($targetNamespace, 'Target namespace cannot be empty');
         $this->targetNamespace = $targetNamespace;
+
         return $this;
     }
 
@@ -108,6 +110,7 @@ class WSDLBuilder
     {
         IsValid::notEmpty($ns, 'NS cannot be empty');
         $this->ns = $ns;
+
         return $this;
     }
 
@@ -120,6 +123,7 @@ class WSDLBuilder
     {
         IsValid::notEmpty($location, 'Location cannot be empty');
         $this->location = $location;
+
         return $this;
     }
 
@@ -132,6 +136,7 @@ class WSDLBuilder
     {
         IsValid::style($style);
         $this->style = $style;
+
         return $this;
     }
 
@@ -144,6 +149,7 @@ class WSDLBuilder
     {
         IsValid::useStyle($use);
         $this->use = $use;
+
         return $this;
     }
 
@@ -156,6 +162,7 @@ class WSDLBuilder
     {
         IsValid::parameterStyle($parameterStyle, $this->style);
         $this->parameterStyle = $parameterStyle;
+
         return $this;
     }
 
@@ -168,6 +175,7 @@ class WSDLBuilder
     {
         IsValid::soapVersion($soapVersion);
         $this->soapVersion = $soapVersion;
+
         return $this;
     }
 
@@ -182,6 +190,7 @@ class WSDLBuilder
     public function setMethod(Method $method): WSDLBuilder
     {
         $this->methods[] = $method;
+
         return $this;
     }
 
@@ -194,6 +203,7 @@ class WSDLBuilder
         foreach ($methods as $method) {
             $this->setMethod($method);
         }
+
         return $this;
     }
 }

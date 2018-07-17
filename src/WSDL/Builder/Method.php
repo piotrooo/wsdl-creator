@@ -108,6 +108,7 @@ class Method
         if (Optional::fromNullable($this->return)->isHeader()->or(false)) {
             return $this->return;
         }
+
         return null;
     }
 

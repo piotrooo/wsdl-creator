@@ -54,6 +54,7 @@ class XMLDocumentStyle implements XMLStyle
                 'name' => $node->getSanitizedName(), 'element' => 'ns:' . $node->getSanitizedName()
             ]);
         }
+
         return $parts;
     }
 
@@ -73,6 +74,7 @@ class XMLDocumentStyle implements XMLStyle
                 $types = array_merge($types, $complexIfNeeded);
             }
         }
+
         return $types;
     }
 
@@ -120,6 +122,7 @@ class XMLDocumentStyle implements XMLStyle
                 $result = array_merge($result, $tmp);
             }
         }
+
         return $result;
     }
 
@@ -132,6 +135,7 @@ class XMLDocumentStyle implements XMLStyle
         } else {
             $attributes = ['name' => $node->getSanitizedName(), 'type' => 'xsd:' . $node->getType()];
         }
+
         return $attributes;
     }
 }

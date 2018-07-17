@@ -51,6 +51,7 @@ class XMLAttributeHelper
             $tmpAttr = $this->createAttributeWithValue($attributeName, $attributeValue);
             $element->appendChild($tmpAttr);
         }
+
         return $element;
     }
 
@@ -58,6 +59,7 @@ class XMLAttributeHelper
     {
         $attribute = $this->DOMDocument->createAttribute($attributeName);
         $attribute->value = $value;
+
         return $attribute;
     }
 

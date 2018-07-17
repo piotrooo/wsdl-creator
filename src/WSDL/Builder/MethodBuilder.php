@@ -46,18 +46,21 @@ class MethodBuilder
     public function setName(string $name): MethodBuilder
     {
         $this->name = $name;
+
         return $this;
     }
 
     public function setParameter(Parameter $parameter): MethodBuilder
     {
         $this->parameters[] = $parameter;
+
         return $this;
     }
 
     public function setReturn(Parameter $parameter): MethodBuilder
     {
         $this->return = $parameter;
+
         return $this;
     }
 
