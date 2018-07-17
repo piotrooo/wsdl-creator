@@ -70,7 +70,7 @@ class XMLDocumentStyle implements XMLStyle
             $element = XMLAttributeHelper::forDOM($DOMDocument)->createElementWithAttributes('xsd:element', $attributes);
             $types[] = $element;
             $complexIfNeeded = $this->generateParameters($DOMDocument, $node, null, $soapVersion);
-            if ($complexIfNeeded) {
+            if (!empty($complexIfNeeded)) {
                 $types = array_merge($types, $complexIfNeeded);
             }
         }
