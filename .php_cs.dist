@@ -31,6 +31,29 @@ return Config::create()
         'method_chaining_indentation' => true,
         'new_with_braces' => true,
         'no_blank_lines_after_class_opening' => true,
-        'no_blank_lines_before_namespace' => true
+        'no_blank_lines_before_namespace' => true,
+        'no_multiline_whitespace_around_double_arrow' => true,
+        'no_trailing_comma_in_singleline_array' => true,
+        'no_unused_imports' => true,
+        'no_whitespace_before_comma_in_array' => true,
+        'no_whitespace_in_blank_line' => true,
+        'object_operator_without_whitespace' => true,
+        'ordered_imports' => true,
+        'php_unit_test_annotation' => [
+            'case' => 'camel',
+            'style' => 'annotation'
+        ],
+        'return_assignment' => true,
+        'return_type_declaration' => true,
+        'semicolon_after_instruction' => true,
+        'ternary_operator_spaces' => true,
+        'ternary_to_null_coalescing' => true,
+        'trim_array_spaces' => true,
+        'whitespace_after_comma_in_array' => true,
+        'yoda_style' => [
+            'equal' => false,
+            'identical' => false,
+            'less_and_greater' => false
+        ]
     ])
     ->setFinder($finder);

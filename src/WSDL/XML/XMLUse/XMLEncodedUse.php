@@ -37,14 +37,12 @@ class XMLEncodedUse implements XMLUse
 {
     public function generateSoapBody(DOMDocument $DOMDocument, string $targetNamespace, string $soapVersion): DOMElement
     {
-        $DOMElement = XMLAttributeHelper::forDOM($DOMDocument)
+        return XMLAttributeHelper::forDOM($DOMDocument)
             ->createElementWithAttributes($soapVersion . ':body', [
                 'use' => 'encoded',
                 'namespace' => $targetNamespace,
                 'encodingStyle' => 'http://schemas.xmlsoap.org/soap/encoding/'
             ]);
-
-        return $DOMElement;
     }
 
     public function generateSoapHeaderIfNeeded(DOMDocument $DOMDocument, string $targetNamespace, string $soapHeaderMessage = '', Parameter $header = null, string $soapVersion): ?DOMElement

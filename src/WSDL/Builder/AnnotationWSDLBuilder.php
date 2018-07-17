@@ -109,7 +109,7 @@ class AnnotationWSDLBuilder
         $this->builder->setMethods($methods);
     }
 
-    public function getBuilder(): ?WSDLBuilder
+    public function getBuilder(): WSDLBuilder
     {
         return $this->builder;
     }
