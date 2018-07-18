@@ -30,6 +30,8 @@ use Ouzo\Utilities\Path;
 use ReflectionClass;
 use WSDL\Annotation\ClassAnnotation;
 use WSDL\Annotation\MethodAnnotation;
+use WSDL\Annotation\WebMethod;
+use WSDL\Annotation\WebService;
 
 /**
  * AnnotationWSDLBuilder
@@ -78,7 +80,7 @@ class AnnotationWSDLBuilder
     private function buildForClass(): void
     {
         $class = $this->reflectionClass();
-        $webServiceAnnotation = $this->annotationReader->getClassAnnotation($class, '\WSDL\Annotation\WebService');
+        $webServiceAnnotation = $this->annotationReader->getClassAnnotation($class, WebService::class);
         if ($webServiceAnnotation === null) {
             throw new AnnotationBuilderException('Class must have @WebService annotation');
         }
@@ -94,7 +96,7 @@ class AnnotationWSDLBuilder
         $methods = [];
         $classMethods = $this->reflectionClass()->getMethods();
         foreach ($classMethods as $classMethod) {
-            $webMethodAnnotation = $this->annotationReader->getMethodAnnotation($classMethod, '\WSDL\Annotation\WebMethod');
+            $webMethodAnnotation = $this->annotationReader->getMethodAnnotation($classMethod, WebMethod::class);
             if ($webMethodAnnotation === null) {
                 continue;
             }
