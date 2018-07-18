@@ -23,6 +23,10 @@
  */
 namespace Tests\WSDL\Builder;
 
+use Fixtures\ServiceAllAnnotations;
+use Fixtures\ServiceClassNameAnnotations;
+use Fixtures\ServiceWebMethods;
+use Fixtures\ServiceWithoutWebServiceAnnotation;
 use Ouzo\Tests\Assert;
 use Ouzo\Tests\CatchException;
 use PHPUnit\Framework\TestCase;
@@ -43,7 +47,7 @@ class AnnotationWSDLBuilderTest extends TestCase
     public function shouldCreateBuilderForWebServiceAnnotation()
     {
         //given
-        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\ServiceAllAnnotations');
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder(ServiceAllAnnotations::class);
 
         //when
         $annotationWSDLBuilder->build();
@@ -62,7 +66,7 @@ class AnnotationWSDLBuilderTest extends TestCase
     public function shouldCreateBuilderForBindingTypeAnnotation()
     {
         //given
-        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\ServiceAllAnnotations');
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder(ServiceAllAnnotations::class);
 
         //when
         $annotationWSDLBuilder->build();
@@ -78,7 +82,7 @@ class AnnotationWSDLBuilderTest extends TestCase
     public function shouldCreateBuilderForSoapBindingAnnotation()
     {
         //given
-        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\ServiceAllAnnotations');
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder(ServiceAllAnnotations::class);
 
         //when
         $annotationWSDLBuilder->build();
@@ -96,7 +100,7 @@ class AnnotationWSDLBuilderTest extends TestCase
     public function shouldCreateBuilderWithClassNameWhenNameIsNotPass()
     {
         //given
-        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\ServiceClassNameAnnotations');
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder(ServiceClassNameAnnotations::class);
 
         //when
         $annotationWSDLBuilder->build();
@@ -112,7 +116,7 @@ class AnnotationWSDLBuilderTest extends TestCase
     public function shouldCreateBuilderWithMethods()
     {
         //given
-        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\ServiceAllAnnotations');
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder(ServiceAllAnnotations::class);
 
         //when
         $annotationWSDLBuilder->build();
@@ -130,7 +134,7 @@ class AnnotationWSDLBuilderTest extends TestCase
     public function shouldThrowExceptionWhenWebServiceAnnotationIsNotSet()
     {
         //given
-        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\ServiceWithoutWebServiceAnnotation');
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder(ServiceWithoutWebServiceAnnotation::class);
 
         //when
         CatchException::when($annotationWSDLBuilder)->build();
@@ -147,7 +151,7 @@ class AnnotationWSDLBuilderTest extends TestCase
     public function shouldCreateBuilderWithWebMethodsOnly()
     {
         //given
-        $annotationWSDLBuilder = new AnnotationWSDLBuilder('\Fixtures\ServiceWebMethods');
+        $annotationWSDLBuilder = new AnnotationWSDLBuilder(ServiceWebMethods::class);
 
         //when
         $annotationWSDLBuilder->build();

@@ -254,7 +254,7 @@
         </operation>
     </binding>
     <service name="RpcLiteralServiceService">
-        <port name="RpcLiteralServicePort" binding="tns:RpcLiteralServiceBinding">
+        <port name="ChangedRpcLiteralServicePort" binding="tns:RpcLiteralServiceBinding">
             <soap:address location="http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php"/>
         </port>
     </service>

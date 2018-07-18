@@ -80,6 +80,7 @@ class XMLProviderTest extends TestCase
             ->setTargetNamespace('http://foo.bar/rpcliteralservice')
             ->setNs('http://foo.bar/rpcliteralservice/types')
             ->setLocation('http://localhost:7777/wsdl-creator/examples/rpc_literal/service.php')
+            ->setPortName('ChangedRpcLiteralService')
             ->setStyle(SoapBinding::RPC)
             ->setUse(SoapBinding::LITERAL)
             ->setSoapVersion(BindingType::SOAP_11)

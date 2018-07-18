@@ -52,14 +52,20 @@ final class WebService implements ClassAnnotation
      * @var string
      */
     public $location;
+    /**
+     * @var string
+     */
+    public $portName;
 
     public function build(WSDLBuilder $builder, ReflectionClass $class): void
     {
         $name = $this->name ?: $class->getShortName();
+        $portName = $this->portName ?: $name;
         $builder
             ->setName($name)
             ->setTargetNamespace($this->targetNamespace)
             ->setNs($this->ns)
-            ->setLocation($this->location);
+            ->setLocation($this->location)
+            ->setPortName($portName);
     }
 }

@@ -69,6 +69,10 @@ class WSDLBuilder
      * @var Method[]
      */
     private $methods;
+    /**
+     * @var string
+     */
+    private $portName;
 
     public static function instance(): WSDLBuilder
     {
@@ -203,6 +207,19 @@ class WSDLBuilder
         foreach ($methods as $method) {
             $this->setMethod($method);
         }
+
+        return $this;
+
+    }
+
+    public function getPortName(): string
+    {
+        return $this->portName;
+    }
+
+    public function setPortName(string $portName): WSDLBuilder
+    {
+        $this->portName = $portName;
 
         return $this;
     }

@@ -122,7 +122,8 @@ class XMLProvider
         $name = $this->builder->getName();
         $serviceElement = $this->createElementWithAttributes('service', ['name' => $name . 'Service']);
 
-        $portElement = $this->createElementWithAttributes('port', ['name' => $name . 'Port', 'binding' => 'tns:' . $name . 'Binding']);
+        $portName = $this->builder->getPortName();
+        $portElement = $this->createElementWithAttributes('port', ['name' => $portName . 'Port', 'binding' => 'tns:' . $name . 'Binding']);
 
         $soapAddressElement = $this
             ->createElementWithAttributes($this->XMLSoapVersion . ':address', ['location' => $this->builder->getLocation()]);
