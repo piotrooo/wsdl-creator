@@ -160,7 +160,7 @@ class AnnotationWSDLBuilderTest extends TestCase
         $WSDLBuilder = $annotationWSDLBuilder->getBuilder();
         Assert::thatArray($WSDLBuilder->getMethods())
             ->extracting('name')
-            ->containsOnly('uppercaseUserName', 'methodWithoutParameters', 'methodWithoutResult');
+            ->containsOnly('uppercaseUserName', 'methodWithoutParameters', 'emptyResult');
     }
 
     /**

@@ -65,7 +65,7 @@ class ServiceWebMethods
     }
 
     /**
-     * @WebMethod
+     * @WebMethod(operationName="emptyResult")
      */
     public function methodWithoutResult()
     {
