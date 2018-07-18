@@ -11,8 +11,7 @@ PHP WSDL Creator
 Class annotations
 =================
 
-@WebService
------------
+### @WebService
 
 Parameters:
 
@@ -21,15 +20,13 @@ Parameters:
 * `location` (`string "http://localhost/wsdl-creator/service.php"`)
 * `ns` (`string "http://foo.bar/webserviceannotations/types"`)
 
-@BindingType
-------------
+### @BindingType
 
 Parameters:
 
 * `value` (`enum {"SOAP_11", "SOAP_12"}`)
 
-@SoapBinding
-------------
+### @SoapBinding
 
 Parameters:
 
@@ -40,19 +37,16 @@ Parameters:
 Method annotations
 ==================
 
-@WebMethod
-----------
+### @WebMethod
 
 No parameters - mark method as a Web Service method
 
-@WebParam
----------
+### @WebParam
 
 * `param` (`string "string $userName"`) [look at the param examples section](#param-examples)
 * `header` (`bool true|false`)
 
-@WebResult
-----------
+### @WebResult
 
 * `param` (`string "string $uppercasedUserName"`) [look at the param examples section](#param-examples)
 
