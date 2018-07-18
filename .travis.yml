@@ -6,6 +6,7 @@ php:
 
 before_script:
   - composer install --dev --no-interaction
+  - composer run-script check-code-style
 
 script:
   - mkdir -p build/logs

@@ -34,5 +34,9 @@
       "Tests\\": "tests/src/",
       "Fixtures\\": "tests/Fixtures"
     }
+  },
+  "scripts": {
+    "fix-code-style": "php-cs-fixer fix",
+    "check-code-style": "php-cs-fixer fix --dry-run"
   }
 }
