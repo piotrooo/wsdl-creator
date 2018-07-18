@@ -66,6 +66,8 @@ return Config::create()
             'case' => 'camel',
             'style' => 'annotation'
         ],
+        'phpdoc_to_comment' => true,
+        'phpdoc_var_without_name' => true,
         'return_assignment' => true,
         'return_type_declaration' => true,
         'semicolon_after_instruction' => true,
