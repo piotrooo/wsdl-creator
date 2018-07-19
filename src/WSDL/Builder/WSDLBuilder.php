@@ -209,7 +209,6 @@ class WSDLBuilder
         }
 
         return $this;
-
     }
 
     public function getPortName(): string
