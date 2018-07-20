@@ -15,26 +15,26 @@ Class annotations
 
 Parameters:
 
-* `name` (`string "WebServiceAnnotations"`)
+* `name` (`string "WebServiceAnnotations"`) default: service name
 * `targetNamespace` (`string "http://foo.bar/webserviceannotations"`)
 * `location` (`string "http://localhost/wsdl-creator/service.php"`)
 * `ns` (`string "http://foo.bar/webserviceannotations/types"`)
-* `portName` (`string "PortNameWebService"`)
+* `portName` (`string "PortNameWebService"`) default: service name
 
 
 ### @BindingType
 
 Parameters:
 
-* `value` (`enum {"SOAP_11", "SOAP_12"}`)
+* `value` (`enum {"SOAP_11", "SOAP_12"}`) default: `"SOAP_11"`
 
 ### @SoapBinding
 
 Parameters:
 
-* `style` (`enum {"RPC", "DOCUMENT"}`)
-* `use` (`enum {"LITERAL", "ENCODED"}`)
-* `parameterStyle` (`enum {"BARE", "WRAPPED"}`)
+* `style` (`enum {"RPC", "DOCUMENT"}`) default: `"RPC"`
+* `use` (`enum {"LITERAL", "ENCODED"}`) default: `"LITERAL"`
+* `parameterStyle` (`enum {"BARE", "WRAPPED"}`) default: `"BARE"`
 
 Method annotations
 ==================
@@ -46,7 +46,7 @@ No parameters - mark method as a Web Service method
 ### @WebParam
 
 * `param` (`string "string $userName"`) [look at the param examples section](#param-examples)
-* `header` (`bool true|false`)
+* `header` (`bool true|false`) default: `false`
 
 ### @WebResult
 
