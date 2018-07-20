@@ -19,6 +19,8 @@ Parameters:
 * `targetNamespace` (`string "http://foo.bar/webserviceannotations"`)
 * `location` (`string "http://localhost/wsdl-creator/service.php"`)
 * `ns` (`string "http://foo.bar/webserviceannotations/types"`)
+* `portName` (`string "PortNameWebService"`)
+
 
 ### @BindingType
 
