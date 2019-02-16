@@ -24,14 +24,18 @@
     "doctrine/annotations": "1.7.x-dev"
   },
   "require-dev": {
-    "phpunit/phpunit": "~7.1.1",
+    "phpunit/phpunit": "~7.5.5",
     "scrutinizer/ocular": "~1.5.2",
     "friendsofphp/php-cs-fixer": "~2.12.2"
   },
   "autoload": {
     "psr-4": {
-      "": "src/",
-      "Tests\\": "tests/src/",
+      "": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/",
       "Fixtures\\": "tests/Fixtures"
     }
   },
