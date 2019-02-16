@@ -44,7 +44,7 @@ class XMLLiteralUse implements XMLUse
             ]);
     }
 
-    public function generateSoapHeaderIfNeeded(DOMDocument $DOMDocument, string $targetNamespace, string $soapHeaderMessage = '', Parameter $header = null, string $soapVersion): ?DOMElement
+    public function generateSoapHeaderIfNeeded(DOMDocument $DOMDocument, string $targetNamespace, string $soapVersion, string $soapHeaderMessage = '', Parameter $header = null): ?DOMElement
     {
         if ($header) {
             return XMLAttributeHelper::forDOM($DOMDocument)

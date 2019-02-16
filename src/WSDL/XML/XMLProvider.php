@@ -172,7 +172,7 @@ class XMLProvider
 
         $soapHeaderMessage = 'tns:' . $methodName . $headerName;
         $soapHeaderElement = $this->XMLUse
-            ->generateSoapHeaderIfNeeded($this->DOMDocument, $targetNamespace, $soapHeaderMessage, $header, $this->XMLSoapVersion);
+            ->generateSoapHeaderIfNeeded($this->DOMDocument, $targetNamespace, $this->XMLSoapVersion, $soapHeaderMessage, $header);
         if ($soapHeaderElement) {
             $inputElement->appendChild($soapHeaderElement);
         }

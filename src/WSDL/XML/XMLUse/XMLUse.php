@@ -36,5 +36,5 @@ interface XMLUse
 {
     public function generateSoapBody(DOMDocument $DOMDocument, string $targetNamespace, string $soapVersion): DOMElement;
 
-    public function generateSoapHeaderIfNeeded(DOMDocument $DOMDocument, string $targetNamespace, string $soapHeaderMessage = '', Parameter $header = null, string $soapVersion): ?DOMElement;
+    public function generateSoapHeaderIfNeeded(DOMDocument $DOMDocument, string $targetNamespace, string $soapVersion, string $soapHeaderMessage = '', Parameter $header = null): ?DOMElement;
 }

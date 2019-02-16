@@ -36,12 +36,12 @@ use WSDL\Builder\WSDLBuilder;
  */
 final class SoapBinding implements ClassAnnotation
 {
-    const RPC = 'RPC';
-    const DOCUMENT = 'DOCUMENT';
-    const LITERAL = 'LITERAL';
-    const ENCODED = 'ENCODED';
-    const BARE = 'BARE';
-    const WRAPPED = 'WRAPPED';
+    public const RPC = 'RPC';
+    public const DOCUMENT = 'DOCUMENT';
+    public const LITERAL = 'LITERAL';
+    public const ENCODED = 'ENCODED';
+    public const BARE = 'BARE';
+    public const WRAPPED = 'WRAPPED';
 
     /**
      * @var string

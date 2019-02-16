@@ -65,7 +65,7 @@ class XMLEncodedUseTest extends XMLBaseUseTest
         //when
         $soapHeaderIfNeeded = $this
             ->XMLUse
-            ->generateSoapHeaderIfNeeded($this->DOMDocument, $this->targetNamespace, $this->soapHeaderMessage, $header, $this->soapVersion);
+            ->generateSoapHeaderIfNeeded($this->DOMDocument, $this->targetNamespace, $this->soapVersion, $this->soapHeaderMessage, $header);
 
         //then
         $this->assertEquals('soap:header', $soapHeaderIfNeeded->tagName);

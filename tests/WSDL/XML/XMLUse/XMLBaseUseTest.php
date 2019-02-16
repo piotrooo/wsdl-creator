@@ -67,7 +67,7 @@ abstract class XMLBaseUseTest extends TestCase
         //when
         $soapHeaderIfNeeded = $this
             ->XMLUse
-            ->generateSoapHeaderIfNeeded($this->DOMDocument, $this->targetNamespace, $this->soapHeaderMessage, null, $this->soapVersion);
+            ->generateSoapHeaderIfNeeded($this->DOMDocument, $this->targetNamespace, $this->soapVersion, $this->soapHeaderMessage, null);
 
         //then
         $this->assertNull($soapHeaderIfNeeded);

@@ -30,11 +30,11 @@ namespace WSDL\Lexer;
  */
 class Token
 {
-    const TYPE = 'type';
-    const NAME = 'name';
-    const ARRAYS = 'array';
-    const CLASS_NAME = 'class_name';
-    const OPEN_OBJECT = 'open_object';
-    const CLOSE_OBJECT = 'close_object';
-    const EOF = 'eof';
+    public const TYPE = 'type';
+    public const NAME = 'name';
+    public const ARRAYS = 'array';
+    public const CLASS_NAME = 'class_name';
+    public const OPEN_OBJECT = 'open_object';
+    public const CLOSE_OBJECT = 'close_object';
+    public const EOF = 'eof';
 }
