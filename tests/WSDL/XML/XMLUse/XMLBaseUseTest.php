@@ -49,7 +49,7 @@ abstract class XMLBaseUseTest extends TestCase
     protected $targetNamespace = 'http://foo.bar/rpcliteralservice';
     protected $soapHeaderMessage = 'tns:MethodRequestHeader';
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->DOMDocument = new DOMDocument();
