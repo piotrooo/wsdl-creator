@@ -46,7 +46,7 @@ class XMLRpcStyleTest extends TestCase
      */
     private $XMLRpcStyle;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->DOMDocument = new DOMDocument();
