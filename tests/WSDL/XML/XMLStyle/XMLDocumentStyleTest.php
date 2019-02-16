@@ -45,7 +45,7 @@ class XMLDocumentStyleTest extends TestCase
      */
     private $XMLDocumentStyle;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->DOMDocument = new DOMDocument();
