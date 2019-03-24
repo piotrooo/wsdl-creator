@@ -239,7 +239,7 @@ class XMLProvider
             $this->definitionsRootNode->appendChild($messageInputElement);
 
             $this->messageHeaderIfNeeded($name, 'ResponseHeader', $method->getHeaderReturn());
-            $messageOutputElement = $this->messageParts($name . 'Response', $method->getReturnNode());
+            $messageOutputElement = $this->messageParts($name . 'Response', $this->getDataForInsert($method));
             $this->definitionsRootNode->appendChild($messageOutputElement);
         }
         return $this;
@@ -319,4 +319,18 @@ class XMLProvider
     {
         return XMLAttributeHelper::forDOM($this->DOMDocument)->createElement($elementName, $value);
     }
+
+    /**
+     * @param Method $method
+     * @return null|Node|Node[]
+     */
+    private function getDataForInsert(Method $method) {
+        $node = $method->getReturnNode();
+        if ($node && $node->getType() == 'wrapper') {
+            return $node->getElements();
+        } else {
+            return $node;
+        }
+    }
+
 }
