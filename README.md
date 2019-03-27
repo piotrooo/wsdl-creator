@@ -8,7 +8,7 @@ PHP WSDL Creator
 [![License](https://poser.pugx.org/piotrooo/wsdl-creator/license)](https://packagist.org/packages/piotrooo/wsdl-creator)
 [![Gitter](https://badges.gitter.im/wsdl-creator/Lobby.svg)](https://gitter.im/wsdl-creator/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-Supported vesions
+Supported versions
 =================
 
 | Major version  | PHP Compatibility                           |
