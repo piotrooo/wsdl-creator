@@ -13,7 +13,7 @@ Supported versions
 
 | Major version  | PHP Compatibility                           |
 |----------------|---------------------------------------------|
-| WSDL Creator 1 | PHP 5.3, PHP 5.4, PHP 5.5, PHP 5.6, PHP 7.0 |
+| WSDL Creator 1 | Legacy version, not supported.              |
 | WSDL Creator 2 | PHP 7.1, PHP 7.2, PHP 7.3                   |
 
 Class annotations
