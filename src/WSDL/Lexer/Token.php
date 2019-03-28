@@ -28,7 +28,7 @@ namespace WSDL\Lexer;
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class Token
+final class Token
 {
     public const TYPE = 'type';
     public const NAME = 'name';

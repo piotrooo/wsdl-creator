@@ -30,7 +30,7 @@ use Exception;
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class Tokenizer
+final class Tokenizer
 {
     /**
      * @var array

@@ -28,7 +28,7 @@ namespace WSDL\Lexer;
  *
  * @author Piotr Olaszewski <piotroo89@gmail.com>
  */
-class TokenObject
+final class TokenObject
 {
     /**
      * @var string
