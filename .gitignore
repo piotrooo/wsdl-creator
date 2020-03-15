@@ -1,5 +1,5 @@
-/vendor/*
-/.idea/*
-/.php_cs.cache
-/composer.lock
-/build/*
+vendor
+.idea
+.php_cs.cache
+composer.lock
+build
