@@ -19,7 +19,7 @@
     }
   ],
   "require": {
-    "php": ">=7.1",
+    "php": ">=7.3",
     "ext-dom": "*",
     "letsdrink/ouzo-goodies": "dev-master",
     "doctrine/annotations": "1.7.x-dev"
