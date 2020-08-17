@@ -139,7 +139,7 @@ class XMLProvider
     {
         $name = $this->builder->getName();
         $targetNamespace = $this->builder->getTargetNamespace();
-        $bindingElement = $this->createElementWithAttributes('binding', ['name' => $name . 'Binding', 'type' => 'tns:' . $name . 'PortType']);
+        $bindingElement = $this->createElementWithAttributes('binding', ['name' => $name . 'Binding', 'type' => 'tns:' . $name . 'Port']);
 
         $soapBindingElement = $this->XMLStyle->generateBinding($this->DOMDocument, $this->XMLSoapVersion);
         $bindingElement->appendChild($soapBindingElement);
@@ -183,7 +183,7 @@ class XMLProvider
     private function portType(): XMLProvider
     {
         $name = $this->builder->getName();
-        $portTypeElement = $this->createElementWithAttributes('portType', ['name' => $name . 'PortType']);
+        $portTypeElement = $this->createElementWithAttributes('portType', ['name' => $name . 'Port']);
 
         foreach ($this->builder->getMethods() as $method) {
             $methodName = $method->getName();
