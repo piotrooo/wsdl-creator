@@ -22,7 +22,7 @@
     "php": ">=7.3",
     "ext-dom": "*",
     "letsdrink/ouzo-goodies": "dev-master",
-    "doctrine/annotations": "~1.7.0"
+    "doctrine/annotations": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "~7.5.5",
