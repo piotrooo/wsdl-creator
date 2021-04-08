@@ -21,7 +21,7 @@
   "require": {
     "php": ">=7.3",
     "ext-dom": "*",
-    "letsdrink/ouzo-goodies": "dev-master",
+    "letsdrink/ouzo-goodies": ^1.8.0",
     "doctrine/annotations": "*"
   },
   "require-dev": {
