@@ -28,4 +28,4 @@ jobs:
         uses: php-actions/composer@v5
 
       - name: Run tests
-        uses: php-actions/phpunit@v3s
+        uses: php-actions/phpunit@v3
