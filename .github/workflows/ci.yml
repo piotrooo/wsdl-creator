@@ -26,5 +26,6 @@ jobs:
       - name: Run tests
         uses: php-actions/phpunit@v3
         with:
+          version: 7.5.5
           php_version: ${{ matrix.php-versions }}
           configuration: phpunit.xml
