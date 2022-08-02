@@ -20,3 +20,6 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           tools: phpunit:7.5.5
+
+      - name: Run tests
+        run: vendor/bin/phpunit --configuration phpunit.xml tests
