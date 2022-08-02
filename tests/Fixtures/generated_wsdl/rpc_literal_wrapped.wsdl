@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<!--Copyright (C) 2013-2022 wsdl-creator contributors-->
+<!--This program is made available under the terms of the MIT License.-->
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:tns="urn:rpcliteralwrappedservice.service.fixtures"
+             xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             name="RpcLiteralWrappedServiceService"
+             targetNamespace="urn:rpcliteralwrappedservice.service.fixtures">
+    <types>
+        <xsd:schema targetNamespace="urn:rpcliteralwrappedservice.service.fixtures">
+            <xsd:complexType name="stringArray" final="#all">
+                <xsd:sequence>
+                    <xsd:element name="item" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="person">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="arrayOfObjects" type="tns:tag"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="arrayOfObjectsOrNullType" nillable="true"
+                                 type="tns:tag"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="arrayOfScalars" type="xsd:string"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="arrayOfScalarsOrNullType" nillable="true"
+                                 type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="boolOrNullType" type="xsd:boolean"/>
+                    <xsd:element name="boolType" type="xsd:boolean"/>
+                    <xsd:element minOccurs="0" name="floatOrNullType" type="xsd:float"/>
+                    <xsd:element name="floatType" type="xsd:float"/>
+                    <xsd:element minOccurs="0" name="intOrNullType" type="xsd:int"/>
+                    <xsd:element name="intType" type="xsd:int"/>
+                    <xsd:element minOccurs="0" name="object" type="tns:tag"/>
+                    <xsd:element minOccurs="0" name="objectOrNullType" nillable="true" type="tns:tag"/>
+                    <xsd:element minOccurs="0" name="stringOrNullType" type="xsd:string"/>
+                    <xsd:element name="stringType" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="tag">
+                <xsd:sequence>
+                    <xsd:element name="name" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="result">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" name="person" type="tns:person"/>
+                    <xsd:element name="value" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="personArray" final="#all">
+                <xsd:sequence>
+                    <xsd:element name="item" type="tns:person" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="resultArray" final="#all">
+                <xsd:sequence>
+                    <xsd:element name="item" type="tns:result" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+    <message name="append">
+        <part name="arg0" type="tns:stringArray"/>
+    </message>
+    <message name="appendResponse">
+        <part name="return" type="tns:stringArray"/>
+    </message>
+    <message name="put">
+        <part name="arg0" type="tns:person"/>
+        <part name="arg1" type="xsd:string"/>
+    </message>
+    <message name="putResponse">
+        <part name="return" type="tns:result"/>
+    </message>
+    <message name="sampleMethod">
+        <part name="arg0" type="xsd:string"/>
+    </message>
+    <message name="sampleMethodResponse">
+        <part type="xsd:string" name="return"/>
+    </message>
+    <message name="set">
+        <part name="arg0" type="tns:person"/>
+    </message>
+    <message name="setResponse"/>
+    <message name="setAll">
+        <part name="arg0" type="tns:personArray"/>
+    </message>
+    <message name="setAllResponse">
+        <part name="return" type="tns:resultArray"/>
+    </message>
+    <portType name="RpcLiteralWrappedService">
+        <operation name="append">
+            <input message="tns:append"
+                   wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/appendRequest"/>
+            <output message="tns:appendResponse"
+                    wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/appendResponse"/>
+        </operation>
+        <operation name="put">
+            <input message="tns:put"
+                   wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/putRequest"/>
+            <output message="tns:putResponse"
+                    wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/putResponse"/>
+        </operation>
+        <operation name="sampleMethod">
+            <input message="tns:sampleMethod"
+                   wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/sampleMethodRequest"/>
+            <output message="tns:sampleMethodResponse"
+                    wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/sampleMethodResponse"/>
+        </operation>
+        <operation name="set">
+            <input message="tns:set"
+                   wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/setRequest"/>
+            <output message="tns:setResponse"
+                    wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/setResponse"/>
+        </operation>
+        <operation name="setAll">
+            <input message="tns:setAll"
+                   wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/setAllRequest"/>
+            <output message="tns:setAllResponse"
+                    wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/setAllResponse"/>
+        </operation>
+    </portType>
+    <binding name="RpcLiteralWrappedServicePortBinding" type="tns:RpcLiteralWrappedService">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="append">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal" namespace="urn:rpcliteralwrappedservice.service.fixtures"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="urn:rpcliteralwrappedservice.service.fixtures"/>
+            </output>
+        </operation>
+        <operation name="put">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal" namespace="urn:rpcliteralwrappedservice.service.fixtures"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="urn:rpcliteralwrappedservice.service.fixtures"/>
+            </output>
+        </operation>
+        <operation name="sampleMethod">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal" namespace="urn:rpcliteralwrappedservice.service.fixtures"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="urn:rpcliteralwrappedservice.service.fixtures"/>
+            </output>
+        </operation>
+        <operation name="set">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal" namespace="urn:rpcliteralwrappedservice.service.fixtures"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="urn:rpcliteralwrappedservice.service.fixtures"/>
+            </output>
+        </operation>
+        <operation name="setAll">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal" namespace="urn:rpcliteralwrappedservice.service.fixtures"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="urn:rpcliteralwrappedservice.service.fixtures"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="RpcLiteralWrappedServiceService">
+        <port binding="tns:RpcLiteralWrappedServicePortBinding" name="RpcLiteralWrappedServicePort">
+            <soap:address location="http://127.0.0.1/service"/>
+        </port>
+    </service>
+</definitions>

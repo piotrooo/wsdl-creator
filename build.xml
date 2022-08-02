@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<project name="wsdl-creator">
-    <target name="phpunit" description="Run unit tests with PHPUnit">
-        <exec executable="./vendor/bin/phpunit" failonerror="true">
-            <arg value="tests"/>
-        </exec>
-    </target>
-</project>

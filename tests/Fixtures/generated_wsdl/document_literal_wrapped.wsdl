@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<!--Copyright (C) 2013-2022 wsdl-creator contributors-->
+<!--This program is made available under the terms of the MIT License.-->
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:tns="urn:documentliteralwrappedservice.service.fixtures"
+             xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             name="DocumentLiteralWrappedServiceService"
+             targetNamespace="urn:documentliteralwrappedservice.service.fixtures">
+    <types>
+        <xsd:schema targetNamespace="urn:documentliteralwrappedservice.service.fixtures">
+            <xsd:element name="append" type="tns:append"/>
+            <xsd:element name="appendResponse" type="tns:appendResponse"/>
+            <xsd:element name="put" type="tns:put"/>
+            <xsd:element name="putResponse" type="tns:putResponse"/>
+            <xsd:element name="sampleMethod" type="tns:sampleMethod"/>
+            <xsd:element name="sampleMethodResponse" type="tns:sampleMethodResponse"/>
+            <xsd:element name="set" type="tns:set"/>
+            <xsd:element name="setResponse" type="tns:setResponse"/>
+            <xsd:element name="setAll" type="tns:setAll"/>
+            <xsd:element name="setAllResponse" type="tns:setAllResponse"/>
+            <xsd:complexType name="append">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="arg0" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="appendResponse">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="return" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="put">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" name="arg0" type="tns:person"/>
+                    <xsd:element minOccurs="0" name="arg1" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="person">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="arrayOfObjects" type="tns:tag"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="arrayOfObjectsOrNullType" nillable="true"
+                                 type="tns:tag"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="arrayOfScalars" type="xsd:string"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="arrayOfScalarsOrNullType" nillable="true"
+                                 type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="boolOrNullType" type="xsd:boolean"/>
+                    <xsd:element name="boolType" type="xsd:boolean"/>
+                    <xsd:element minOccurs="0" name="floatOrNullType" type="xsd:float"/>
+                    <xsd:element name="floatType" type="xsd:float"/>
+                    <xsd:element minOccurs="0" name="intOrNullType" type="xsd:int"/>
+                    <xsd:element name="intType" type="xsd:int"/>
+                    <xsd:element minOccurs="0" name="object" type="tns:tag"/>
+                    <xsd:element minOccurs="0" name="objectOrNullType" nillable="true" type="tns:tag"/>
+                    <xsd:element minOccurs="0" name="stringOrNullType" type="xsd:string"/>
+                    <xsd:element name="stringType" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="tag">
+                <xsd:sequence>
+                    <xsd:element name="name" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="putResponse">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" name="return" type="tns:result"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="result">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" name="person" type="tns:person"/>
+                    <xsd:element name="value" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="sampleMethod">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" name="arg0" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="sampleMethodResponse">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" name="return" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="set">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" name="arg0" type="tns:person"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="setResponse">
+                <xsd:sequence/>
+            </xsd:complexType>
+            <xsd:complexType name="setAll">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="arg0" type="tns:person"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="setAllResponse">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:result"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+    <message name="append">
+        <part element="tns:append" name="parameters"/>
+    </message>
+    <message name="appendResponse">
+        <part element="tns:appendResponse" name="parameters"/>
+    </message>
+    <message name="put">
+        <part element="tns:put" name="parameters"/>
+    </message>
+    <message name="putResponse">
+        <part element="tns:putResponse" name="parameters"/>
+    </message>
+    <message name="sampleMethod">
+        <part element="tns:sampleMethod" name="parameters"/>
+    </message>
+    <message name="sampleMethodResponse">
+        <part element="tns:sampleMethodResponse" name="parameters"/>
+    </message>
+    <message name="set">
+        <part element="tns:set" name="parameters"/>
+    </message>
+    <message name="setResponse">
+        <part element="tns:setResponse" name="parameters"/>
+    </message>
+    <message name="setAll">
+        <part element="tns:setAll" name="parameters"/>
+    </message>
+    <message name="setAllResponse">
+        <part element="tns:setAllResponse" name="parameters"/>
+    </message>
+    <portType name="DocumentLiteralWrappedService">
+        <operation name="append">
+            <input message="tns:append"
+                   wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/appendRequest"/>
+            <output message="tns:appendResponse"
+                    wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/appendResponse"/>
+        </operation>
+        <operation name="put">
+            <input message="tns:put"
+                   wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/putRequest"/>
+            <output message="tns:putResponse"
+                    wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/putResponse"/>
+        </operation>
+        <operation name="sampleMethod">
+            <input message="tns:sampleMethod"
+                   wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/sampleMethodRequest"/>
+            <output message="tns:sampleMethodResponse"
+                    wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/sampleMethodResponse"/>
+        </operation>
+        <operation name="set">
+            <input message="tns:set"
+                   wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/setRequest"/>
+            <output message="tns:setResponse"
+                    wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/setResponse"/>
+        </operation>
+        <operation name="setAll">
+            <input message="tns:setAll"
+                   wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/setAllRequest"/>
+            <output message="tns:setAllResponse"
+                    wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/setAllResponse"/>
+        </operation>
+    </portType>
+    <binding name="DocumentLiteralWrappedServicePortBinding" type="tns:DocumentLiteralWrappedService">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="append">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="put">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="sampleMethod">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="set">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="setAll">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="DocumentLiteralWrappedServiceService">
+        <port binding="tns:DocumentLiteralWrappedServicePortBinding" name="DocumentLiteralWrappedServicePort">
+            <soap:address location="http://127.0.0.1/service"/>
+        </port>
+    </service>
+</definitions>
