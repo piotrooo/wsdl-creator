@@ -27,3 +27,4 @@ jobs:
         uses: php-actions/phpunit@v3
         with:
           php_version: ${{ matrix.php-versions }}
+          configuration: phpunit.xml
