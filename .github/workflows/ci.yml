@@ -18,14 +18,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-versions }}
-          tools: phpunit:7.5.5
-
       - name: Install dependencies
         uses: php-actions/composer@v5
+        with:
+          php_version: ${{ matrix.php-versions }}
 
       - name: Run tests
         uses: php-actions/phpunit@v3
+        with:
+          php_version: ${{ matrix.php-versions }}
