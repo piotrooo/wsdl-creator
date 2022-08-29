@@ -19,9 +19,7 @@ class XmlGeneratorDocumentMessageStrategy implements XmlGeneratorMessageStrategy
     {
         $methods = $service->getMethods();
         foreach ($methods as $method) {
-            $webMethodAttribute = $method->getWebMethodAttribute();
-
-            $name = $webMethodAttribute?->operationName() ?: $method->getReflectionMethod()->getName();
+            $name = $method->getOperationName();
 
             $messageElement = $wsdlDocument->createElement('message');
             $messageElement->setAttribute('name', $name);

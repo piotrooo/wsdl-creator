@@ -23,9 +23,7 @@ class XmlGeneratorRpcMessageStrategy implements XmlGeneratorMessageStrategy
         $implementorReflectionClass = $service->getClass()->getImplementorReflectionClass();
         $methods = $service->getMethods();
         foreach ($methods as $method) {
-            $webMethodAttribute = $method->getWebMethodAttribute();
-
-            $name = $webMethodAttribute?->operationName() ?: $method->getReflectionMethod()->getName();
+            $name = $method->getOperationName();
 
             $messageElement = $wsdlDocument->createElement('message');
             $messageElement->setAttribute('name', $name);

@@ -29,9 +29,7 @@ class XmlGeneratorDocumentTypeStrategy implements XmlGeneratorTypeStrategy
         $implementorReflectionClass = $service->getClass()->getImplementorReflectionClass();
         $methods = $service->getMethods();
         foreach ($methods as $method) {
-            $webMethodAttribute = $method->getWebMethodAttribute();
-
-            $name = $webMethodAttribute?->operationName() ?: $method->getReflectionMethod()->getName();
+            $name = $method->getOperationName();
 
             $xsElementElement = $wsdlDocument->createElement('xsd:element');
             $xsElementElement->setAttribute('name', $name);
@@ -45,9 +43,7 @@ class XmlGeneratorDocumentTypeStrategy implements XmlGeneratorTypeStrategy
         }
 
         foreach ($methods as $method) {
-            $webMethodAttribute = $method->getWebMethodAttribute();
-
-            $name = $webMethodAttribute?->operationName() ?: $method->getReflectionMethod()->getName();
+            $name = $method->getOperationName();
 
             $xsComplexTypeElement = $wsdlDocument->createElement('xsd:complexType');
             $xsComplexTypeElement->setAttribute('name', $name);

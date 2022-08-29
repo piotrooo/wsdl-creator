@@ -77,7 +77,7 @@ class XmlGenerator
         foreach ($methods as $method) {
             $webMethodAttribute = $method->getWebMethodAttribute();
 
-            $name = $webMethodAttribute?->operationName() ?: $method->getReflectionMethod()->getName();
+            $name = $method->getOperationName();
 
             $operationElement = $wsdlDocument->createElement('operation');
             $operationElement->setAttribute('name', $name);
@@ -111,7 +111,7 @@ class XmlGenerator
         foreach ($methods as $method) {
             $webMethodAttribute = $method->getWebMethodAttribute();
 
-            $name = $webMethodAttribute?->operationName() ?: $method->getReflectionMethod()->getName();
+            $name = $method->getOperationName();
             $action = $webMethodAttribute?->action();
 
             $operationElement = $wsdlDocument->createElement('operation');
