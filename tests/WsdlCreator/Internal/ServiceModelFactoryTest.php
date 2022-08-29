@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright (C) 2013-2022 wsdl-creator contributors
+ * This program is made available under the terms of the MIT License.
+ */
+
 namespace WsdlCreator\Internal;
 
 use PHPUnit\Framework\TestCase;

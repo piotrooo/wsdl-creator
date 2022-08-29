@@ -30,4 +30,41 @@ class Class_
     {
         return $this->SOAPBindingAttribute;
     }
+
+    public function getName(): string
+    {
+        return $this->webServiceAttribute->name() ?: $this->getShortName();
+    }
+
+    public function getTargetNamespace(): string
+    {
+        $targetNamespace = $this->getWebServiceAttribute()->targetNamespace();
+        if (is_null($targetNamespace)) {
+            $fullName = strtolower($this->implementorReflectionClass->getName());
+            $targetNamespace = collect(explode('\\', $fullName))
+                ->reverse()
+                ->implode('.');
+        }
+
+        if (!filter_var($targetNamespace, FILTER_VALIDATE_URL)) {
+            $targetNamespace = "urn:{$targetNamespace}";
+        }
+
+        return $targetNamespace;
+    }
+
+    public function getServiceName(): string
+    {
+        return $this->webServiceAttribute->serviceName() ?: "{$this->getShortName()}Service";
+    }
+
+    public function getPortName(): string
+    {
+        return $this->webServiceAttribute->portName() ?: "{$this->getShortName()}Port";
+    }
+
+    private function getShortName(): string
+    {
+        return $this->implementorReflectionClass->getShortName();
+    }
 }

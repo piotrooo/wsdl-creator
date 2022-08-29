@@ -7,7 +7,6 @@
 namespace WsdlCreator\Xml;
 
 use DOMDocument;
-use ReflectionClass;
 use WsdlCreator\Annotation\SOAPBindingStyle;
 use WsdlCreator\Internal\Model\Service;
 use WsdlCreator\Xml\Message\XmlGeneratorDocumentStrategyFactory;
@@ -37,12 +36,10 @@ class XmlGenerator
         $wsdlDocument->formatOutput = true;
 
         $class = $service->getClass();
-        $classShortName = $class->getImplementorReflectionClass()->getShortName();
-        $webServiceAttribute = $class->getWebServiceAttribute();
-        $className = $webServiceAttribute->name() ?: $classShortName;
-        $targetNamespace = $this->getTargetNamespace($webServiceAttribute->targetNamespace(), $class->getImplementorReflectionClass());
-        $serviceName = $webServiceAttribute->serviceName() ?: "{$classShortName}Service";
-        $portName = $webServiceAttribute->portName() ?: "{$classShortName}Port";
+        $className = $class->getName();
+        $targetNamespace = $class->getTargetNamespace();
+        $serviceName = $class->getServiceName();
+        $portName = $class->getPortName();
         $SOAPBindingAttribute = $class->getSOAPBindingAttribute();
         $methods = $service->getMethods();
 
@@ -111,15 +108,12 @@ class XmlGenerator
         foreach ($methods as $method) {
             $webMethodAttribute = $method->getWebMethodAttribute();
 
-            $name = $method->getOperationName();
-            $action = $webMethodAttribute?->action();
-
             $operationElement = $wsdlDocument->createElement('operation');
-            $operationElement->setAttribute('name', $name);
+            $operationElement->setAttribute('name', $method->getOperationName());
             $bindingElement->appendChild($operationElement);
 
             $soapOperation = $wsdlDocument->createElement("{$bindingId}:operation");
-            $soapOperation->setAttribute('soapAction', $action);
+            $soapOperation->setAttribute('soapAction', $webMethodAttribute?->action());
             $operationElement->appendChild($soapOperation);
 
             $operationInputElement = $wsdlDocument->createElement('input');
@@ -158,21 +152,5 @@ class XmlGenerator
 
         $wsdlDocument->appendChild($definitionsElement);
         return $wsdlDocument;
-    }
-
-    private function getTargetNamespace(?string $targetNamespace, ReflectionClass $class): string
-    {
-        if (is_null($targetNamespace)) {
-            $fullName = strtolower($class->getName());
-            $targetNamespace = collect(explode('\\', $fullName))
-                ->reverse()
-                ->implode('.');
-        }
-
-        if (!filter_var($targetNamespace, FILTER_VALIDATE_URL)) {
-            $targetNamespace = "urn:{$targetNamespace}";
-        }
-
-        return $targetNamespace;
     }
 }
