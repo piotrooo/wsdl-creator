@@ -74,7 +74,12 @@ class XmlGenerator
 
         foreach ($methods as $method) {
             $name = $method->getOperationName();
-            $action = $method->getAction();
+            $action = $method->getWebMethodAttribute()?->action();
+
+            $requestAction = $action;
+            if (is_null($requestAction)) {
+                $requestAction = "{$targetNamespace}/{$className}/{$name}Request";
+            }
 
             $operationElement = $wsdlDocument->createElement('operation');
             $operationElement->setAttribute('name', $name);
@@ -87,12 +92,12 @@ class XmlGenerator
             $portTypeElement->appendChild($operationElement);
 
             $operationInputElement = $wsdlDocument->createElement('input');
-            $operationInputElement->setAttribute('wsam:Action', "{$targetNamespace}/{$className}/{$action}Request");
+            $operationInputElement->setAttribute('wsam:Action', $requestAction);
             $operationInputElement->setAttribute('message', "tns:{$name}");
             $operationElement->appendChild($operationInputElement);
 
             $operationOutputElement = $wsdlDocument->createElement('output');
-            $operationOutputElement->setAttribute('wsam:Action', "{$targetNamespace}/{$className}/{$action}Response");
+            $operationOutputElement->setAttribute('wsam:Action', "{$targetNamespace}/{$className}/{$name}Response");
             $operationOutputElement->setAttribute('message', "tns:{$name}Response");
             $operationElement->appendChild($operationOutputElement);
         }

@@ -92,8 +92,7 @@
     </message>
     <portType name="RpcLiteralWrappedService">
         <operation name="add" parameterOrder="first-param arg1">
-            <input message="tns:add"
-                   wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/addRequest"/>
+            <input message="tns:add" wsam:Action="sum-action"/>
             <output message="tns:addResponse"
                     wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/addResponse"/>
         </operation>
@@ -131,7 +130,7 @@
     <binding name="RpcLiteralWrappedServicePortBinding" type="tns:RpcLiteralWrappedService">
         <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
         <operation name="add">
-            <soap:operation soapAction=""/>
+            <soap:operation soapAction="sum-action"/>
             <input>
                 <soap:body namespace="urn:rpcliteralwrappedservice.service.fixtures" use="literal"/>
             </input>

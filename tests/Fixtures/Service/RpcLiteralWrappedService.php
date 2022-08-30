@@ -63,6 +63,7 @@ class RpcLiteralWrappedService
         return $object;
     }
 
+    #[WebMethod(action: 'sum-action')]
     public function add(#[WebParam(name: 'first-param')] int $a, int $b): void
     {
     }
