@@ -10,11 +10,13 @@ use Illuminate\Support\Collection;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use phpDocumentor\Reflection\DocBlockFactory;
+use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionMethod;
 use RuntimeException;
 use WsdlCreator\Annotation\SOAPBinding;
 use WsdlCreator\Annotation\WebMethod;
+use WsdlCreator\Annotation\WebParam;
 use WsdlCreator\Annotation\WebService;
 use WsdlCreator\Internal\Model\Class_;
 use WsdlCreator\Internal\Model\Method;
@@ -56,7 +58,7 @@ class ServiceModelFactory
     }
 
     /**
-     * @return Method
+     * @return Method[]
      */
     private function getMethods(ReflectionClass $implementorReflectionClass): array
     {
@@ -89,6 +91,9 @@ class ServiceModelFactory
         return $methods;
     }
 
+    /**
+     * @return MethodParameter[]
+     */
     private function getMethodParameters(?DocBlock $docBlock, ReflectionMethod $reflectionMethod): array
     {
         $map = collect();
@@ -105,8 +110,15 @@ class ServiceModelFactory
         $methodParameters = [];
         $reflectionParameters = $reflectionMethod->getParameters();
         foreach ($reflectionParameters as $reflectionParameter) {
+            $webParamAttributes = $reflectionParameter->getAttributes(WebParam::class);
+
+            $webParamAttribute = null;
+            if (!empty($webParamAttributes)) {
+                $webParamAttribute = $webParamAttributes[0]->newInstance();
+            }
+
             $param = $map->get($reflectionParameter->getName());
-            $methodParameters[] = new MethodParameter($reflectionParameter, $param);
+            $methodParameters[] = new MethodParameter($reflectionParameter, $webParamAttribute, $param);
         }
         return $methodParameters;
     }
@@ -122,6 +134,9 @@ class ServiceModelFactory
         return new MethodReturn($reflectionUnionType, $docBlockReturn);
     }
 
+    /**
+     * @param ReflectionAttribute[] $webServiceAttributes
+     */
     private function validateWebServiceAttributeExists(ReflectionClass $implementorReflectionClass, array $webServiceAttributes): void
     {
         if (empty($webServiceAttributes)) {
@@ -144,10 +159,12 @@ class ServiceModelFactory
             $webMethod = $webMethodAttributes[0]->newInstance();
             return !$webMethod->exclude();
         });
+
         if ($reflectionMethods->isEmpty()) {
             $classShortName = $implementorReflectionClass->getShortName();
             throw new RuntimeException("The web service defined by class {$classShortName} does not contains any valid web methods");
         }
+
         return $reflectionMethods;
     }
 }

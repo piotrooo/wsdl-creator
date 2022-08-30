@@ -56,6 +56,11 @@
             </xsd:complexType>
         </xsd:schema>
     </types>
+    <message name="add">
+        <part name="first-param" type="xsd:int"/>
+        <part name="arg1" type="xsd:int"/>
+    </message>
+    <message name="addResponse"/>
     <message name="append">
         <part name="arg0" type="tns:stringArray"/>
     </message>
@@ -86,31 +91,37 @@
         <part name="return" type="tns:resultArray"/>
     </message>
     <portType name="RpcLiteralWrappedService">
-        <operation name="append">
+        <operation name="add" parameterOrder="first-param arg1">
+            <input message="tns:add"
+                   wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/addRequest"/>
+            <output message="tns:addResponse"
+                    wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/addResponse"/>
+        </operation>
+        <operation name="append" parameterOrder="arg0">
             <input message="tns:append"
                    wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/appendRequest"/>
             <output message="tns:appendResponse"
                     wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/appendResponse"/>
         </operation>
-        <operation name="put">
+        <operation name="put" parameterOrder="arg0 arg1">
             <input message="tns:put"
                    wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/putRequest"/>
             <output message="tns:putResponse"
                     wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/putResponse"/>
         </operation>
-        <operation name="sampleMethod">
+        <operation name="sampleMethod" parameterOrder="arg0">
             <input message="tns:sampleMethod"
                    wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/sampleMethodRequest"/>
             <output message="tns:sampleMethodResponse"
                     wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/sampleMethodResponse"/>
         </operation>
-        <operation name="set">
+        <operation name="set" parameterOrder="arg0">
             <input message="tns:set"
                    wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/setRequest"/>
             <output message="tns:setResponse"
                     wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/setResponse"/>
         </operation>
-        <operation name="setAll">
+        <operation name="setAll" parameterOrder="arg0">
             <input message="tns:setAll"
                    wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/setAllRequest"/>
             <output message="tns:setAllResponse"
@@ -119,6 +130,15 @@
     </portType>
     <binding name="RpcLiteralWrappedServicePortBinding" type="tns:RpcLiteralWrappedService">
         <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="add">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body namespace="urn:rpcliteralwrappedservice.service.fixtures" use="literal"/>
+            </input>
+            <output>
+                <soap:body namespace="urn:rpcliteralwrappedservice.service.fixtures" use="literal"/>
+            </output>
+        </operation>
         <operation name="append">
             <soap:operation soapAction=""/>
             <input>

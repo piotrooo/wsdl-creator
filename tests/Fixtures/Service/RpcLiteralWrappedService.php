@@ -10,6 +10,7 @@ use Fixtures\Service\Model\Person;
 use Fixtures\Service\Model\Result;
 use WsdlCreator\Annotation\SOAPBinding;
 use WsdlCreator\Annotation\SOAPBindingStyle;
+use WsdlCreator\Annotation\WebParam;
 use WsdlCreator\Annotation\WebService;
 
 /**
@@ -57,5 +58,9 @@ class RpcLiteralWrappedService
                 ->setValue("value:{$i}");
         }
         return $object;
+    }
+
+    public function add(#[WebParam(name: 'first-param')] int $a, int $b): void
+    {
     }
 }

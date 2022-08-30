@@ -56,8 +56,10 @@ class XmlGeneratorRpcMessageStrategy implements XmlGeneratorMessageStrategy
                     $type = XmlHelpers::classType($reflectionUnionType->getName());
                 }
 
+                $paramName = $parameter->getName($i);
+
                 $partElement = $wsdlDocument->createElement('part');
-                $partElement->setAttribute('name', "arg{$i}");
+                $partElement->setAttribute('name', $paramName);
                 $partElement->setAttribute('type', $type);
                 $messageElement->appendChild($partElement);
             }

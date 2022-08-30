@@ -8,6 +8,8 @@
              targetNamespace="urn:documentliteralwrappedservice.service.fixtures">
     <types>
         <xsd:schema targetNamespace="urn:documentliteralwrappedservice.service.fixtures">
+            <xsd:element name="add" type="tns:add"/>
+            <xsd:element name="addResponse" type="tns:addResponse"/>
             <xsd:element name="append" type="tns:append"/>
             <xsd:element name="appendResponse" type="tns:appendResponse"/>
             <xsd:element name="put" type="tns:put"/>
@@ -18,6 +20,15 @@
             <xsd:element name="setResponse" type="tns:setResponse"/>
             <xsd:element name="setAll" type="tns:setAll"/>
             <xsd:element name="setAllResponse" type="tns:setAllResponse"/>
+            <xsd:complexType name="add">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" name="first-param" type="xsd:int"/>
+                    <xsd:element minOccurs="0" name="arg1" type="xsd:int"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="addResponse">
+                <xsd:sequence/>
+            </xsd:complexType>
             <xsd:complexType name="append">
                 <xsd:sequence>
                     <xsd:element maxOccurs="unbounded" minOccurs="0" name="arg0" type="xsd:string"/>
@@ -100,6 +111,12 @@
             </xsd:complexType>
         </xsd:schema>
     </types>
+    <message name="add">
+        <part element="tns:add" name="parameters"/>
+    </message>
+    <message name="addResponse">
+        <part element="tns:addResponse" name="parameters"/>
+    </message>
     <message name="append">
         <part element="tns:append" name="parameters"/>
     </message>
@@ -131,6 +148,12 @@
         <part element="tns:setAllResponse" name="parameters"/>
     </message>
     <portType name="DocumentLiteralWrappedService">
+        <operation name="add">
+            <input message="tns:add"
+                   wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/addRequest"/>
+            <output message="tns:addResponse"
+                    wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/addResponse"/>
+        </operation>
         <operation name="append">
             <input message="tns:append"
                    wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/appendRequest"/>
@@ -164,6 +187,15 @@
     </portType>
     <binding name="DocumentLiteralWrappedServicePortBinding" type="tns:DocumentLiteralWrappedService">
         <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="add">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
         <operation name="append">
             <soap:operation soapAction=""/>
             <input>

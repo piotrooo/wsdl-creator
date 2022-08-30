@@ -8,6 +8,7 @@ namespace WsdlCreator\Xml;
 
 use DOMDocument;
 use WsdlCreator\Annotation\SOAPBindingStyle;
+use WsdlCreator\Internal\Model\MethodParameter;
 use WsdlCreator\Internal\Model\Service;
 use WsdlCreator\Xml\Message\XmlGeneratorDocumentStrategyFactory;
 use WsdlCreator\Xml\Type\XmlGeneratorTypeStrategyFactory;
@@ -78,6 +79,12 @@ class XmlGenerator
 
             $operationElement = $wsdlDocument->createElement('operation');
             $operationElement->setAttribute('name', $name);
+            if ($SOAPBindingAttribute->style() === SOAPBindingStyle::RPC) {
+                $parameterOrder = collect($method->getParameters())
+                    ->map(fn(MethodParameter $parameter, $i) => $parameter->getName($i))
+                    ->implode(' ');
+                $operationElement->setAttribute('parameterOrder', $parameterOrder);
+            }
             $portTypeElement->appendChild($operationElement);
 
             $operationInputElement = $wsdlDocument->createElement('input');

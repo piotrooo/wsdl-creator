@@ -55,7 +55,7 @@ class XmlGeneratorDocumentTypeStrategy implements XmlGeneratorTypeStrategy
             $parameters = $method->getParameters();
             if (!empty($parameters)) {
                 foreach ($parameters as $i => $parameter) {
-                    $paramName = "arg{$i}";
+                    $paramName = $parameter->getName($i);
                     $type = '';
                     $isArray = false;
                     $reflectionUnionType = $parameter->getReflectionParameter()->getType();

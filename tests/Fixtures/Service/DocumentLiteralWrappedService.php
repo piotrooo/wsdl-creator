@@ -8,6 +8,7 @@ namespace Fixtures\Service;
 
 use Fixtures\Service\Model\Person;
 use Fixtures\Service\Model\Result;
+use WsdlCreator\Annotation\WebParam;
 use WsdlCreator\Annotation\WebService;
 
 #[WebService]
@@ -51,5 +52,9 @@ class DocumentLiteralWrappedService
                 ->setValue("value:{$i}");
         }
         return $object;
+    }
+
+    public function add(#[WebParam(name: 'first-param')] int $a, int $b): void
+    {
     }
 }
