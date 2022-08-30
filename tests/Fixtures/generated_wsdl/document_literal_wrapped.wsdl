@@ -16,8 +16,8 @@
             <xsd:element name="putResponse" type="tns:putResponse"/>
             <xsd:element name="sampleMethod" type="tns:sampleMethod"/>
             <xsd:element name="sampleMethodResponse" type="tns:sampleMethodResponse"/>
-            <xsd:element name="set" type="tns:set"/>
-            <xsd:element name="setResponse" type="tns:setResponse"/>
+            <xsd:element name="set-person" type="tns:set-person"/>
+            <xsd:element name="set-personResponse" type="tns:set-personResponse"/>
             <xsd:element name="setAll" type="tns:setAll"/>
             <xsd:element name="setAllResponse" type="tns:setAllResponse"/>
             <xsd:complexType name="add">
@@ -91,12 +91,12 @@
                     <xsd:element minOccurs="0" name="return" type="xsd:string"/>
                 </xsd:sequence>
             </xsd:complexType>
-            <xsd:complexType name="set">
+            <xsd:complexType name="set-person">
                 <xsd:sequence>
                     <xsd:element minOccurs="0" name="arg0" type="tns:person"/>
                 </xsd:sequence>
             </xsd:complexType>
-            <xsd:complexType name="setResponse">
+            <xsd:complexType name="set-personResponse">
                 <xsd:sequence/>
             </xsd:complexType>
             <xsd:complexType name="setAll">
@@ -135,11 +135,11 @@
     <message name="sampleMethodResponse">
         <part element="tns:sampleMethodResponse" name="parameters"/>
     </message>
-    <message name="set">
-        <part element="tns:set" name="parameters"/>
+    <message name="set-person">
+        <part element="tns:set-person" name="parameters"/>
     </message>
-    <message name="setResponse">
-        <part element="tns:setResponse" name="parameters"/>
+    <message name="set-personResponse">
+        <part element="tns:set-personResponse" name="parameters"/>
     </message>
     <message name="setAll">
         <part element="tns:setAll" name="parameters"/>
@@ -172,11 +172,11 @@
             <output message="tns:sampleMethodResponse"
                     wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/sampleMethodResponse"/>
         </operation>
-        <operation name="set">
-            <input message="tns:set"
-                   wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/setRequest"/>
-            <output message="tns:setResponse"
-                    wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/setResponse"/>
+        <operation name="set-person">
+            <input message="tns:set-person"
+                   wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/set-personRequest"/>
+            <output message="tns:set-personResponse"
+                    wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/set-personResponse"/>
         </operation>
         <operation name="setAll">
             <input message="tns:setAll"
@@ -223,7 +223,7 @@
                 <soap:body use="literal"/>
             </output>
         </operation>
-        <operation name="set">
+        <operation name="set-person">
             <soap:operation soapAction=""/>
             <input>
                 <soap:body use="literal"/>

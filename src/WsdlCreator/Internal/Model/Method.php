@@ -53,4 +53,9 @@ class Method
     {
         return $this->webMethodAttribute?->operationName() ?: $this->getReflectionMethod()->getName();
     }
+
+    public function getAction(): string
+    {
+        return $this->webMethodAttribute?->action() ?: $this->getOperationName();
+    }
 }

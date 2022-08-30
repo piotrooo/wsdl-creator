@@ -8,10 +8,18 @@ namespace Fixtures\Service;
 
 use Fixtures\Service\Model\Person;
 use Fixtures\Service\Model\Result;
+use WsdlCreator\Annotation\SOAPBinding;
+use WsdlCreator\Annotation\SOAPBindingStyle;
+use WsdlCreator\Annotation\SOAPBindingUse;
+use WsdlCreator\Annotation\WebMethod;
 use WsdlCreator\Annotation\WebParam;
 use WsdlCreator\Annotation\WebService;
 
+/**
+ * @author Piotr Olaszewski
+ */
 #[WebService]
+#[SOAPBinding(style: SOAPBindingStyle::DOCUMENT, use: SOAPBindingUse::LITERAL)]
 class DocumentLiteralWrappedService
 {
     public function sampleMethod(string $value): string
@@ -35,6 +43,7 @@ class DocumentLiteralWrappedService
             ->setValue($value);
     }
 
+    #[WebMethod(operationName: 'set-person')]
     public function set(Person $person): void
     {
     }

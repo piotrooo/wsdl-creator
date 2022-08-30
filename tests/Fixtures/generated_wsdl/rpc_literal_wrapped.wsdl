@@ -80,10 +80,10 @@
     <message name="sampleMethodResponse">
         <part type="xsd:string" name="return"/>
     </message>
-    <message name="set">
+    <message name="set-person">
         <part name="arg0" type="tns:person"/>
     </message>
-    <message name="setResponse"/>
+    <message name="set-personResponse"/>
     <message name="setAll">
         <part name="arg0" type="tns:personArray"/>
     </message>
@@ -115,11 +115,11 @@
             <output message="tns:sampleMethodResponse"
                     wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/sampleMethodResponse"/>
         </operation>
-        <operation name="set" parameterOrder="arg0">
-            <input message="tns:set"
-                   wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/setRequest"/>
-            <output message="tns:setResponse"
-                    wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/setResponse"/>
+        <operation name="set-person" parameterOrder="arg0">
+            <input message="tns:set-person"
+                   wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/set-personRequest"/>
+            <output message="tns:set-personResponse"
+                    wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/set-personResponse"/>
         </operation>
         <operation name="setAll" parameterOrder="arg0">
             <input message="tns:setAll"
@@ -166,7 +166,7 @@
                 <soap:body use="literal" namespace="urn:rpcliteralwrappedservice.service.fixtures"/>
             </output>
         </operation>
-        <operation name="set">
+        <operation name="set-person">
             <soap:operation soapAction=""/>
             <input>
                 <soap:body use="literal" namespace="urn:rpcliteralwrappedservice.service.fixtures"/>
