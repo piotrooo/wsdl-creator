@@ -10,6 +10,7 @@ use DOMDocument;
 use DOMElement;
 use phpDocumentor\Reflection\Types\Array_;
 use phpDocumentor\Reflection\Types\Object_;
+use WsdlCreator\Annotation\SOAPBindingStyle;
 use WsdlCreator\Internal\Model\Service;
 use WsdlCreator\Xml\Utils\XmlHelpers;
 
@@ -56,7 +57,7 @@ class XmlGeneratorRpcMessageStrategy implements XmlGeneratorMessageStrategy
                     $type = XmlHelpers::classType($reflectionUnionType->getName());
                 }
 
-                $paramName = $parameter->getName($i);
+                $paramName = $parameter->getName($i, SOAPBindingStyle::RPC);
 
                 $partElement = $wsdlDocument->createElement('part');
                 $partElement->setAttribute('name', $paramName);

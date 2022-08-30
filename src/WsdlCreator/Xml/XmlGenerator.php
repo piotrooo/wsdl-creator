@@ -85,7 +85,7 @@ class XmlGenerator
             $operationElement->setAttribute('name', $name);
             if ($SOAPBindingAttribute->style() === SOAPBindingStyle::RPC) {
                 $parameterOrder = collect($method->getParameters())
-                    ->map(fn(MethodParameter $parameter, $i) => $parameter->getName($i))
+                    ->map(fn(MethodParameter $parameter, $i) => $parameter->getName($i, SOAPBindingStyle::RPC))
                     ->implode(' ');
                 $operationElement->setAttribute('parameterOrder', $parameterOrder);
             }

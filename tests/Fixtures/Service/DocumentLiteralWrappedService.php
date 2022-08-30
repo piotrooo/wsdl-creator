@@ -64,7 +64,7 @@ class DocumentLiteralWrappedService
     }
 
     #[WebMethod(action: 'sum-action')]
-    public function add(#[WebParam(name: 'first-param')] int $a, int $b): void
+    public function add(#[WebParam(name: 'first-param')] int $a, #[WebParam(name: 'second-param', partName: 'b-part-name')] int $b): void
     {
     }
 }

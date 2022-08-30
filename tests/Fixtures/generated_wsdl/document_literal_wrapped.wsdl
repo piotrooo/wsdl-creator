@@ -23,7 +23,7 @@
             <xsd:complexType name="add">
                 <xsd:sequence>
                     <xsd:element minOccurs="0" name="first-param" type="xsd:int"/>
-                    <xsd:element minOccurs="0" name="arg1" type="xsd:int"/>
+                    <xsd:element minOccurs="0" name="second-param" type="xsd:int"/>
                 </xsd:sequence>
             </xsd:complexType>
             <xsd:complexType name="addResponse">

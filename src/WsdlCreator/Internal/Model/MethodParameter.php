@@ -8,6 +8,7 @@ namespace WsdlCreator\Internal\Model;
 
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use ReflectionParameter;
+use WsdlCreator\Annotation\SOAPBindingStyle;
 use WsdlCreator\Annotation\WebParam;
 
 /**
@@ -38,8 +39,14 @@ class MethodParameter
         return $this->param;
     }
 
-    public function getName(int $index): string
+    public function getName(int $index, string $style = SOAPBindingStyle::DOCUMENT): string
     {
+        if ($style === SOAPBindingStyle::RPC) {
+            $partName = $this->webParamAttribute?->partName();
+            if (!is_null($partName)) {
+                return $partName;
+            }
+        }
         return $this->webParamAttribute?->name() ?: "arg{$index}";
     }
 }
