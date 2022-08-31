@@ -8,6 +8,7 @@ namespace WsdlCreator\Xml\Type;
 
 use DOMDocument;
 use DOMElement;
+use Illuminate\Support\Collection;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use phpDocumentor\Reflection\Types\Array_;
 use phpDocumentor\Reflection\Types\Object_;
@@ -100,6 +101,15 @@ class XmlGeneratorDocumentTypeStrategy implements XmlGeneratorTypeStrategy
                 }
             }
             $xsComplexTypeElement->appendChild($xsSequenceElement);
+
+            /** @var Collection<int, MethodParameter> $parameters */
+            $parameters = collect($method->getParameters())->filter(fn(MethodParameter $parameter) => $parameter->getWebParamAttribute()?->header());
+            foreach ($parameters as $parameter) {
+                $reflectionUnionType = $parameter->getReflectionParameter()->getType();
+                if (!$reflectionUnionType->isBuiltin()) {
+                    $classes[] = $reflectionUnionType->getName();
+                }
+            }
 
             foreach ($classes as $class) {
                 $this->xmlClassModeler->append($class, $wsdlDocument, $xsSchemaElement);

@@ -8,6 +8,7 @@ namespace Fixtures\Service;
 
 use Fixtures\Service\Model\Person;
 use Fixtures\Service\Model\Result;
+use Fixtures\Service\Model\Token;
 use WsdlCreator\Annotation\SOAPBinding;
 use WsdlCreator\Annotation\SOAPBindingParameterStyle;
 use WsdlCreator\Annotation\SOAPBindingStyle;
@@ -69,7 +70,7 @@ class DocumentLiteralWrappedService
     {
     }
 
-    public function operationWithHeader(#[WebParam(header: true)] string $token, #[WebParam(name: 'anotherToken', header: true)] string $anotherToken): string
+    public function operationWithHeader(#[WebParam(header: true)] string $token, #[WebParam(name: 'anotherToken', header: true)] Token $anotherToken): string
     {
         return '';
     }

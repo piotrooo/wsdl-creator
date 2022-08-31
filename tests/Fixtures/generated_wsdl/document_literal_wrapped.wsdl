@@ -44,6 +44,12 @@
             <xsd:complexType name="operationWithHeader">
                 <xsd:sequence/>
             </xsd:complexType>
+            <xsd:complexType name="token">
+                <xsd:sequence>
+                    <xsd:element name="expire" type="xsd:int"/>
+                    <xsd:element name="name" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
             <xsd:complexType name="operationWithHeaderResponse">
                 <xsd:sequence>
                     <xsd:element name="return" type="xsd:string" minOccurs="0"/>
