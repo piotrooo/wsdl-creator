@@ -13,6 +13,14 @@
                     <xsd:element name="item" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
                 </xsd:sequence>
             </xsd:complexType>
+            <xsd:element name="arg0" type="xsd:string"/>
+            <xsd:complexType name="token">
+                <xsd:sequence>
+                    <xsd:element name="expire" type="xsd:int"/>
+                    <xsd:element name="name" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="anotherToken" type="tns:token"/>
             <xsd:complexType name="person">
                 <xsd:sequence>
                     <xsd:element maxOccurs="unbounded" minOccurs="0" name="arrayOfObjects" type="tns:tag"/>
@@ -67,6 +75,13 @@
     <message name="appendResponse">
         <part name="return" type="tns:stringArray"/>
     </message>
+    <message name="operationWithHeader">
+        <part name="arg0" element="tns:arg0"/>
+        <part name="anotherToken" element="tns:anotherToken"/>
+    </message>
+    <message name="operationWithHeaderResponse">
+        <part name="return" type="xsd:string"/>
+    </message>
     <message name="put">
         <part name="arg0" type="tns:person"/>
         <part name="arg1" type="xsd:string"/>
@@ -101,6 +116,12 @@
                    wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/appendRequest"/>
             <output message="tns:appendResponse"
                     wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/appendResponse"/>
+        </operation>
+        <operation name="operationWithHeader" parameterOrder="arg0 anotherToken">
+            <input wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/operationWithHeaderRequest"
+                   message="tns:operationWithHeader"/>
+            <output wsam:Action="urn:rpcliteralwrappedservice.service.fixtures/RpcLiteralWrappedService/operationWithHeaderResponse"
+                    message="tns:operationWithHeaderResponse"/>
         </operation>
         <operation name="put" parameterOrder="arg0 arg1">
             <input message="tns:put"
@@ -142,6 +163,17 @@
             <soap:operation soapAction=""/>
             <input>
                 <soap:body use="literal" namespace="urn:rpcliteralwrappedservice.service.fixtures"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="urn:rpcliteralwrappedservice.service.fixtures"/>
+            </output>
+        </operation>
+        <operation name="operationWithHeader">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal" namespace="urn:rpcliteralwrappedservice.service.fixtures"/>
+                <soap:header message="tns:operationWithHeader" part="arg0" use="literal"/>
+                <soap:header message="tns:operationWithHeader" part="anotherToken" use="literal"/>
             </input>
             <output>
                 <soap:body use="literal" namespace="urn:rpcliteralwrappedservice.service.fixtures"/>

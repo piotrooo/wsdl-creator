@@ -61,7 +61,11 @@ class XmlGeneratorRpcMessageStrategy implements XmlGeneratorMessageStrategy
 
                 $partElement = $wsdlDocument->createElement('part');
                 $partElement->setAttribute('name', $paramName);
-                $partElement->setAttribute('type', $type);
+                if ($parameter->getWebParamAttribute()?->header()) {
+                    $partElement->setAttribute('element', "tns:{$paramName}");
+                } else {
+                    $partElement->setAttribute('type', $type);
+                }
                 $messageElement->appendChild($partElement);
             }
 

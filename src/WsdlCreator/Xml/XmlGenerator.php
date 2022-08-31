@@ -89,7 +89,7 @@ class XmlGenerator
                 $parameterOrder = collect($method->getParameters())
                     ->map(fn(MethodParameter $parameter, $i) => $parameter->getName($i, SOAPBindingStyle::RPC))
                     ->implode(' ');
-                if ($hasHeaderParameter) {
+                if ($hasHeaderParameter && $SOAPBindingAttribute->style() === SOAPBindingStyle::DOCUMENT) {
                     $parameterOrder = trim("parameters {$parameterOrder}");
                 }
                 $operationElement->setAttribute('parameterOrder', $parameterOrder);
@@ -143,15 +143,14 @@ class XmlGenerator
                 if (!$header) {
                     continue;
                 }
-                $soapBodyElement->setAttribute('parts', 'parameters');
+                if ($SOAPBindingAttribute->style() === SOAPBindingStyle::DOCUMENT) {
+                    $soapBodyElement->setAttribute('parts', 'parameters');
+                }
 
                 $soapHeaderElement = $wsdlDocument->createElement("{$bindingId}:header");
                 $soapHeaderElement->setAttribute('use', 'literal');
                 $soapHeaderElement->setAttribute('message', "tns:{$method->getOperationName()}");
                 $soapHeaderElement->setAttribute('part', $methodParameter->getName($i));
-                if ($SOAPBindingAttribute->style() === SOAPBindingStyle::RPC) {
-                    $soapHeaderElement->setAttribute('namespace', $targetNamespace);
-                }
                 $operationInputElement->appendChild($soapHeaderElement);
             }
 

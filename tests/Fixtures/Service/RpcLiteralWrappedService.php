@@ -8,6 +8,7 @@ namespace Fixtures\Service;
 
 use Fixtures\Service\Model\Person;
 use Fixtures\Service\Model\Result;
+use Fixtures\Service\Model\Token;
 use WsdlCreator\Annotation\SOAPBinding;
 use WsdlCreator\Annotation\SOAPBindingParameterStyle;
 use WsdlCreator\Annotation\SOAPBindingStyle;
@@ -67,5 +68,10 @@ class RpcLiteralWrappedService
     #[WebMethod(action: 'sum-action')]
     public function add(#[WebParam(name: 'first-param')] int $a, #[WebParam(name: 'second-param', partName: 'b-part-name')] int $b): void
     {
+    }
+
+    public function operationWithHeader(#[WebParam(header: true)] string $token, #[WebParam(name: 'anotherToken', header: true)] Token $anotherToken): string
+    {
+        return '';
     }
 }
