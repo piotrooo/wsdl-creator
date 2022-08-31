@@ -9,6 +9,7 @@ namespace Fixtures\Service;
 use Fixtures\Service\Model\Person;
 use Fixtures\Service\Model\Result;
 use WsdlCreator\Annotation\SOAPBinding;
+use WsdlCreator\Annotation\SOAPBindingParameterStyle;
 use WsdlCreator\Annotation\SOAPBindingStyle;
 use WsdlCreator\Annotation\SOAPBindingUse;
 use WsdlCreator\Annotation\WebMethod;
@@ -19,7 +20,7 @@ use WsdlCreator\Annotation\WebService;
  * @author Piotr Olaszewski
  */
 #[WebService]
-#[SOAPBinding(style: SOAPBindingStyle::RPC, use: SOAPBindingUse::LITERAL)]
+#[SOAPBinding(style: SOAPBindingStyle::RPC, use: SOAPBindingUse::LITERAL, parameterStyle: SOAPBindingParameterStyle::WRAPPED)]
 class RpcLiteralWrappedService
 {
     public function sampleMethod(string $value): string

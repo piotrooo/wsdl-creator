@@ -133,6 +133,23 @@ class XmlGenerator
             }
             $operationInputElement->appendChild($soapBodyElement);
 
+            foreach ($method->getParameters() as $i => $methodParameter) {
+                $header = $methodParameter->getWebParamAttribute()?->header();
+                if (!$header) {
+                    continue;
+                }
+                $soapBodyElement->setAttribute('parts', 'parameters');
+
+                $soapHeaderElement = $wsdlDocument->createElement("{$bindingId}:header");
+                $soapHeaderElement->setAttribute('use', 'literal');
+                $soapHeaderElement->setAttribute('message', "tns:{$method->getOperationName()}");
+                $soapHeaderElement->setAttribute('part', $methodParameter->getName($i));
+                if ($SOAPBindingAttribute->style() === SOAPBindingStyle::RPC) {
+                    $soapHeaderElement->setAttribute('namespace', $targetNamespace);
+                }
+                $operationInputElement->appendChild($soapHeaderElement);
+            }
+
             $operationOutputElement = $wsdlDocument->createElement('output');
             $operationElement->appendChild($operationOutputElement);
 

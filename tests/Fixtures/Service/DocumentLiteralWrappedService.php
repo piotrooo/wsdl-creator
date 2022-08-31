@@ -9,6 +9,7 @@ namespace Fixtures\Service;
 use Fixtures\Service\Model\Person;
 use Fixtures\Service\Model\Result;
 use WsdlCreator\Annotation\SOAPBinding;
+use WsdlCreator\Annotation\SOAPBindingParameterStyle;
 use WsdlCreator\Annotation\SOAPBindingStyle;
 use WsdlCreator\Annotation\SOAPBindingUse;
 use WsdlCreator\Annotation\WebMethod;
@@ -19,7 +20,7 @@ use WsdlCreator\Annotation\WebService;
  * @author Piotr Olaszewski
  */
 #[WebService]
-#[SOAPBinding(style: SOAPBindingStyle::DOCUMENT, use: SOAPBindingUse::LITERAL)]
+#[SOAPBinding(style: SOAPBindingStyle::DOCUMENT, use: SOAPBindingUse::LITERAL, parameterStyle: SOAPBindingParameterStyle::WRAPPED)]
 class DocumentLiteralWrappedService
 {
     public function sampleMethod(string $value): string
@@ -66,5 +67,10 @@ class DocumentLiteralWrappedService
     #[WebMethod(action: 'sum-action')]
     public function add(#[WebParam(name: 'first-param')] int $a, #[WebParam(name: 'second-param', partName: 'b-part-name')] int $b): void
     {
+    }
+
+    public function operationWithHeader(#[WebParam(header: true)] string $token, #[WebParam(name: 'anotherToken', header: true)] string $anotherToken): string
+    {
+        return '';
     }
 }
