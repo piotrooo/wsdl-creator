@@ -136,6 +136,7 @@
     <message name="operationWithHeader">
         <part name="parameters" element="tns:operationWithHeader"/>
         <part name="arg0" element="tns:arg0"/>
+        <part name="anotherToken" element="tns:anotherToken"/>
     </message>
     <message name="operationWithHeaderResponse">
         <part name="result" element="tns:operationWithHeaderResponse"/>
@@ -176,7 +177,7 @@
             <output message="tns:appendResponse"
                     wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/appendResponse"/>
         </operation>
-        <operation name="operationWithHeader" parameterOrder="parameters arg0">
+        <operation name="operationWithHeader" parameterOrder="parameters arg0 anotherToken">
             <input wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/operationWithHeaderRequest"
                    message="tns:operationWithHeader"/>
             <output wsam:Action="urn:documentliteralwrappedservice.service.fixtures/DocumentLiteralWrappedService/operationWithHeaderResponse"

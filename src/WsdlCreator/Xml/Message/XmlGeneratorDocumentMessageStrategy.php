@@ -8,6 +8,8 @@ namespace WsdlCreator\Xml\Message;
 
 use DOMDocument;
 use DOMElement;
+use Illuminate\Support\Collection;
+use WsdlCreator\Internal\Model\MethodParameter;
 use WsdlCreator\Internal\Model\Service;
 
 /**
@@ -30,12 +32,26 @@ class XmlGeneratorDocumentMessageStrategy implements XmlGeneratorMessageStrategy
             $partElement->setAttribute('element', "tns:{$name}");
             $messageElement->appendChild($partElement);
 
+            $hasHeaderParameters = false;
+            /** @var Collection<int, MethodParameter> $methodParameters */
+            $methodParameters = collect($method->getParameters())->filter(fn(MethodParameter $parameter) => $parameter->getWebParamAttribute()?->header());
+            foreach ($methodParameters as $i => $methodParameter) {
+                $hasHeaderParameters = true;
+                $parameterName = $methodParameter->getName($i);
+
+                $partElement = $wsdlDocument->createElement('part');
+                $partElement->setAttribute('name', $parameterName);
+                $partElement->setAttribute('element', "tns:{$parameterName}");
+                $messageElement->appendChild($partElement);
+            }
+
             $messageResponseElement = $wsdlDocument->createElement('message');
             $messageResponseElement->setAttribute('name', "{$name}Response");
             $definitionsElement->appendChild($messageResponseElement);
 
+            $responseName = $hasHeaderParameters ? 'result' : 'parameters';
             $partResponseElement = $wsdlDocument->createElement('part');
-            $partResponseElement->setAttribute('name', 'parameters');
+            $partResponseElement->setAttribute('name', $responseName);
             $partResponseElement->setAttribute('element', "tns:{$name}Response");
             $messageResponseElement->appendChild($partResponseElement);
         }

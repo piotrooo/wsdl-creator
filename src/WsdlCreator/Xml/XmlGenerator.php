@@ -83,10 +83,15 @@ class XmlGenerator
 
             $operationElement = $wsdlDocument->createElement('operation');
             $operationElement->setAttribute('name', $name);
-            if ($SOAPBindingAttribute->style() === SOAPBindingStyle::RPC) {
+
+            $hasHeaderParameter = collect($method->getParameters())->contains(fn(MethodParameter $parameter) => $parameter->getWebParamAttribute()?->header());
+            if ($SOAPBindingAttribute->style() === SOAPBindingStyle::RPC || $hasHeaderParameter) {
                 $parameterOrder = collect($method->getParameters())
                     ->map(fn(MethodParameter $parameter, $i) => $parameter->getName($i, SOAPBindingStyle::RPC))
                     ->implode(' ');
+                if ($hasHeaderParameter) {
+                    $parameterOrder = trim("parameters {$parameterOrder}");
+                }
                 $operationElement->setAttribute('parameterOrder', $parameterOrder);
             }
             $portTypeElement->appendChild($operationElement);

@@ -11,6 +11,7 @@ use DOMElement;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use phpDocumentor\Reflection\Types\Array_;
 use phpDocumentor\Reflection\Types\Object_;
+use WsdlCreator\Internal\Model\MethodParameter;
 use WsdlCreator\Internal\Model\Service;
 use WsdlCreator\Xml\Utils\XmlHelpers;
 use WsdlCreator\Xml\XmlClassModeler;
@@ -52,7 +53,7 @@ class XmlGeneratorDocumentTypeStrategy implements XmlGeneratorTypeStrategy
             $classes = [];
 
             $xsSequenceElement = $wsdlDocument->createElement('xsd:sequence');
-            $parameters = $method->getParameters();
+            $parameters = collect($method->getParameters())->filter(fn(MethodParameter $parameter) => !$parameter->getWebParamAttribute()?->header());
             if (!empty($parameters)) {
                 foreach ($parameters as $i => $parameter) {
                     $paramName = $parameter->getName($i);
