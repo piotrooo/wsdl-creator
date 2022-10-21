@@ -21,13 +21,13 @@
   "require": {
     "php": ">=7.3",
     "ext-dom": "*",
-    "letsdrink/ouzo-goodies": "^1.8.0",
-    "doctrine/annotations": "^1.10.3"
+    "letsdrink/ouzo-goodies": "dev-master",
+    "doctrine/annotations": "1.7.x-dev"
   },
   "require-dev": {
-    "phpunit/phpunit": "^7.5.5",
-    "scrutinizer/ocular": "^1.5.2",
-    "friendsofphp/php-cs-fixer": "^2.12.2"
+    "phpunit/phpunit": "~7.5.5",
+    "scrutinizer/ocular": "~1.5.2",
+    "friendsofphp/php-cs-fixer": "~2.12.2"
   },
   "autoload": {
     "psr-4": {
