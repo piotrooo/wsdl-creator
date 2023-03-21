@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2013-2020
+ * Copyright (C) 2013-2022
  * Piotr Olaszewski <piotroo89@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
