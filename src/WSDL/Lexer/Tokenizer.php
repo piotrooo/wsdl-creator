@@ -54,7 +54,7 @@ final class Tokenizer
         $offset = 0;
         while (isset($string[$offset])) {
             foreach (self::$tokenMap as $regex => $token) {
-                if (preg_match($regex, $string, $matches, null, $offset)) {
+                if (preg_match($regex, $string, $matches, 0, $offset)) {
                     $tokens[] = TokenObject::create($token, trim($matches[0]));
                     $offset += strlen($matches[0]);
                     continue 2;
